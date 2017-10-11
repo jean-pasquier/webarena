@@ -8,11 +8,9 @@ use App\Controller\AppController;
 */
 class ArenasController  extends AppController
 {
-    public function index()
+    public function signup()
     {
-        $this->loadModel('fighters');
-        $figterlist=$this->fighters->find('all');
-        //pr($figterlist->toArray());
+        
     }
     
     

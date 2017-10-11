@@ -46,10 +46,21 @@ $cakeDescription = 'WebArenas';
     </head>
     <body>
 
-        <header class="home">
-            <h1>Welcome to the WebArenas !</h1>
-            <?= $this->Html->image('cake-logo.png', ['alt' => 'CakePhp']) ?>
-        </header>
+        <nav class="top-bar expanded" data-topbar role="navigation">
+            <ul class="title-area large-3 medium-4 columns">
+                <li class="name">
+                    <h1><a href=""><?= $this->fetch('title') ?></a></h1>
+                </li>
+            </ul>
+            <div class="top-bar-section">
+                <ul class="right">
+                    <li><?php echo $this->Html->link('Index', '/');?></li>
+                    <li><?php echo $this->Html->link('Login', ['controller' => 'Arenas', 'action' => 'login']);?></li>
+                    <li><?php echo $this->Html->link('Signup', ['controller' => 'Arenas', 'action' => 'signup']);?></li>
+                </ul>
+            </div>
+        </nav>
+        
 
 
     </body>
