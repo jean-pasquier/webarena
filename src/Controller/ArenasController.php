@@ -24,6 +24,8 @@ class ArenasController  extends AppController
     public function login()
     {
         
+        $this->set('entity','');
+        
     }
     
     
