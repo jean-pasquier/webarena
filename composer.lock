@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "163c94a955a9c68b07a07d64efc0940d",
+    "content-hash": "db1fff5667a1f3c3d52cb8b3a33fd698",
     "packages": [
         {
             "name": "aura/intl",
@@ -1018,16 +1018,16 @@
     "packages-dev": [
         {
             "name": "cakephp/bake",
-            "version": "1.4.2",
+            "version": "1.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/bake.git",
-                "reference": "952f1d4f6d96fe7834a0f9eb39b2bd207ed6629f"
+                "reference": "1457d59df095db2d5aee2f280eb576970f932194"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/bake/zipball/952f1d4f6d96fe7834a0f9eb39b2bd207ed6629f",
-                "reference": "952f1d4f6d96fe7834a0f9eb39b2bd207ed6629f",
+                "url": "https://api.github.com/repos/cakephp/bake/zipball/1457d59df095db2d5aee2f280eb576970f932194",
+                "reference": "1457d59df095db2d5aee2f280eb576970f932194",
                 "shasum": ""
             },
             "require": {
@@ -1061,7 +1061,7 @@
                 "bake",
                 "cakephp"
             ],
-            "time": "2017-09-15T12:24:02+00:00"
+            "time": "2017-10-14T20:01:15+00:00"
         },
         {
             "name": "cakephp/cakephp-codesniffer",
