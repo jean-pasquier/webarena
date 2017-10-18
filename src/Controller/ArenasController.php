@@ -31,6 +31,10 @@ class ArenasController  extends AppController
     
     public function sight()
     {
+        $this->loadModel('Fighters');
+        $dim = $this->Fighters->getDim();
+        $this->set('width_x', $dim[0]);
+        $this->set('lenght_y', $dim[1]);
     }
     
     

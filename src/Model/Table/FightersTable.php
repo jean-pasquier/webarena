@@ -38,6 +38,14 @@ class FightersTable extends Table
       array_push($best, $res['level']);
       return $best;
     }
+    
+    public function getDim()
+    {
+        $width_x = 15;
+        $lenght_y = 10;
+        $dim = array($width_x, $lenght_y);
+        return $dim;
+    }
 
 
     /**
