@@ -29,4 +29,3 @@ echo $this->Form->end();
 		<?php endforeach; ?>
 	</tbody>
 </table>
-
