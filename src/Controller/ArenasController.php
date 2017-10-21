@@ -77,13 +77,13 @@ $this->set('sightArray', $sightArray);
 
 
 
-    public function fighter()
-	{
-        $this->loadModel('Fighters');
-
-		$list = $this->Fighters->getFighters('f3677c68-40c9-4fc2-84e1-105a35087575');
-        $this->set('list', $list);
-    }
+  //   public function fighter()
+	// {
+  //       $this->loadModel('Fighters');
+  //
+	// 	$list = $this->Fighters->getFighters('f3677c68-40c9-4fc2-84e1-105a35087575');
+  //       $this->set('list', $list);
+  //   }
 
     public function index()
     {
