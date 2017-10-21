@@ -16,26 +16,64 @@ class ArenasController  extends AppController
 		$heigh = 15;
 		$sightArray = $this->Fighters->getSightArray();
 
-		$this->set('xmax', $heigh);
+	$this->set('xmax', $heigh);
         $this->set('ymax', $width);
-		$this->set('sightArray', $sightArray);
-		
-//		pr($this->Fighters->getFighterCoord(0));
+	$this->set('sightArray', $sightArray);
+        
+        
+        // get position 
+        $pos= $this->Fighters->getPosition();
+        $this->set('x',$pos['coordinate_x']);
+        $this->set('y',$pos['coordinate_y']);   
+        
+       
+        if ($this->request->is('post'))
+        {
+            if($this->request->data['dir'] == 'up')
+            {
+                $this->Fighters->move(0,1);
+                $this->redirect(['action'=>'sight']);
+            } 
+            if($this->request->data['dir'] == 'down')
+            {
+                $this->Fighters->move(0,(-1));
+                $this->redirect(['action'=>'sight']);
+
+
+            }   
+             if($this->request->data['dir'] == 'right')
+            {
+                $this->Fighters->move(1,0);
+                $this->redirect(['action'=>'sight']);
+
+            } 
+            if($this->request->data['dir'] == 'left')
+            {
+              $this->Fighters->move((-1),0);
+              $this->redirect(['action'=>'sight']);
+            }   
+        }
+
+
     }
     
-    
-    
-    public function fighter(){
+    public function move()
+    {
+       $this->loadModel('Fighters');
+       $this->Fighters->move_up();   
+    } 
+      
+    public function fighter()
+    {
         $this->loadModel('Fighters');
         $best = $this->Fighters->getBestFighter();
         $this->set('best', $best);
     }
-	
-	public function index()
-	{
-        $this->set('hello','Hello Mamene');
-	}
     
+    public function index()
+    {
+    }
+
     
     public function login()
     {

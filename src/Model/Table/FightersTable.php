@@ -26,26 +26,45 @@ class FightersTable extends Table
 {
 
 	
-	public function getSightArray()
-	{
-		$width = 15;
-		$heigh = 15;
-		$array = array();
-		for($i=0; $i < $heigh; $i++)
-		{
-			$cols = array();
-			for($j=0; $j< $width; $j++)
-			{	
-				array_push($cols, '.');
-			}
-			array_push($array, $cols);
-		}
-		
-		$array[5][2]= 'F';
-		
-		return $array;
-	}
-       
+    public function getSightArray()
+    {
+            $width = 15;
+            $heigh = 15;
+            $array = array();
+            for($i=0; $i < $heigh; $i++)
+            {
+                    $cols = array();
+                    for($j=0; $j< $width; $j++)
+                    {	
+                            array_push($cols, '.');
+                    }
+                    array_push($array, $cols);
+            }
+
+            $array[5][2]= 'F';
+
+            return $array;
+    }
+    
+    
+    public function getPosition()
+    {           
+        $id = '1';
+        $query = $this->get($id,['fields'=>['coordinate_x', 'coordinate_y']]);
+        //debug($query->toArray());
+        return($query->toArray());
+    }
+    
+    public function move($x,$y)
+    {
+        $id = '1';
+        $fighter = $this->get($id);
+        $fighter_data = $fighter->toArray();
+        $fighter->coordinate_x=$x+$fighter_data['coordinate_x'];
+        $fighter->coordinate_y=$y+$fighter_data['coordinate_y'];
+        $this->save($fighter);
+    }
+
 	
     public function getBestFighter()
     {
