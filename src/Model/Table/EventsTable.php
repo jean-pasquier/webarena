@@ -19,6 +19,12 @@ use Cake\Validation\Validator;
  */
 class EventsTable extends Table
 {
+	
+	public function getDayEvents()
+	{
+		//probleme date !
+		return $this->find()->where(['dateDiff(NOW(), date) <' => 1])->order(['date' => 'Desc'])->toList();
+	}
 
     /**
      * Initialize method
