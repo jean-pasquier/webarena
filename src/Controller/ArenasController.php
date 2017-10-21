@@ -19,10 +19,44 @@ class ArenasController  extends AppController
 		$sightArray = $this->Fighters->getSightArray();
 
 		$this->set('xmax', $heigh);
-        $this->set('ymax', $width);
+			$this->set('ymax', $width);
 		$this->set('sightArray', $sightArray);
-		
-//		pr($this->Fighters->getFighterCoord(0));
+        
+        
+        // get position 
+        $pos= $this->Fighters->getPosition();
+        $this->set('x',$pos['coordinate_x']);
+        $this->set('y',$pos['coordinate_y']);   
+        
+       
+        if ($this->request->is('post'))
+        {
+            if($this->request->data['dir'] == 'up')
+            {
+                $this->Fighters->move(0,1);
+                $this->redirect(['action'=>'sight']);
+            } 
+            if($this->request->data['dir'] == 'down')
+            {
+                $this->Fighters->move(0,(-1));
+                $this->redirect(['action'=>'sight']);
+
+
+            }   
+             if($this->request->data['dir'] == 'right')
+            {
+                $this->Fighters->move(1,0);
+                $this->redirect(['action'=>'sight']);
+
+            } 
+            if($this->request->data['dir'] == 'left')
+            {
+              $this->Fighters->move((-1),0);
+              $this->redirect(['action'=>'sight']);
+            }   
+        }
+
+
     }
     
     
@@ -34,12 +68,11 @@ class ArenasController  extends AppController
 		$list = $this->Fighters->getFighters('f3677c68-40c9-4fc2-84e1-105a35087575');
         $this->set('list', $list);
     }
-	
-	public function index()
-	{
-        $this->set('hello','Hello Mamene');
-	}
     
+    public function index()
+    {
+    }
+
     
     public function login()
     {
