@@ -60,6 +60,79 @@ class FightersTable extends Table
 	}
 
 
+
+	public function getFighters($id)
+	{
+		return $this->find()->where(['player_id' => $id])->toList();
+	}
+
+	public function isFighterHere($x, $y)
+	{
+		return $this->find()
+			->where(['current_health >' => 0, 'coordinate_x' => $x, 'coordinate_y' => $y])
+			->count() > 0;
+	}
+
+	public function getFighterCoords($id)
+	{
+//		$res = $this->find()
+//            ->select(['coordinate_x', 'coordinate_y'])
+//			->where(['id' => $id]);
+	}
+
+	public function getSightArray()
+	{
+		$width = 15;
+		$height = 10;
+		$array = array();
+		$pid='545f827c-576c-4dc5-ab6d-27c33186dc3e';
+		for($i=0; $i < $height; $i++)
+		{
+			$cols = array();
+			for($j=0; $j< $width; $j++)
+			{
+				array_push($cols, '.');
+			}
+			array_push($array, $cols);
+		}
+		$res = $this->find()
+						->select(['coordinate_x', 'coordinate_y'])
+						->where(['player_id' => $pid]);
+		foreach($res as $row)
+		{
+			$array[$row['coordinate_x']][$row['coordinate_y']]= 'M';
+		}
+
+		$res = $this->find()
+						->select(['coordinate_x', 'coordinate_y'])
+						->where(['player_id !=' => $pid]);
+		foreach($res as $row)
+		{
+			$array[$row['coordinate_x']][$row['coordinate_y']]= 'E';
+		}
+		return $array;
+	}
+
+
+    public function getPosition()
+    {
+        $id = '1';
+        $query = $this->get($id,['fields'=>['coordinate_x', 'coordinate_y']]);
+        //debug($query->toArray());
+        return($query->toArray());
+    }
+
+    public function move($x,$y)
+    {
+        $id = '1';
+        $fighter = $this->get($id);
+        $fighter_data = $fighter->toArray();
+        $fighter->coordinate_x=$x+$fighter_data['coordinate_x'];
+        $fighter->coordinate_y=$y+$fighter_data['coordinate_y'];
+        $this->save($fighter);
+    }
+
+
     public function getBestFighter()
     {
       $res = $this->find()
