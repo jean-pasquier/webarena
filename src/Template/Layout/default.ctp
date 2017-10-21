@@ -28,6 +28,8 @@ $cakeDescription = 'WebArenas';
 
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('cake.css') ?>
+    <?= $this->Html->css('webarena.css') ?>
+    <?= $this->Html->css('bootstrap.min.css') ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
@@ -42,11 +44,10 @@ $cakeDescription = 'WebArenas';
         </ul>
         <div class="top-bar-section">
             <ul class="right">
-                <li><?php echo $this->Html->link('Index', '/');?></li>
-                <li><?php echo $this->Html->link('Players', ['controller' => 'Players', 'action' => '/']);?></li>
-                <li><?php echo $this->Html->link('Fighters', ['controller' => 'Fighters', 'action' => '/']);?></li>
-                <li><?php echo $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
+                <li><?php echo $this->Html->link('Home', ['controller' => 'Arenas', 'action' => '/']);?></li>
+                <li><?php echo $this->Html->link('Fighters', ['controller' => 'Arenas', 'action' => 'fighter']);?></li>
                 <li><?php echo $this->Html->link('Sight', ['controller' => 'Arenas', 'action' => 'sight']);?></li>
+                <li><?php echo $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
             </ul>
         </div>
     </nav>

@@ -1,11 +1,13 @@
 <?php $this->assign('title', 'Sight');?>
-<?php
-foreach(range(0, $width_x-1) as $width)
-{
-    foreach(range(0, $lenght_y-1) as $lenght)
-    {
-        echo('x');
-    }
-    ?> </br>
-    <?php
-}
+
+<table class="table table-bordered table-responsive">
+	<tbody>
+		<?php foreach ($sightArray as $row): ?>
+		<tr>
+			<?php foreach ($row as $square): ?>
+			<td><?= $square ?></td>
+			<?php endforeach; ?>
+		</tr>
+		<?php endforeach; ?>
+	</tbody>
+</table>

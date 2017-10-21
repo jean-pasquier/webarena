@@ -24,6 +24,29 @@ use Cake\Validation\Validator;
  */
 class FightersTable extends Table
 {
+
+	
+	public function getSightArray()
+	{
+		$width = 15;
+		$heigh = 15;
+		$array = array();
+		for($i=0; $i < $heigh; $i++)
+		{
+			$cols = array();
+			for($j=0; $j< $width; $j++)
+			{	
+				array_push($cols, '.');
+			}
+			array_push($array, $cols);
+		}
+		
+		$array[5][2]= 'F';
+		
+		return $array;
+	}
+       
+	
     public function getBestFighter()
     {
       $res = $this->find()
