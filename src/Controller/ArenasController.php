@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
+
 /**
 * Personal Controller
 * User personal interface
@@ -25,10 +27,12 @@ class ArenasController  extends AppController
     
     
     
-    public function fighter(){
+    public function fighter()
+	{
         $this->loadModel('Fighters');
-        $best = $this->Fighters->getBestFighter();
-        $this->set('best', $best);
+		
+		$list = $this->Fighters->getFighters('f3677c68-40c9-4fc2-84e1-105a35087575');
+        $this->set('list', $list);
     }
 	
 	public function index()
@@ -43,11 +47,53 @@ class ArenasController  extends AppController
         
     }
     
+	public function addFighter()
+	{
+		$width = 15;
+		$heigth = 10;
+		$this->loadModel('Fighters');
+		$fighter = $this->Fighters->newEntity();
+		$this->set('entity', $fighter);
+		
+		
+        if ($this->request->is('post')) 
+		{
+            $fighter = $this->Fighters->patchEntity($fighter, $this->request->getData());
+			
+			$fighter->player_id = 'f3677c68-40c9-4fc2-84e1-105a35087575';
+			do
+			{
+				$x = rand(0, $width);
+				$y = rand(0, $heigth);
+				$busy = $this->Fighters->isFighterHere($x, $y);
+			}
+			while($busy);
+			
+			$fighter->coordinate_x = $x;
+			$fighter->coordinate_y = $y;
+			$fighter->skill_health = 5;
+			$fighter->current_health = 5;
+			$fighter->skill_sight = 2;
+			$fighter->skill_strength = 1;
+			$fighter->level = 1;
+			$fighter->xp = 0;
+
+			if ($this->Fighters->save($fighter)) {
+                $this->Flash->success(__('The fighter has been saved.'));
+
+                return $this->redirect(['action' => 'fighter']);
+            }
+            $this->Flash->error(__('The fighter could not be saved. Please, try again.'));
+        }
+		
+	}
     
 	
     public function diary()
     {
-        $this->set('mydiary', 'I love pizzas');
+		$this->loadModel('Events');
+		$events = $this->Events->getDayEvents();
+        $this->set('events', $events);
     }
 	
 		

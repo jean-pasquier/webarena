@@ -24,7 +24,25 @@ use Cake\Validation\Validator;
  */
 class FightersTable extends Table
 {
+	
+	public function getFighters($id)
+	{
+		return $this->find()->where(['player_id' => $id])->toList();
+	}
+	
+	public function isFighterHere($x, $y)
+	{
+		return $this->find()
+			->where(['current_health >' => 0, 'coordinate_x' => $x, 'coordinate_y' => $y])
+			->count() > 0;
+	}
 
+	public function getFighterCoords($id)
+	{
+//		$res = $this->find()
+//            ->select(['coordinate_x', 'coordinate_y'])
+//			->where(['id' => $id]);
+	}
 	
 	public function getSightArray()
 	{
