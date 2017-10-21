@@ -25,13 +25,13 @@ use Cake\Validation\Validator;
 class FightersTable extends Table
 {
 
-
 	public function getSightArray()
 	{
 		$width = 15;
 		$height = 10;
 		$array = array();
 		$pid='545f827c-576c-4dc5-ab6d-27c33186dc3e';
+		
 		for($i=0; $i < $height; $i++)
 		{
 			$cols = array();
@@ -41,24 +41,27 @@ class FightersTable extends Table
 			}
 			array_push($array, $cols);
 		}
+		
 		$res = $this->find()
-						->select(['coordinate_x', 'coordinate_y'])
-						->where(['player_id' => $pid]);
+			->select(['coordinate_x', 'coordinate_y'])
+			->where(['player_id' => $pid]);
+		
 		foreach($res as $row)
 		{
-			$array[$row['coordinate_x']][$row['coordinate_y']]= 'M';
+			$array[$row['coordinate_y']][$row['coordinate_x']]= 'M';
 		}
 
 		$res = $this->find()
-						->select(['coordinate_x', 'coordinate_y'])
-						->where(['player_id !=' => $pid]);
+			->select(['coordinate_x', 'coordinate_y'])
+			->where(['player_id !=' => $pid]);
+		
 		foreach($res as $row)
 		{
-			$array[$row['coordinate_x']][$row['coordinate_y']]= 'E';
+			$array[$row['coordinate_y']][$row['coordinate_x']]= 'E';
 		}
+		
 		return $array;
 	}
-
 
 
 	public function getFighters($id)
@@ -73,46 +76,6 @@ class FightersTable extends Table
 			->count() > 0;
 	}
 
-	public function getFighterCoords($id)
-	{
-//		$res = $this->find()
-//            ->select(['coordinate_x', 'coordinate_y'])
-//			->where(['id' => $id]);
-	}
-	// 
-	// public function getSightArray()
-	// {
-	// 	$width = 15;
-	// 	$height = 10;
-	// 	$array = array();
-	// 	$pid='545f827c-576c-4dc5-ab6d-27c33186dc3e';
-	// 	for($i=0; $i < $height; $i++)
-	// 	{
-	// 		$cols = array();
-	// 		for($j=0; $j< $width; $j++)
-	// 		{
-	// 			array_push($cols, '.');
-	// 		}
-	// 		array_push($array, $cols);
-	// 	}
-	// 	$res = $this->find()
-	// 					->select(['coordinate_x', 'coordinate_y'])
-	// 					->where(['player_id' => $pid]);
-	// 	foreach($res as $row)
-	// 	{
-	// 		$array[$row['coordinate_x']][$row['coordinate_y']]= 'M';
-	// 	}
-	//
-	// 	$res = $this->find()
-	// 					->select(['coordinate_x', 'coordinate_y'])
-	// 					->where(['player_id !=' => $pid]);
-	// 	foreach($res as $row)
-	// 	{
-	// 		$array[$row['coordinate_x']][$row['coordinate_y']]= 'E';
-	// 	}
-	// 	return $array;
-	// }
-
 
     public function getPosition()
     {
@@ -122,13 +85,13 @@ class FightersTable extends Table
         return($query->toArray());
     }
 
-    public function move($x,$y)
+    public function move($x, $y)
     {
         $id = '1';
         $fighter = $this->get($id);
         $fighter_data = $fighter->toArray();
-        $fighter->coordinate_x=$x+$fighter_data['coordinate_x'];
-        $fighter->coordinate_y=$y+$fighter_data['coordinate_y'];
+        $fighter->coordinate_x = $x + $fighter_data['coordinate_x'];
+        $fighter->coordinate_y = $y + $fighter_data['coordinate_y'];
         $this->save($fighter);
     }
 
@@ -136,24 +99,16 @@ class FightersTable extends Table
     public function getBestFighter()
     {
       $res = $this->find()
-              ->select(['name', 'xp', 'level'])
-              ->order(['level' => 'DESC'])
-              ->first();
-              //->groupBy('level');
+	  ->select(['name', 'xp', 'level'])
+	  ->order(['level' => 'DESC'])
+	  ->first();
+	  //->groupBy('level');
       //pr($res);
       $best = array();
       array_push($best, $res['name']);
       array_push($best, $res['xp']);
       array_push($best, $res['level']);
       return $best;
-    }
-
-    public function getDim()
-    {
-        $width_x = 15;
-        $lenght_y = 10;
-        $dim = array($width_x, $lenght_y);
-        return $dim;
     }
 
 

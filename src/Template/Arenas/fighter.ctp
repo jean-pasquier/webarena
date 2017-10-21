@@ -2,7 +2,7 @@
 
 <h1>Fighters</h1>
 
-<ul class="list-unstyled">
+<ul class="list-unstyled col-md-6 col-md-offset-3">
 	<?php foreach ($list as $fighter): ?>
 	<li>
 		<article class="panel <?=($fighter['current_health']==0)?'panel-danger':'panel-success'; ?>">
@@ -22,5 +22,5 @@
 	<?php endforeach; ?>
 </ul>
 
-<?= $this->Html->link('New Fighter', ['action' => './addFighter']);
 
+<?= $this->Html->link('New Fighter', ['action' => './addFighter']);

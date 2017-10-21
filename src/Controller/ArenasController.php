@@ -15,55 +15,39 @@ class ArenasController  extends AppController
     {
         $this->loadModel('Fighters');
         $this->loadModel('Surroundings');
-		    $width = 15;
-		    $height = 10;
+		
+		$width = 15;
+		$height = 10;
+		
         $sightArray = $this->Fighters->getSightArray();
-        $sightArray=$this->Surroundings->check($sightArray, $width, $height);
-		    $this->set('xmax', $height);
-        $this->set('ymax', $width);
-		    $this->set('sightArray', $sightArray);
-
-//		pr($this->Fighters->getFighterCoord(0));
-    }
-
-
-
-    public function fighter(){
-$this->loadModel('Surroundings');
-$width = 15;
-$height = 10;
-$sightArray = $this->Fighters->getSightArray();
-$sightArray=$this->Surroundings->check($sightArray, $width, $height);
-$this->set('xmax', $height);
-$this->set('ymax', $width);
-$this->set('sightArray', $sightArray);
-
-
-        // get position
+        $sightArray = $this->Surroundings->check($sightArray, $width, $height);
         $pos= $this->Fighters->getPosition();
-        $this->set('x',$pos['coordinate_x']);
-        $this->set('y',$pos['coordinate_y']);
 
+		$this->set([
+			'xmax' => $height,
+        	'ymax' => $width,
+			'sightArray' => $sightArray,
+			'x' => $pos['coordinate_x'],
+			'y' => $pos['coordinate_y']
+		]);
+		
 
         if ($this->request->is('post'))
         {
             if($this->request->data['dir'] == 'up')
             {
-                $this->Fighters->move(0,1);
+                $this->Fighters->move(0, (-1));
                 $this->redirect(['action'=>'sight']);
             }
             if($this->request->data['dir'] == 'down')
             {
-                $this->Fighters->move(0,(-1));
+                $this->Fighters->move(0,1);
                 $this->redirect(['action'=>'sight']);
-
-
             }
              if($this->request->data['dir'] == 'right')
             {
                 $this->Fighters->move(1,0);
                 $this->redirect(['action'=>'sight']);
-
             }
             if($this->request->data['dir'] == 'left')
             {
@@ -71,22 +55,23 @@ $this->set('sightArray', $sightArray);
               $this->redirect(['action'=>'sight']);
             }
         }
-
-
     }
 
 
 
-  //   public function fighter()
-	// {
-  //       $this->loadModel('Fighters');
-  //
-	// 	$list = $this->Fighters->getFighters('f3677c68-40c9-4fc2-84e1-105a35087575');
-  //       $this->set('list', $list);
-  //   }
+
+
+	public function fighter()
+	{
+	 	$this->loadModel('Fighters');
+
+		$list = $this->Fighters->getFighters('545f827c-576c-4dc5-ab6d-27c33186dc3e');
+	 	$this->set('list', $list);
+	}
 
     public function index()
     {
+		
     }
 
 
@@ -109,7 +94,7 @@ $this->set('sightArray', $sightArray);
 		{
             $fighter = $this->Fighters->patchEntity($fighter, $this->request->getData());
 
-			$fighter->player_id = 'f3677c68-40c9-4fc2-84e1-105a35087575';
+			$fighter->player_id = '545f827c-576c-4dc5-ab6d-27c33186dc3e';
 			do
 			{
 				$x = rand(0, $width);
