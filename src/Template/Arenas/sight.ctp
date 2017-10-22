@@ -10,7 +10,6 @@
     <li>Y= <?php echo $y ?></li>
     <li>Trap detect = <?php echo $trap_detect ?></li>
     <li>Monster detect = <?php echo $monster_detect ?></li>
-    <li>Succes attack = <?php echo $succes_attack ?></li>
 
 </ul>
 

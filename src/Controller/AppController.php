@@ -66,6 +66,7 @@ class AppController extends Controller
         $this->Auth->config('authenticate', [
           'Form' => ['userModel' => 'Players']
         ]);
+        $this->Auth->config('logoutRedirect', ['controller' => 'Pages', 'action' => 'home']);
 
         /*
          * Enable the following components for recommended CakePHP security settings.

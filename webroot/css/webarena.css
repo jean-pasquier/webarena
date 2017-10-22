@@ -1,11 +1,28 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : 9 oct. 2017, 14:38:29
-    Author     : Jean
-*/
-
-
+.mainnav-menu{
+	background-color: transparent;
+	transition: transform 0.5s;
+	border: none;
+}
+.mainnav-menu:hover, .mainnav-menu:active, .mainnav-menu:visited, .mainnav-menu:focus{
+ 	background-color: transparent !important;
+}
+.mainnav-menu .icon2 {
+	transition: background 0.5s;
+	background-color: #FFF !important;
+}
+.mainnav-menu .icon1, .mainnav-menu .icon3{
+	transition: transform 0.5s;
+	background-color: #FFF !important;
+}
+.mainnav-menu.is-opened .icon2{
+	background: transparent !important;
+}
+.mainnav-menu.is-opened .icon1{
+    transform: translateY(6.3px) rotate(45deg);
+}
+.mainnav-menu.is-opened .icon3{
+    transform: translateY(-6.3px) rotate(-45deg);
+}
+.mainnav-menu.is-opened {
+	transform: rotate(180deg);
+}

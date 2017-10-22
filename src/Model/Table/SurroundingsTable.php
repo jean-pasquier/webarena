@@ -48,7 +48,7 @@ class SurroundingsTable extends Table
 	}
 
 	//regenerate a surrounding array : [type, x, y]
-	public function generate(array $array, $width, $heigth)
+	public function generate($width, $heigth)
 	{		
 		//delete all the surroundings
 		$this->deleteAll([]);
@@ -98,37 +98,23 @@ class SurroundingsTable extends Table
 			array_push($mySurr, $temparr);
 		}
 
-		//add all the surroundings in the table and in the array
+		//add all the surroundings in the table
 		foreach($mySurr as $row)
 		{
-			$array[$row[2]][$row[1]] = $row[0];
+//			$array[$row[2]][$row[1]] = $row[0];
 			$new = $this->newEntity();
 			$new->type = $row[0];
 			$new->coordinate_x = $row[1];
 			$new->coordinate_y = $row[2];
 			$this->save($new);
 		}
-		return $array;
 	}
 
 	//check if surrounding exists
-	public function check(array $array, $width, $heigth)
+	public function checkToGenerate($array, $width, $heigth)
 	{
-		$res = $this->find('all')->select(['type', 'coordinate_x', 'coordinate_y']);
-		
-		//if no surrounding
-		if($res->count() == 0)
-		{
-			$array = $this->generate($array, $width, $heigth);
-		}
-		else
-		{
-			foreach($res as $row)
-			{
-				$array[$row['coordinate_y']][$row['coordinate_x']] = $row['type'];
-			}
-		}
-		return $array;
+		if($this->find('all')->select(['type', 'coordinate_x', 'coordinate_y'])->count() == 0)
+			$this->generate($width, $heigth);
 	}
         
         //detect if there is a trap around the position x and y 
