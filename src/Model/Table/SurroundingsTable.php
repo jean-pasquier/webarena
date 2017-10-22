@@ -111,7 +111,7 @@ class SurroundingsTable extends Table
           $res=$this->find('all')->select(['type', 'coordinate_x', 'coordinate_y']);
           if($res->count()==0)
           {
-            $array=$this->Generate($array);
+            $array=$this->generate($array, $width, $height);
           }
           else {
         		foreach($res as $row)

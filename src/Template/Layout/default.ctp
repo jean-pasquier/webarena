@@ -64,7 +64,7 @@ $cakeDescription = 'WebArenas';
                 <dt>Author :</dt>
                 <dd>
                     <ul>
-                        <li>Benjamin Callonec</li>
+                        <li>Benjamin Callonnec</li>
                         <li>Thomas Griseau</li>
                         <li>Etienne Meunier</li>
                         <li>Jean Pasquier</li>
@@ -77,7 +77,7 @@ $cakeDescription = 'WebArenas';
                         <li>F - Responsive pages with Bootstrap</li>
                     </ol>
                 </dd>
-                
+
             </dl>
         </section>
     </footer>
