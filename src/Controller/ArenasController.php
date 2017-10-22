@@ -96,6 +96,7 @@ class ArenasController  extends AppController
             $width = 15;
             $heigth = 10;
             $this->loadModel('Fighters');
+            $this->loadModel('Surroundings');
             $fighter = $this->Fighters->newEntity();
             $this->set('entity', $fighter);
 
@@ -107,9 +108,9 @@ class ArenasController  extends AppController
 			$fighter->player_id = '545f827c-576c-4dc5-ab6d-27c33186dc3e';
 			do
 			{
-				$x = rand(0, $width);
-				$y = rand(0, $heigth);
-				$busy = $this->Fighters->isFighterHere($x, $y);
+				$x = rand(0, $width - 1);
+				$y = rand(0, $heigth - 1);
+				$busy = $this->Surroundings->isEmptySquare($x, $y);
 			}
 			while($busy);
 

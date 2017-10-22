@@ -2,11 +2,11 @@
 
 <h1><?= $this->fetch('title') ?></h1>
 
-<div class="fighters form large-9 medium-8 columns content">
+<div class="fighters form columns content col-md-6 col-md-offset-3">
     <?= $this->Form->create($entity) ?>
     <fieldset>
         <?= $this->Form->control('name'); ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Submit', ['class' => 'button'])) ?>
     <?= $this->Form->end() ?>
 </div>
