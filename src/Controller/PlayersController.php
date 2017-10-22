@@ -79,8 +79,8 @@ public function logout()
             $player = $this->Players->patchEntity($player, $this->request->getData());
             if ($this->Players->save($player)) {
                 $this->Flash->success(__('The player has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $this->Auth->setUser($player->toArray());
+                return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
             }
             $this->Flash->error(__('The player could not be saved. Please, try again.'));
         }
