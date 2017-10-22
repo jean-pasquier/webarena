@@ -48,6 +48,7 @@ $cakeDescription = 'WebArenas';
                 <li><?php echo $this->Html->link('Fighters', ['controller' => 'Arenas', 'action' => 'fighter']);?></li>
                 <li><?php echo $this->Html->link('Sight', ['controller' => 'Arenas', 'action' => 'sight']);?></li>
                 <li><?php echo $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
+                <li><?php echo $this->Html->link('Deconnexion', ['controller' => 'Players', 'action' => 'logout']);?></li>
             </ul>
         </div>
     </nav>
@@ -64,7 +65,7 @@ $cakeDescription = 'WebArenas';
                 <dt>Author :</dt>
                 <dd>
                     <ul>
-                        <li>Benjamin Callonec</li>
+                        <li>Benjamin Callonnec</li>
                         <li>Thomas Griseau</li>
                         <li>Etienne Meunier</li>
                         <li>Jean Pasquier</li>
@@ -77,7 +78,7 @@ $cakeDescription = 'WebArenas';
                         <li>F - Responsive pages with Bootstrap</li>
                     </ol>
                 </dd>
-                
+
             </dl>
         </section>
     </footer>

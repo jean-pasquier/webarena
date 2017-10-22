@@ -15,25 +15,25 @@ class ArenasController  extends AppController
     {
         $this->loadModel('Fighters');
         $this->loadModel('Surroundings');
-		
+
 		$width = 15;
 		$heigth = 10;
 
-		$sightArray = $this->Fighters->getSightArray('545f827c-576c-4dc5-ab6d-27c33186dc3e', $width, $heigth);
+		$sightArray = $this->Fighters->getSightArray($this->Auth->user('id'), $width, $heigth);
         $sightArray = $this->Surroundings->check($sightArray, $width, $heigth);
-        $pos = $this->Fighters->getPosition('545f827c-576c-4dc5-ab6d-27c33186dc3e');
-		
+        $pos = $this->Fighters->getPosition($this->Auth->user('id'));
+
 		$this->set([
 			'xmax' => $heigth,
 			'ymax' => $width,
-			'hasAliveFighter' => $this->Fighters->hasAliveFighter('545f827c-576c-4dc5-ab6d-27c33186dc3e'),
+			'hasAliveFighter' => $this->Fighters->hasAliveFighter($this->Auth->user('id')),
 			'sightArray' => $sightArray,
 			'x' => $pos['coordinate_x'],
 			'y' => $pos['coordinate_y']
 		]);
-		
 
-       
+
+
         if ($this->request->is('post'))
         {
             $x=0;
@@ -58,7 +58,7 @@ class ArenasController  extends AppController
               $x=(-1);
               $y=0;
             }
-            $this->Fighters->move('545f827c-576c-4dc5-ab6d-27c33186dc3e',$x,$y,$sightArray,$heigth,$width);
+            $this->Fighters->move($this->Auth->user('id'),$x,$y,$sightArray,$heigth,$width);
             $this->redirect(['action'=>'sight']);
         }
     }
@@ -71,25 +71,19 @@ class ArenasController  extends AppController
 	public function fighter()
 	{
 	 	$this->loadModel('Fighters');
-		
-		$list = $this->Fighters->getFighters('545f827c-576c-4dc5-ab6d-27c33186dc3e');
+
+		$list = $this->Fighters->getFighters($this->Auth->user('id'));
 	 	$this->set([
 			'list' => $list,
-			'hasAliveFighter' => $this->Fighters->hasAliveFighter('545f827c-576c-4dc5-ab6d-27c33186dc3e')
+			'hasAliveFighter' => $this->Fighters->hasAliveFighter($this->Auth->user('id'))
 		]);
 	}
 
     public function index()
     {
-		
-    }
-
-
-    public function login()
-    {
-
 
     }
+
 
     public function addFighter()
     {
@@ -100,12 +94,12 @@ class ArenasController  extends AppController
             $fighter = $this->Fighters->newEntity();
             $this->set('entity', $fighter);
 
-            
+
         if ($this->request->is('post'))
 		{
             $fighter = $this->Fighters->patchEntity($fighter, $this->request->getData());
-			
-			$fighter->player_id = '545f827c-576c-4dc5-ab6d-27c33186dc3e';
+
+			$fighter->player_id = $this->Auth->user('id');
 			do
 			{
 				$x = rand(0, $width - 1);
@@ -123,10 +117,10 @@ class ArenasController  extends AppController
 			$fighter->level = 1;
 			$fighter->xp = 0;
 
-			
+
 			if ($this->Fighters->save($fighter)) {
                 $this->Flash->success(__('The fighter has been saved.'));
-				
+
                 return $this->redirect(['action' => 'fighter']);
             }
             $this->Flash->error(__('The fighter could not be saved. Please, try again.'));
@@ -142,10 +136,5 @@ class ArenasController  extends AppController
         $this->set('events', $events);
     }
 
-
-    public function signup()
-    {
-
-    }
 
 }
