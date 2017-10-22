@@ -63,6 +63,13 @@ class FightersTable extends Table
 		return $array;
 	}
 
+	//check if the player has remaining alive fighter
+	public function hasAliveFighter($pid)
+	{
+		return $this->find()
+			->where(['player_id' => $pid, 'current_health >' => 0])
+			->count() > 0;
+	}
 
 	public function getFighters($id)
 	{
@@ -95,7 +102,14 @@ class FightersTable extends Table
         $this->save($fighter);
     }
 
-
+	
+	public function getPlayerFighters($pid)
+	{
+		$q = $this->find()->select('id')->where(['player_id' => $pid]);
+		$q->hydrate(false);
+		return $q->toArray();
+	}
+	
     public function getBestFighter()
     {
       $res = $this->find()

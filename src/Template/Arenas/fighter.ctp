@@ -1,6 +1,7 @@
 <?php $this->assign('title', 'Fighters');?>
 
-<h1>Fighters</h1>
+<h1><?= $this->fetch('title') ?></h1>
+
 
 <ul class="list-unstyled col-md-6 col-md-offset-3">
 	<?php foreach ($list as $fighter): ?>
@@ -22,5 +23,8 @@
 	<?php endforeach; ?>
 </ul>
 
-
-<?= $this->Html->link('New Fighter', ['action' => './addFighter']);
+<?php if (!$hasAliveFighter): ?>
+<p class="col-md-6 col-md-offset-3">All your fighters are dead...
+	<?= $this->Html->link('Create a new fighter', ['action' => './addFighter']); ?>
+ ?</p>
+<?php endif; ?>
