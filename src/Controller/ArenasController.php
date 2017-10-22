@@ -18,49 +18,61 @@ class ArenasController  extends AppController
 
 		$width = 15;
 		$heigth = 10;
+		
+		//check if the player has an active fighter
+		$hasAliveFighter = $this->Fighters->hasAliveFighter($this->Auth->user('id'));
+		$this->set('hasAliveFighter', $hasAliveFighter);
 
-		$sightArray = $this->Fighters->getSightArray($this->Auth->user('id'), $width, $heigth);
-        $sightArray = $this->Surroundings->check($sightArray, $width, $heigth);
-        $pos = $this->Fighters->getPosition($this->Auth->user('id'));
+		if($hasAliveFighter)
+		{
+			$fid = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['id']);
 
-		$this->set([
-			'xmax' => $heigth,
-			'ymax' => $width,
-			'hasAliveFighter' => $this->Fighters->hasAliveFighter($this->Auth->user('id')),
-			'sightArray' => $sightArray,
-			'x' => $pos['coordinate_x'],
-			'y' => $pos['coordinate_y']
-		]);
+			$sightArray = $this->Fighters->getSightArray($this->Auth->user('id'), $width, $heigth);
 
+			$sightArray = $this->Fighters->fillSightArray($this->Auth->user('id'), $fid, $sightArray);
 
-
-        if ($this->request->is('post'))
-        {
-            $x=0;
-            $y=0;
-            if($this->request->data['dir'] == 'UP')
-            {
-                $x=0;
-                $y=(-1);
-            }
-            if($this->request->data['dir'] == 'DOWN')
-            {
-                $x=0;
-                $y=1;
-            }
-             if($this->request->data['dir'] == 'RIGHT')
-            {
-                $x=1;
-                $y=0;
-            }
-            if($this->request->data['dir'] == 'LEFT')
-            {
-              $x=(-1);
-              $y=0;
-            }
-            $this->Fighters->move($this->Auth->user('id'),$x,$y,$sightArray,$heigth,$width);
-            $this->redirect(['action'=>'sight']);
-        }
+			//$sightArray = $this->Surroundings->check($sightArray, $width, $heigth);
+			$pos = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['coordinate_x', 'coordinate_y']);
+			
+			$this->set([
+				'xmax' => $heigth,
+				'ymax' => $width,
+				'sightArray' => $sightArray,
+				'x' => $pos['coordinate_x'],
+				'y' => $pos['coordinate_y']
+			]);
+			
+			
+			if ($this->request->is('post'))
+			{
+				if($this->request->data['dir'] == 'UP')
+				{
+					$x=0;
+					$y=(-1);
+				}
+				else if($this->request->data['dir'] == 'DOWN')
+				{
+					$x=0;
+					$y=1;
+				}
+				else if($this->request->data['dir'] == 'RIGHT')
+				{
+					$x=1;
+					$y=0;
+				}
+				else if($this->request->data['dir'] == 'LEFT')
+				{
+					$x=(-1);
+					$y=0;
+				}
+				else
+				{
+					$this->Flash->error(__('Cannot move the fighter. Please, try again.'));
+				}
+				$this->Fighters->move($this->Auth->user('id'), $x, $y, $sightArray, $heigth, $width);
+				$this->redirect(['action'=>'sight']);
+			}
+		}
     }
 
 
@@ -72,7 +84,7 @@ class ArenasController  extends AppController
 	{
 	 	$this->loadModel('Fighters');
 
-		$list = $this->Fighters->getFighters($this->Auth->user('id'));
+		$list = $this->Fighters->getAllFighters($this->Auth->user('id'));
 	 	$this->set([
 			'list' => $list,
 			'hasAliveFighter' => $this->Fighters->hasAliveFighter($this->Auth->user('id'))
