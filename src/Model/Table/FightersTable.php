@@ -25,90 +25,92 @@ use Cake\Validation\Validator;
 class FightersTable extends Table
 {
 
-	public function getSightArray()
-	{
-		$width = 15;
-		$height = 10;
+    public function getFighters($id)
+    {
+		return $this->find()->where(['player_id' => $id])->toList();
+    }
+
+    public function isFighterHere($x, $y)
+    {
+		return $this->find()
+			->where(['current_health >' => 0, 'coordinate_x' => $x, 'coordinate_y' => $y])
+			->count() > 0;
+    }
+    public function getSightArray($pid, $width, $heigth)
+    {
 		$array = array();
-		$pid='545f827c-576c-4dc5-ab6d-27c33186dc3e';
-		
-		for($i=0; $i < $height; $i++)
+
+		for($i=0; $i<$heigth; $i++)
 		{
 			$cols = array();
-			for($j=0; $j< $width; $j++)
+			for($j=0; $j<$width; $j++)
 			{
 				array_push($cols, '.');
 			}
 			array_push($array, $cols);
 		}
-		
-		$res = $this->find()
-			->select(['coordinate_x', 'coordinate_y'])
-			->where(['player_id' => $pid]);
-		
-		foreach($res as $row)
-		{
-			$array[$row['coordinate_y']][$row['coordinate_x']]= 'M';
-		}
+
+
+		$pos = $this->getPosition($pid);
+		$array[$pos['coordinate_y']][$pos['coordinate_x']] = 'M';
 
 		$res = $this->find()
 			->select(['coordinate_x', 'coordinate_y'])
-			->where(['player_id !=' => $pid]);
-		
+			->where(['player_id !=' => $pid, 'current_health >' => 0]);
+
 		foreach($res as $row)
 		{
 			$array[$row['coordinate_y']][$row['coordinate_x']]= 'E';
 		}
-		
-		return $array;
-	}
 
-	//check if the player has remaining alive fighter
-	public function hasAliveFighter($pid)
-	{
+		return $array;
+    }
+
+    //check if the player has remaining alive fighter
+    public function hasAliveFighter($pid)
+    {
 		return $this->find()
 			->where(['player_id' => $pid, 'current_health >' => 0])
 			->count() > 0;
-	}
-
-	public function getFighters($id)
-	{
-		return $this->find()->where(['player_id' => $id])->toList();
-	}
-
-	public function isFighterHere($x, $y)
-	{
-		return $this->find()
-			->where(['current_health >' => 0, 'coordinate_x' => $x, 'coordinate_y' => $y])
-			->count() > 0;
-	}
-
-
-    public function getPosition()
-    {
-        $id = '1';
-        $query = $this->get($id,['fields'=>['coordinate_x', 'coordinate_y']]);
-        //debug($query->toArray());
-        return($query->toArray());
     }
 
-    public function move($x, $y)
+
+
+    public function getPosition($pid)
     {
-        $id = '1';
-        $fighter = $this->get($id);
+        $pos = $this->find()
+			->select(['coordinate_x', 'coordinate_y'])
+			->where(['player_id' => $pid, 'current_health >' => 0])
+			->first();
+		if($pos == null) 
+			return $pos;
+		return($pos->toArray());
+    }
+
+    public function move($pid,$x, $y,$sightArray,$height,$width)
+    {
+        $fighter = $this->find()->where(['player_id' => $pid, 'current_health >' => 0])->first();
         $fighter_data = $fighter->toArray();
-        $fighter->coordinate_x = $x + $fighter_data['coordinate_x'];
-        $fighter->coordinate_y = $y + $fighter_data['coordinate_y'];
-        $this->save($fighter);
+        $tempo_coord_x = $x + $fighter_data['coordinate_x'];
+        $tempo_coord_y = $y + $fighter_data['coordinate_y'];
+		
+        if($tempo_coord_x >=0 && $tempo_coord_x < $width && $tempo_coord_y >=0 && $tempo_coord_y < $height )
+        {
+            if($sightArray[$tempo_coord_y][$tempo_coord_x]=='.')
+            {
+                $fighter->coordinate_x = $tempo_coord_x;
+                $fighter->coordinate_y = $tempo_coord_y;
+                $this->save($fighter); 
+            }
+            if($sightArray[$tempo_coord_y][$tempo_coord_x]=='W' || $sightArray[$tempo_coord_y][$tempo_coord_x]=='T' )
+            {
+                $fighter->current_health = 0;
+                $this->save($fighter); 
+            } 
+        }    
     }
 
 	
-	public function getPlayerFighters($pid)
-	{
-		$q = $this->find()->select('id')->where(['player_id' => $pid]);
-		$q->hydrate(false);
-		return $q->toArray();
-	}
 	
     public function getBestFighter()
     {

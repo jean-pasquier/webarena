@@ -106,21 +106,21 @@ class SurroundingsTable extends Table
   }
 
 
-      public function check(array $array, $width, $height)
+  public function check(array $array, $width, $height)
+  {
+      $res=$this->find('all')->select(['type', 'coordinate_x', 'coordinate_y']);
+      if($res->count()==0)
       {
-          $res=$this->find('all')->select(['type', 'coordinate_x', 'coordinate_y']);
-          if($res->count()==0)
-          {
-            $array=$this->generate($array, $width, $height);
-          }
-          else {
-        		foreach($res as $row)
-        		{
-        			$array[$row['coordinate_x']][$row['coordinate_y']]=$row['type'];
-        		}
-          }
-          return $array;
+        $array=$this->Generate($array,$width,$heights);
       }
+      else {
+                    foreach($res as $row)
+                    {
+                            $array[$row['coordinate_x']][$row['coordinate_y']]=$row['type'];
+                    }
+      }
+      return $array;
+  }
 
     /**
      * Initialize method

@@ -56,8 +56,8 @@ $cakeDescription = 'WebArenas';
             <div class="top-bar-section">
                 <ul class="right">
                     <li><?php echo $this->Html->link('Index', '/');?></li>
-                    <li><?php echo $this->Html->link('Login', ['controller' => 'Arenas', 'action' => 'login']);?></li>
-                    <li><?php echo $this->Html->link('Signup', ['controller' => 'Arenas', 'action' => 'signup']);?></li>
+                    <li><?php echo $this->Html->link('Login', ['controller' => 'Players', 'action' => 'login']);?></li>
+                    <li><?php echo $this->Html->link('Signup', ['controller' => 'Players', 'action' => 'add']);?></li>
                 </ul>
             </div>
         </nav>
