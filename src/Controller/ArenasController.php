@@ -17,14 +17,14 @@ class ArenasController  extends AppController
         $this->loadModel('Surroundings');
 		
 		$width = 15;
-		$height = 10;
+		$heigth = 10;
 
-		$sightArray = $this->Fighters->getSightArray();
-        $sightArray = $this->Surroundings->check($sightArray, $width, $height);
-        $pos = $this->Fighters->getPosition();
+		$sightArray = $this->Fighters->getSightArray('545f827c-576c-4dc5-ab6d-27c33186dc3e', $width, $heigth);
+        $sightArray = $this->Surroundings->check($sightArray, $width, $heigth);
+        $pos = $this->Fighters->getPosition('545f827c-576c-4dc5-ab6d-27c33186dc3e');
 
 		$this->set([
-			'xmax' => $height,
+			'xmax' => $heigth,
         	'ymax' => $width,
 			'sightArray' => $sightArray,
 			'x' => $pos['coordinate_x'],
@@ -36,22 +36,22 @@ class ArenasController  extends AppController
         {
             if($this->request->data['dir'] == 'up')
             {
-                $this->Fighters->move(0, (-1));
+                $this->Fighters->move('545f827c-576c-4dc5-ab6d-27c33186dc3e', 0, (-1));
                 $this->redirect(['action'=>'sight']);
             }
             if($this->request->data['dir'] == 'down')
             {
-                $this->Fighters->move(0, 1);
+                $this->Fighters->move('545f827c-576c-4dc5-ab6d-27c33186dc3e', 0, 1);
                 $this->redirect(['action'=>'sight']);
             }
              if($this->request->data['dir'] == 'right')
             {
-                $this->Fighters->move(1, 0);
+                $this->Fighters->move('545f827c-576c-4dc5-ab6d-27c33186dc3e', 1, 0);
                 $this->redirect(['action'=>'sight']);
             }
             if($this->request->data['dir'] == 'left')
             {
-              $this->Fighters->move((-1), 0);
+              $this->Fighters->move('545f827c-576c-4dc5-ab6d-27c33186dc3e', (-1), 0);
               $this->redirect(['action'=>'sight']);
             }
         }
