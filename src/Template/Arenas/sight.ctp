@@ -3,14 +3,14 @@
 <h1><?= $this->fetch('title') ?></h1>
 
 
+<?php if ($hasAliveFighter): ?>
+
 <ul>
     <li>X= <?php echo $x ?></li>
     <li>Y= <?php echo $y ?></li>
 </ul>
 
-
-<?php
-// echo($this->Form->postButton('move', ['controller' => 'Arenas', 'action' => 'move']));
+<?php 
 echo $this->Form->create();
 echo $this->Form->submit('UP',['class' => 'button','name'=>'dir']);
 echo $this->Form->submit('DOWN',['class' => 'button', 'name'=>'dir']);
@@ -30,3 +30,13 @@ echo $this->Form->end();
 		<?php endforeach; ?>
 	</tbody>
 </table>
+
+<?php endif;?>
+
+<?php if (!$hasAliveFighter) : ?>
+<div class="alert alert-danger col-md-6 col-md-offset-3">
+	<h4>You do not have alive fighter or all of them are dead...</h4>
+	<p><?= $this->Html->link('Create a new fighter', ['action' => './addFighter']); ?>
+	</p>
+</div>
+<?php endif; ?>

@@ -22,10 +22,11 @@ class ArenasController  extends AppController
 		$sightArray = $this->Fighters->getSightArray('545f827c-576c-4dc5-ab6d-27c33186dc3e', $width, $heigth);
         $sightArray = $this->Surroundings->check($sightArray, $width, $heigth);
         $pos = $this->Fighters->getPosition('545f827c-576c-4dc5-ab6d-27c33186dc3e');
-
+		
 		$this->set([
 			'xmax' => $heigth,
-                        'ymax' => $width,
+			'ymax' => $width,
+			'hasAliveFighter' => $this->Fighters->hasAliveFighter('545f827c-576c-4dc5-ab6d-27c33186dc3e'),
 			'sightArray' => $sightArray,
 			'x' => $pos['coordinate_x'],
 			'y' => $pos['coordinate_y']

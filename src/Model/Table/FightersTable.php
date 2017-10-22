@@ -27,51 +27,51 @@ class FightersTable extends Table
 
     public function getFighters($id)
     {
-            return $this->find()->where(['player_id' => $id])->toList();
+		return $this->find()->where(['player_id' => $id])->toList();
     }
 
     public function isFighterHere($x, $y)
     {
-            return $this->find()
-                    ->where(['current_health >' => 0, 'coordinate_x' => $x, 'coordinate_y' => $y])
-                    ->count() > 0;
+		return $this->find()
+			->where(['current_health >' => 0, 'coordinate_x' => $x, 'coordinate_y' => $y])
+			->count() > 0;
     }
     public function getSightArray($pid, $width, $heigth)
     {
-            $array = array();
+		$array = array();
 
-            for($i=0; $i<$heigth; $i++)
-            {
-                    $cols = array();
-                    for($j=0; $j<$width; $j++)
-                    {
-                            array_push($cols, '.');
-                    }
-                    array_push($array, $cols);
-            }
+		for($i=0; $i<$heigth; $i++)
+		{
+			$cols = array();
+			for($j=0; $j<$width; $j++)
+			{
+				array_push($cols, '.');
+			}
+			array_push($array, $cols);
+		}
 
 
-            $pos = $this->getPosition($pid);
-            $array[$pos['coordinate_y']][$pos['coordinate_x']] = 'M';
+		$pos = $this->getPosition($pid);
+		$array[$pos['coordinate_y']][$pos['coordinate_x']] = 'M';
 
-            $res = $this->find()
-                    ->select(['coordinate_x', 'coordinate_y'])
-                    ->where(['player_id !=' => $pid, 'current_health >' => 0]);
+		$res = $this->find()
+			->select(['coordinate_x', 'coordinate_y'])
+			->where(['player_id !=' => $pid, 'current_health >' => 0]);
 
-            foreach($res as $row)
-            {
-                    $array[$row['coordinate_y']][$row['coordinate_x']]= 'E';
-            }
+		foreach($res as $row)
+		{
+			$array[$row['coordinate_y']][$row['coordinate_x']]= 'E';
+		}
 
-            return $array;
+		return $array;
     }
 
     //check if the player has remaining alive fighter
     public function hasAliveFighter($pid)
     {
-            return $this->find()
-                    ->where(['player_id' => $pid, 'current_health >' => 0])
-                    ->count() > 0;
+		return $this->find()
+			->where(['player_id' => $pid, 'current_health >' => 0])
+			->count() > 0;
     }
 
 
@@ -82,15 +82,18 @@ class FightersTable extends Table
 			->select(['coordinate_x', 'coordinate_y'])
 			->where(['player_id' => $pid, 'current_health >' => 0])
 			->first();
-        return($pos->toArray());
+		if($pos == null) 
+			return $pos;
+		return($pos->toArray());
     }
 
     public function move($pid,$x, $y,$sightArray,$height,$width)
     {
         $fighter = $this->find()->where(['player_id' => $pid, 'current_health >' => 0])->first();
         $fighter_data = $fighter->toArray();
-        $tempo_coord_x=$x + $fighter_data['coordinate_x'];
-        $tempo_coord_y=$y + $fighter_data['coordinate_y'];
+        $tempo_coord_x = $x + $fighter_data['coordinate_x'];
+        $tempo_coord_y = $y + $fighter_data['coordinate_y'];
+		
         if($tempo_coord_x >=0 && $tempo_coord_x < $width && $tempo_coord_y >=0 && $tempo_coord_y < $height )
         {
             if($sightArray[$tempo_coord_y][$tempo_coord_x]=='.')
@@ -101,9 +104,8 @@ class FightersTable extends Table
             }
             if($sightArray[$tempo_coord_y][$tempo_coord_x]=='W' || $sightArray[$tempo_coord_y][$tempo_coord_x]=='T' )
             {
-                //$fighter->current_health=0;
-                // on le kill 
-               // $this->save($fighter); 
+                $fighter->current_health = 0;
+                $this->save($fighter); 
             } 
         }    
     }
