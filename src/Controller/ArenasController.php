@@ -17,45 +17,52 @@ class ArenasController  extends AppController
         $this->loadModel('Surroundings');
 		
 		$width = 15;
-		$height = 10;
+		$heigth = 10;
 
-		$sightArray = $this->Fighters->getSightArray();
-        $sightArray = $this->Surroundings->check($sightArray, $width, $height);
-        $pos = $this->Fighters->getPosition();
-
+		$sightArray = $this->Fighters->getSightArray('545f827c-576c-4dc5-ab6d-27c33186dc3e', $width, $heigth);
+        $sightArray = $this->Surroundings->check($sightArray, $width, $heigth);
+        $pos = $this->Fighters->getPosition('545f827c-576c-4dc5-ab6d-27c33186dc3e');
+		
 		$this->set([
-			'xmax' => $height,
-        	'ymax' => $width,
+			'xmax' => $heigth,
+			'ymax' => $width,
+			'hasAliveFighter' => $this->Fighters->hasAliveFighter('545f827c-576c-4dc5-ab6d-27c33186dc3e'),
 			'sightArray' => $sightArray,
 			'x' => $pos['coordinate_x'],
 			'y' => $pos['coordinate_y']
 		]);
 		
 
+       
         if ($this->request->is('post'))
         {
-            if($this->request->data['dir'] == 'up')
+            $x=0;
+            $y=0;
+            if($this->request->data['dir'] == 'UP')
             {
-                $this->Fighters->move(0, (-1));
-                $this->redirect(['action'=>'sight']);
+                $x=0;
+                $y=(-1);
             }
-            if($this->request->data['dir'] == 'down')
+            if($this->request->data['dir'] == 'DOWN')
             {
-                $this->Fighters->move(0, 1);
-                $this->redirect(['action'=>'sight']);
+                $x=0;
+                $y=1;
             }
-             if($this->request->data['dir'] == 'right')
+             if($this->request->data['dir'] == 'RIGHT')
             {
-                $this->Fighters->move(1, 0);
-                $this->redirect(['action'=>'sight']);
+                $x=1;
+                $y=0;
             }
-            if($this->request->data['dir'] == 'left')
+            if($this->request->data['dir'] == 'LEFT')
             {
-              $this->Fighters->move((-1), 0);
-              $this->redirect(['action'=>'sight']);
+              $x=(-1);
+              $y=0;
             }
+            $this->Fighters->move('545f827c-576c-4dc5-ab6d-27c33186dc3e',$x,$y,$sightArray,$heigth,$width);
+            $this->redirect(['action'=>'sight']);
         }
     }
+
 
 
 
@@ -84,15 +91,15 @@ class ArenasController  extends AppController
 
     }
 
-	public function addFighter()
-	{
-		$width = 15;
-		$heigth = 10;
-		$this->loadModel('Fighters');
-		$fighter = $this->Fighters->newEntity();
-		$this->set('entity', $fighter);
+    public function addFighter()
+    {
+            $width = 15;
+            $heigth = 10;
+            $this->loadModel('Fighters');
+            $fighter = $this->Fighters->newEntity();
+            $this->set('entity', $fighter);
 
-
+            
         if ($this->request->is('post'))
 		{
             $fighter = $this->Fighters->patchEntity($fighter, $this->request->getData());
@@ -122,9 +129,9 @@ class ArenasController  extends AppController
                 return $this->redirect(['action' => 'fighter']);
             }
             $this->Flash->error(__('The fighter could not be saved. Please, try again.'));
-        }
+            }
 
-	}
+    }
 
 
     public function diary()
