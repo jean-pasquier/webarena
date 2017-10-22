@@ -130,7 +130,24 @@ class SurroundingsTable extends Table
 		}
 		return $array;
 	}
+        
+        //detect if there is a trap around the position x and y 
+        public function detect_trap($x,$y,$type)
+        {
+          /*$res=$this->find('all')->where(['coordinate_x >=' =>($x-1),
+               'coordinate_x <=' =>($x+1),'coordinate_y >=' =>($y-1),'coordinate_y <=' =>($y+1),'type ='=>'T'])->count();
+          */
+           $res=$this->find('all')->where(['type ='=>$type,'coordinate_x =' =>$x,'coordinate_y >=' =>($y-1),'coordinate_y <=' =>($y+1)])
+                                  ->orWhere(['type ='=>$type,'coordinate_y =' =>$y,'coordinate_x >=' =>($x-1),'coordinate_x <=' =>($x+1)]);
+           return($res->count());
+        }
 	
+        // allows to one element of the surronding to receive an attack
+        public function get_attack($id,$x,$y)
+        {
+            
+        }
+        
 	//calculate random coordinates checking if the square is empty
 	public function calculateRandomCoord($arr, $xmax, $ymax)
 	{

@@ -8,10 +8,16 @@
 <ul>
     <li>X= <?php echo $x ?></li>
     <li>Y= <?php echo $y ?></li>
+    <li>Trap detect = <?php echo $trap_detect ?></li>
+    <li>Monster detect = <?php echo $monster_detect ?></li>
+    <li>Succes attack = <?php echo $succes_attack ?></li>
+
 </ul>
 
 <?php 
 echo $this->Form->create();
+echo 'Attack : ' ;
+echo $this->Form->checkbox('attack');
 echo $this->Form->submit('UP',['class' => 'button','name'=>'dir']);
 echo $this->Form->submit('DOWN',['class' => 'button', 'name'=>'dir']);
 echo $this->Form->submit('RIGHT', ['class' => 'button', 'name'=>'dir']);

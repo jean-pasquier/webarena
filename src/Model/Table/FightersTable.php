@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
  * Fighters Model
@@ -65,6 +66,7 @@ class FightersTable extends Table
 
 		return $array;
     }
+    
 
     //check if the player has remaining alive fighter
     public function hasAliveFighter($pid)
@@ -108,6 +110,65 @@ class FightersTable extends Table
                 $this->save($fighter); 
             } 
         }    
+    }
+    
+    public function attack($pid,$x,$y)
+    {
+        $Surroundings = TableRegistry::get('Surroundings');
+        $fighter = $this->find()->where(['player_id' => $pid, 'current_health >' => 0])->first();
+        $fighter_data = $fighter->toArray();
+        $tempo_coord_x = $x + $fighter_data['coordinate_x'];
+        $tempo_coord_y = $y + $fighter_data['coordinate_y'];
+        $succes = 0;
+        
+        //  kill monsters 
+        $monster=$Surroundings->find()
+                     ->where(['Type' => 'W','coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y])
+                     ->first();
+        if($monster)
+        {
+            $Surroundings->delete($monster);
+            $succes=1;
+        }
+        
+        //fight with players
+        $ennemy=$this->find()
+                     ->where(['coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y,'current_health >' => 0])
+                     ->first();
+        if($ennemy)
+        {
+            // on récupère le niveau de l'attaqué et le niveau de l'attaquant + calcul du seuil
+            $seuil =10+$ennemy['level']-$fighter['level'];
+            $dice = rand(0,20);
+
+            if($dice > $seuil)
+            {
+                // on applique l'attaque à la vie de l'énemie
+                $ennemy->current_health = $ennemy['current_health']-$fighter['skill_strength'];
+                
+                if($ennemy->current_health <= 0)
+                {
+                   $ennemy->current_health=0; 
+                   $fighter->xp=$fighter->xp+ $ennemy['level'];
+                }
+                else
+                {
+                   $fighter->xp=$fighter->xp+1;
+                }
+                $this->save($fighter);
+                $this->save($ennemy); 
+                $succes=1;
+
+            }
+            else
+            {
+                //message d'échec`
+                $succes=2;
+            }
+            // on détermine si l'attaque réussit 
+            // si elle fail on affiche un truc 
+        }
+        return($succes); // 0 = rien 1 = succes 2 = parade 
     }
 
 	
