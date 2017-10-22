@@ -7,6 +7,6 @@
     <fieldset>
         <?= $this->Form->control('name'); ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit', ['class' => 'button'])) ?>
+    <?= $this->Form->button(__('Submit', ['class' => 'btn btn-default'])) ?>
     <?= $this->Form->end() ?>
 </div>

@@ -12,10 +12,10 @@
 
 <?php 
 echo $this->Form->create();
-echo $this->Form->submit('UP',['class' => 'button','name'=>'dir']);
-echo $this->Form->submit('DOWN',['class' => 'button', 'name'=>'dir']);
-echo $this->Form->submit('RIGHT', ['class' => 'button', 'name'=>'dir']);
-echo $this->Form->submit('LEFT', ['class' => 'button', 'name'=>'dir']);
+echo $this->Form->submit('UP',['class' => 'btn btn-default','name'=>'dir']);
+echo $this->Form->submit('DOWN',['class' => 'btn btn-default', 'name'=>'dir']);
+echo $this->Form->submit('RIGHT', ['class' => 'btn btn-default', 'name'=>'dir']);
+echo $this->Form->submit('LEFT', ['class' => 'btn btn-default', 'name'=>'dir']);
 echo $this->Form->end();
 ?>
 

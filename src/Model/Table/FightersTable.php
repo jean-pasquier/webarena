@@ -56,7 +56,7 @@ class FightersTable extends Table
     }
 	
 	//fill the array with datas : fighter, surrounding, ennemies
-	public function fillSightArray($pid, $fid, $arr)
+	public function fillSightArray($pid, $arr)
 	{
 		//fighter position
 		$aFighter = $this->getAliveFighter($pid, ['player_id', 'coordinate_x', 'coordinate_y', 'skill_sight']);
@@ -71,11 +71,9 @@ class FightersTable extends Table
 'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') <=' => $aFighter['skill_sight'],
 'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') >=' => - $aFighter['skill_sight']
 			]);
-				
-//		foreach($ennemies as $ennemy)
-//		{
-//			$arr[$ennemy['coordinate_y']][$ennemy['coordinate_x']]= 'E';
-//		}
+						
+		foreach($ennemies as $ennemy)
+			$arr[$ennemy['coordinate_y']][$ennemy['coordinate_x']]= 'E';
 		
 		//surroundings position
 		$surr = TableRegistry::get('Surroundings')
@@ -86,9 +84,7 @@ class FightersTable extends Table
 			]);
 
 		foreach($surr as $sur)
-		{
 			$arr[$sur['coordinate_y']][$sur['coordinate_x']] = $sur['type'];
-		}
 		
 		return $arr;
 	}
@@ -102,8 +98,7 @@ class FightersTable extends Table
 			->count() > 0;
     }
 
-
-
+	//return the selected data in argument
     public function getAliveFighter($pid, $select = array())
     {
         $pos = $this->find()

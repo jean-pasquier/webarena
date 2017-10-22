@@ -25,11 +25,9 @@ class ArenasController  extends AppController
 
 		if($hasAliveFighter)
 		{
-			$fid = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['id']);
-
 			$sightArray = $this->Fighters->getSightArray($this->Auth->user('id'), $width, $heigth);
 
-			$sightArray = $this->Fighters->fillSightArray($this->Auth->user('id'), $fid, $sightArray);
+			$sightArray = $this->Fighters->fillSightArray($this->Auth->user('id'), $sightArray);
 
 			//$sightArray = $this->Surroundings->check($sightArray, $width, $heigth);
 			$pos = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['coordinate_x', 'coordinate_y']);

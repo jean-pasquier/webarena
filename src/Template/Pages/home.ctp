@@ -43,24 +43,25 @@ $cakeDescription = 'WebArenas';
         <?= $this->Html->css('cake.css') ?>
         <?= $this->Html->css('home.css') ?>
     	<?= $this->Html->css('bootstrap.min.css') ?>
+    	<?= $this->Html->css('webarena.css') ?>
         <link href="https://fonts.googleapis.com/css?family=Raleway:500i|Roboto:300,400,700|Roboto+Mono" rel="stylesheet">
     </head>
     <body>
-
-        <nav class="top-bar expanded" data-topbar role="navigation">
-            <ul class="title-area large-3 medium-4 columns">
-                <li class="name">
-                    <h1><a href=""><?= $this->fetch('title') ?></a></h1>
-                </li>
-            </ul>
-            <div class="top-bar-section">
-                <ul class="right">
-                    <li><?php echo $this->Html->link('Index', '/');?></li>
+		<nav class="navbar navbar-inverse navbar-fixed-top container-fluid" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<?= $this->Html->link('Home', '/', ['class' => 'navbar-brand']);?>
+				</div>
+				<div>
+					<ul class="nav navbar-nav navbar-right">
                     <li><?php echo $this->Html->link('Login', ['controller' => 'Players', 'action' => 'login']);?></li>
                     <li><?php echo $this->Html->link('Signup', ['controller' => 'Players', 'action' => 'add']);?></li>
-                </ul>
-            </div>
-        </nav>
+					</ul>
+				</div>
+
+
+			</div>
+		</nav>
 
 
 
