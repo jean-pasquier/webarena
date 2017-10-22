@@ -23,13 +23,9 @@ class SurroundingsTable extends Table
 	//check if there is something at ($x, $y) neather fighter or existing surrounding in db
 	public function isEmptySquare($x, $y)
 	{
-		return 
-		$this->find()
+		return $this->find()
 			->where(['coordinate_x' => $x, 'coordinate_y' => $y])
-			->count() > 0 
-			|| 
-			TableRegistry::get('Fighters')
-			->$this->find()
+			->count() > 0 || TableRegistry::get('Fighters')->find()
 			->where(['current_health >' => 0, 'coordinate_x' => $x, 'coordinate_y' => $y])
 			->count() > 0;
 	}
