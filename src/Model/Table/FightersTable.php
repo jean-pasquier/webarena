@@ -37,7 +37,7 @@ class FightersTable extends Table
 			->where(['current_health >' => 0, 'coordinate_x' => $x, 'coordinate_y' => $y])
 			->count() > 0;
     }
-	
+
     public function getSightArray($pid, $width, $heigth)
     {
 		$array = array();
@@ -55,14 +55,14 @@ class FightersTable extends Table
 		return $array;
     }
 
-	
+
 	//fill the array with datas : fighter, surrounding, ennemies
 	public function fillSightArray($pid, $arr)
 	{
 		//fighter position
 		$aFighter = $this->getAliveFighter($pid, ['player_id', 'coordinate_x', 'coordinate_y', 'skill_sight']);
 		$arr[$aFighter['coordinate_y']][$aFighter['coordinate_x']] = 'M';
-		
+
 		//ennemies position
 		$ennemies = $this->find()
 			->select(['coordinate_x', 'coordinate_y'])
@@ -72,10 +72,10 @@ class FightersTable extends Table
 'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') <=' => $aFighter['skill_sight'],
 'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') >=' => - $aFighter['skill_sight']
 			]);
-						
+
 		foreach($ennemies as $ennemy)
 			$arr[$ennemy['coordinate_y']][$ennemy['coordinate_x']]= 'E';
-		
+
 		//surroundings position
 		$surr = TableRegistry::get('Surroundings')
 			->find()
@@ -86,11 +86,11 @@ class FightersTable extends Table
 
 		foreach($surr as $sur)
 			$arr[$sur['coordinate_y']][$sur['coordinate_x']] = $sur['type'];
-		
+
 		return $arr;
 	}
 
-	
+
     //check if the player has remaining alive fighter
     public function hasAliveFighter($pid)
     {
@@ -109,6 +109,27 @@ class FightersTable extends Table
 		if($pos == null)
 			return $pos;
 		return($pos->toArray());
+    }
+
+    //add guild id in the alive fighter of the player id
+    public function addGuildintoFighter($pid, $gid)
+    {
+      $query = $this->find()
+                    ->update()
+                    ->set(['guild_id' => $gid])
+                    ->where(['player_id' => $pid, 'current_health >' => 0])
+                    ->execute();
+    }
+
+    public function getGuildintoFighter($pid)
+    {
+      $pos = $this->find()
+      ->select('guild_id')
+      ->where(['player_id' => $pid, 'current_health >' => 0])
+      ->first();
+    if($pos == null)
+      return $pos;
+    return($pos->toArray());
     }
 
     public function move($pid, $x, $y, $sightArray, $height, $width)
@@ -133,7 +154,7 @@ class FightersTable extends Table
             }
         }
     }
-    
+
     public function attack($pid,$x,$y)
     {
         $Surroundings = TableRegistry::get('Surroundings');
@@ -142,8 +163,8 @@ class FightersTable extends Table
         $tempo_coord_x = $x + $fighter_data['coordinate_x'];
         $tempo_coord_y = $y + $fighter_data['coordinate_y'];
         $succes = 0;
-        
-        //  kill monsters 
+
+        //  kill monsters
         $monster=$Surroundings->find()
                      ->where(['Type' => 'W','coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y])
                      ->first();
@@ -152,7 +173,7 @@ class FightersTable extends Table
             $Surroundings->delete($monster);
             $succes=1;
         }
-        
+
         //fight with players
         $ennemy=$this->find()
                      ->where(['coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y,'current_health >' => 0])
@@ -167,10 +188,10 @@ class FightersTable extends Table
             {
                 // on applique l'attaque à la vie de l'énemie
                 $ennemy->current_health = $ennemy['current_health']-$fighter['skill_strength'];
-                
+
                 if($ennemy->current_health <= 0)
                 {
-                   $ennemy->current_health=0; 
+                   $ennemy->current_health=0;
                    $fighter->xp=$fighter->xp+ $ennemy['level'];
                 }
                 else
@@ -178,7 +199,7 @@ class FightersTable extends Table
                    $fighter->xp=$fighter->xp+1;
                 }
                 $this->save($fighter);
-                $this->save($ennemy); 
+                $this->save($ennemy);
                 $succes=1;
 
             }
@@ -187,10 +208,10 @@ class FightersTable extends Table
                 //message d'échec`
                 $succes=2;
             }
-            // on détermine si l'attaque réussit 
-            // si elle fail on affiche un truc 
+            // on détermine si l'attaque réussit
+            // si elle fail on affiche un truc
         }
-        return($succes); // 0 = rien 1 = succes 2 = parade 
+        return($succes); // 0 = rien 1 = succes 2 = parade
     }
 
 

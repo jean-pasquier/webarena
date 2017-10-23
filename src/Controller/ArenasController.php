@@ -167,8 +167,7 @@ class ArenasController  extends AppController
       $this->loadModel('Fighters');
       $this->loadModel('Guilds');
       $this->loadModel('Messages');
-      $id = '545f827c-576c-4dc5-ab6d-27c33186dc3e';
-      $fighters = $this->Fighters->getFighters($id);
+      $fighters = $this->Fighters->getAllFighters($this->Auth->user('id'));
       foreach($fighters as $fighter)
       {
         $temp = array();
@@ -177,7 +176,9 @@ class ArenasController  extends AppController
         array_push($res, $temp);
       }
       $guilds = $this->Guilds->find_guild($res);
+      $fighters = $this->Fighters->getFightersGuild($guilds[0][0]->id);
       $this->set('guilds', $guilds);
+      $this->set('fighters', $fighters);
     }
 
     public function addGuild()
@@ -203,28 +204,25 @@ class ArenasController  extends AppController
     {
       $this->loadModel('Guilds');
       $this->loadModel('Fighters');
-      $entity = $this->Fighters->newEntity();
-      $id = '545f827c-576c-4dc5-ab6d-27c33186dc3e';
       $res = array();
-      $temp = array();
       $list = $this->Guilds->getAllGuilds();
       foreach($list as $guild):
         $fighters_name = $this->Fighters->getFightersGuild($guild->id);
         $guild['fighters_name'] = $fighters_name;
         array_push($res, $guild);
       endforeach;
-      $names = $this->Fighters->getFighters($id);
-      foreach($names as $name):
-        array_push($temp, $name->name);
-      endforeach;
-
       if($this->request->is('post'))
       {
-        $entity = $this->Fighters->patchEntity($entity, $this->request->getData());
+        $gid = $this->request->getData();
+        $temp = $this->Fighters->getGuildintoFighter($this->Auth->user('id'));
+        var_dump($temp);
+        var_dump($gid);
+        if(!$temp['guild_id'] || [$temp['guild_id'] != $gid['guild_id']])
+        $this->Fighters->addGuildintoFighter($this->Auth->user('id'), $gid['guild_id']);
+        return $this->redirect(['action' => 'guild']);
+
       }
-      $this->set('names', $temp);
       $this->set('guilds', $res);
-      $this->set('entity', $entity);
 
     }
 

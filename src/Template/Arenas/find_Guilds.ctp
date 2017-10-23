@@ -18,10 +18,11 @@
         <dt>Guild empty</dt>
         <dd> There is no fighters is this guild for the moment </dd>
       <?php endif; ?>
-				</dl>
-         <?= $this->form->create($entity); ?>
-         <?= $this->form->control('fighters_name', [
-           'options' => $names]);?>
+      </dl>
+         <?= $this->form->create(); ?>
+         <?= $this->form->checkbox('guild_id', [
+           'value' => $guild->id,
+            'required' => true]);?>
            <?= $this->Form->button(__('Join guild')) ?>
            <?= $this->Form->end() ?>
 			</div>

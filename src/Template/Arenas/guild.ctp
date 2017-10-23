@@ -7,11 +7,13 @@
 	<?php foreach ($guilds as $guild): if($guild):?>
 	<li>
 		<article class="panel panel-success">
-			<h5 class="panel-heading"><?= $guild['fighter_name'] ?></h5>
+			<h5 class="panel-heading"><?= $guild[0]->name ?></h5>
 			<div class="panel-body">
 				<dl class="dl-horizontal">
-					<dt>guild name</dt>
-					<dd><?= $guild['name']?></dd>
+					<?php foreach($fighters as $fighter): ?>
+					<dt>Fighter</dt>
+					<dd><?= $fighter->name?></dd>
+				<?php endforeach; ?>
 				</dl>
 			</div>
 		</article>
