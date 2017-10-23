@@ -2,6 +2,7 @@
 namespace App\Controller;
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 /**
 * Personal Controller
@@ -215,8 +216,6 @@ class ArenasController  extends AppController
       {
         $gid = $this->request->getData();
         $temp = $this->Fighters->getGuildintoFighter($this->Auth->user('id'));
-        var_dump($temp);
-        var_dump($gid);
         if(!$temp['guild_id'] || [$temp['guild_id'] != $gid['guild_id']])
         $this->Fighters->addGuildintoFighter($this->Auth->user('id'), $gid['guild_id']);
         return $this->redirect(['action' => 'guild']);
@@ -226,9 +225,44 @@ class ArenasController  extends AppController
 
     }
 
-    public function joinGuild($guild_id)
+    public function messages()
     {
-
+      $this->loadModel('Messages');
+      $this->loadModel('Fighters');
+      $entity = $this->Messages->newEntity();
+      $fres = array();
+      $fid = $this->Fighters->getAliveFighter($this->Auth->user('id'), 'id');
+      $messages = $this->Messages->find_message($fid['id']);
+      foreach($messages as $message):
+        $temp =  $this->Fighters->getFighter($message['fighter_id_from'], 'name');
+        $message['fighter_name_from'] = $temp[0]['name'];
+        $temp = $this->Fighters->getFighter($message['fighter_id'], 'name');
+        $message['fighter_name'] = $temp[0]['name'];
+      endforeach;
+      $fighters = $this->Fighters->getEveryFighterAliveExecptOurs($this->Auth->user('id'), ['id', 'name']);
+      foreach($fighters as $fighter):
+        array_push($fres, $fighter['name']);
+      endforeach;
+      if($this->request->is('post'))
+      {
+        $req = array();
+        $data = $this->request->getData();
+        $req['date'] =  Time::now();
+        $req['title'] = $data['title'];
+        $req['message'] = $data['message'];
+        $req['fighter_id_from'] = $fid['id'];
+        $req['fighter_id'] = $fighters[$data['fighters_name']]->id;
+        if($this->Messages->insert_message($req)):
+          $this->Flash->success(__('The message has been saved.'));
+           return $this->redirect(['action' => 'messages']);
+         else:
+            $this->Flash->error(__('The message could not be saved. Please, try again.'));
+        endif;
+      }
+      $this->set('fid', $fid['id']);
+      $this->set('fighters', $fres);
+      $this->set('messages', $messages);
+      $this->set('entity', $entity);
     }
 
 

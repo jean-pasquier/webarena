@@ -31,6 +31,16 @@ class FightersTable extends Table
 		return $this->find()->where(['player_id' => $pid])->toList();
     }
 
+    public function getEveryFighterAliveExecptOurs($pid, $select = array())
+    {
+      return $this->find()->select($select)->where(['player_id !=' => $pid, 'current_health >' => 0])->toList();
+    }
+
+    public function getFighter($fid, $select = array())
+    {
+      return $this->find()->select($select)->where(['id' => $fid])->toArray();
+    }
+
     public function isFighterHere($x, $y)
     {
 		return $this->find()

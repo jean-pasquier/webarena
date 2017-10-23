@@ -25,9 +25,30 @@ class MessagesTable extends Table
     public function find_message($fighter_id)
     {
       $query = $this->find()
-                    ->where(['fighter_id_from' => $fighter_id, 'OR' => ['fighter_id' => $fighter_id]])
-                    ->toArray();
+                    ->where(['fighter_id_from' => $fighter_id])
+                    ->orwhere(['fighter_id' => $fighter_id])
+                    ->toList();
       return $query;
+    }
+
+    public function insert_message($data)
+    {
+      $query = $this->query()
+                    ->insert(['date', 'title', 'message', 'fighter_id_from', 'fighter_id'])
+                    ->values([
+                      'date' => $data['date'],
+                      'title' => $data['title'],
+                      'message' => $data['message'],
+                      'fighter_id_from' => $data['fighter_id_from'],
+                      'fighter_id' => $data['fighter_id']
+                    ])
+                    ->execute();
+      // <article class="panel <?=($fighter['current_health']==0)?'panel-danger':'panel-success';
+      if($query):
+        return true;
+      else:
+        return false;
+      endif;
     }
 
     /**
