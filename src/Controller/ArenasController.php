@@ -197,6 +197,11 @@ class ArenasController  extends AppController
       foreach($names as $name):
         array_push($temp, $name->name);
       endforeach;
+
+      if($this->request->is('post'))
+      {
+        $entity = $this->Fighters->patchEntity($entity, $this->request->getData());
+      }
       $this->set('names', $temp);
       $this->set('guilds', $res);
       $this->set('entity', $entity);
