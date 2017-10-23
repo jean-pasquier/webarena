@@ -30,33 +30,46 @@ $cakeDescription = 'WebArenas';
     <?= $this->Html->css('cake.css') ?>
     <?= $this->Html->css('webarena.css') ?>
     <?= $this->Html->css('bootstrap.min.css') ?>
+    <?= $this->Html->script(['jquery-3.2.1.min', 'bootstrap.min', 'script']) ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 </head>
 <body>
-    <nav class="top-bar expanded" data-topbar role="navigation">
-        <ul class="title-area large-3 medium-4 columns">
-            <li class="name">
-                <h1><a href=""><?= $this->fetch('title') ?></a></h1>
-            </li>
-        </ul>
-        <div class="top-bar-section">
-            <ul class="right">
-                <li><?php echo $this->Html->link('Home', ['controller' => 'Arenas', 'action' => '/']);?></li>
-                <li><?php echo $this->Html->link('Fighters', ['controller' => 'Arenas', 'action' => 'fighter']);?></li>
-                <li><?php echo $this->Html->link('Sight', ['controller' => 'Arenas', 'action' => 'sight']);?></li>
-                <li><?php echo $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
-                <li><?php echo $this->Html->link('Guilds', ['controller' => 'Arenas', 'action' => 'guild']);?></li>
-            </ul>
-        </div>
+    <nav class="navbar navbar-inverse navbar-fixed-top container-fluid" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed mainnav-menu" data-toggle="collapse" data-target="#collapse" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar icon1"></span>
+					<span class="icon-bar icon2"></span>
+					<span class="icon-bar icon3"></span>
+				</button>
+				<?= $this->Html->link('Home', '/', ['class' => 'navbar-brand']);?>
+			</div>
+			<div class="collapse navbar-collapse" id="collapse">
+				<ul class="nav navbar-nav">
+					<li><?php echo $this->Html->link('Home', ['controller' => 'Arenas', 'action' => '/']);?></li>
+					<li><?php echo $this->Html->link('Fighters', ['controller' => 'Arenas', 'action' => 'fighter']);?></li>
+					<li><?php echo $this->Html->link('Sight', ['controller' => 'Arenas', 'action' => 'sight']);?></li>
+					<li><?php echo $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
+          <li><?php echo $this->Html->link('Guilds', ['controller' => 'Arenas', 'action' => 'guild']);?></li>
+					<li><?php echo $this->Html->link('Deconnexion', ['controller' => 'Players', 'action' => 'logout']);?></li>
+				</ul>
+			</div>
+
+
+		</div>
     </nav>
+
+
     <?= $this->Flash->render() ?>
-    <div class="container clearfix">
+    <div class="container clearfix" style="padding-top: 60px;">
         <?= $this->fetch('content') ?>
     </div>
-    <footer>
+
+    <footer class="footer">
         <section>
             <h3>Group information</h3>
             <dl>
@@ -64,7 +77,7 @@ $cakeDescription = 'WebArenas';
                 <dd>SI05</dd>
                 <dt>Author :</dt>
                 <dd>
-                    <ul>
+                    <ul class="list-unstyled">
                         <li>Benjamin Callonnec</li>
                         <li>Thomas Griseau</li>
                         <li>Etienne Meunier</li>
@@ -73,7 +86,7 @@ $cakeDescription = 'WebArenas';
                 </dd>
                 <dt>Options :</dt>
                 <dd>
-                    <ol>
+                    <ol class="list-unstyled">
                         <li>D - Setting elements management</li>
                         <li>F - Responsive pages with Bootstrap</li>
                     </ol>
@@ -82,5 +95,6 @@ $cakeDescription = 'WebArenas';
             </dl>
         </section>
     </footer>
+
 </body>
 </html>

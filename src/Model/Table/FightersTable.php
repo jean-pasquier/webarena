@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
  * Fighters Model
@@ -25,9 +26,9 @@ use Cake\Validation\Validator;
 class FightersTable extends Table
 {
 
-    public function getFighters($id)
+    public function getAllFighters($pid)
     {
-		return $this->find()->where(['player_id' => $id])->toList();
+		return $this->find()->where(['player_id' => $pid])->toList();
     }
 
     public function isFighterHere($x, $y)
@@ -36,6 +37,7 @@ class FightersTable extends Table
 			->where(['current_health >' => 0, 'coordinate_x' => $x, 'coordinate_y' => $y])
 			->count() > 0;
     }
+	
     public function getSightArray($pid, $width, $heigth)
     {
 		$array = array();
@@ -50,22 +52,45 @@ class FightersTable extends Table
 			array_push($array, $cols);
 		}
 
-
-		$pos = $this->getPosition($pid);
-		$array[$pos['coordinate_y']][$pos['coordinate_x']] = 'M';
-
-		$res = $this->find()
-			->select(['coordinate_x', 'coordinate_y'])
-			->where(['player_id !=' => $pid, 'current_health >' => 0]);
-
-		foreach($res as $row)
-		{
-			$array[$row['coordinate_y']][$row['coordinate_x']]= 'E';
-		}
-
 		return $array;
     }
 
+	
+	//fill the array with datas : fighter, surrounding, ennemies
+	public function fillSightArray($pid, $arr)
+	{
+		//fighter position
+		$aFighter = $this->getAliveFighter($pid, ['player_id', 'coordinate_x', 'coordinate_y', 'skill_sight']);
+		$arr[$aFighter['coordinate_y']][$aFighter['coordinate_x']] = 'M';
+		
+		//ennemies position
+		$ennemies = $this->find()
+			->select(['coordinate_x', 'coordinate_y'])
+			->where([
+				'player_id !=' => $aFighter['player_id'],
+				'current_health >' => 0,
+'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') <=' => $aFighter['skill_sight'],
+'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') >=' => - $aFighter['skill_sight']
+			]);
+						
+		foreach($ennemies as $ennemy)
+			$arr[$ennemy['coordinate_y']][$ennemy['coordinate_x']]= 'E';
+		
+		//surroundings position
+		$surr = TableRegistry::get('Surroundings')
+			->find()
+			->where([
+'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') <=' => $aFighter['skill_sight'],
+'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') >=' => - $aFighter['skill_sight']
+			]);
+
+		foreach($surr as $sur)
+			$arr[$sur['coordinate_y']][$sur['coordinate_x']] = $sur['type'];
+		
+		return $arr;
+	}
+
+	
     //check if the player has remaining alive fighter
     public function hasAliveFighter($pid)
     {
@@ -74,12 +99,11 @@ class FightersTable extends Table
 			->count() > 0;
     }
 
-
-
-    public function getPosition($pid)
+	//return the selected data in argument
+    public function getAliveFighter($pid, $select = array())
     {
         $pos = $this->find()
-			->select(['coordinate_x', 'coordinate_y'])
+			->select($select)
 			->where(['player_id' => $pid, 'current_health >' => 0])
 			->first();
 		if($pos == null)
@@ -87,7 +111,7 @@ class FightersTable extends Table
 		return($pos->toArray());
     }
 
-    public function move($pid,$x, $y,$sightArray,$height,$width)
+    public function move($pid, $x, $y, $sightArray, $height, $width)
     {
         $fighter = $this->find()->where(['player_id' => $pid, 'current_health >' => 0])->first();
         $fighter_data = $fighter->toArray();
@@ -108,6 +132,65 @@ class FightersTable extends Table
                 $this->save($fighter);
             }
         }
+    }
+    
+    public function attack($pid,$x,$y)
+    {
+        $Surroundings = TableRegistry::get('Surroundings');
+        $fighter = $this->find()->where(['player_id' => $pid, 'current_health >' => 0])->first();
+        $fighter_data = $fighter->toArray();
+        $tempo_coord_x = $x + $fighter_data['coordinate_x'];
+        $tempo_coord_y = $y + $fighter_data['coordinate_y'];
+        $succes = 0;
+        
+        //  kill monsters 
+        $monster=$Surroundings->find()
+                     ->where(['Type' => 'W','coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y])
+                     ->first();
+        if($monster)
+        {
+            $Surroundings->delete($monster);
+            $succes=1;
+        }
+        
+        //fight with players
+        $ennemy=$this->find()
+                     ->where(['coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y,'current_health >' => 0])
+                     ->first();
+        if($ennemy)
+        {
+            // on récupère le niveau de l'attaqué et le niveau de l'attaquant + calcul du seuil
+            $seuil =10+$ennemy['level']-$fighter['level'];
+            $dice = rand(0,20);
+
+            if($dice > $seuil)
+            {
+                // on applique l'attaque à la vie de l'énemie
+                $ennemy->current_health = $ennemy['current_health']-$fighter['skill_strength'];
+                
+                if($ennemy->current_health <= 0)
+                {
+                   $ennemy->current_health=0; 
+                   $fighter->xp=$fighter->xp+ $ennemy['level'];
+                }
+                else
+                {
+                   $fighter->xp=$fighter->xp+1;
+                }
+                $this->save($fighter);
+                $this->save($ennemy); 
+                $succes=1;
+
+            }
+            else
+            {
+                //message d'échec`
+                $succes=2;
+            }
+            // on détermine si l'attaque réussit 
+            // si elle fail on affiche un truc 
+        }
+        return($succes); // 0 = rien 1 = succes 2 = parade 
     }
 
 

@@ -1,20 +1,8 @@
-<?php
-/**
- * @var \App\View\AppView $this
- */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Players'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Fighters'), ['controller' => 'Fighters', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Fighter'), ['controller' => 'Fighters', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="players form large-9 medium-8 columns content">
+<h1>Signup</h1>
+
+<div class="players form col-md-6 col-md-offset-3 columns content">
     <?= $this->Form->create($player) ?>
     <fieldset>
-        <legend><?= __('Add Player') ?></legend>
         <?php
             echo $this->Form->control('email');
             echo $this->Form->control('password');

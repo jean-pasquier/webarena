@@ -26,6 +26,30 @@ class PlayersController extends AppController
         $this->set('_serialize', ['players']);
     }
 
+    public function login()
+{
+    if ($this->request->is('post')) {
+        $user = $this->Auth->identify();
+        if ($user) {
+            $this->Auth->setUser($user);
+            return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
+        }
+        $this->Flash->error('Votre identifiant ou votre mot de passe est incorrect.');
+    }
+}
+
+public function initialize()
+{
+    parent::initialize();
+    $this->Auth->allow(['logout', 'add']);
+}
+
+public function logout()
+{
+    $this->Flash->success('Vous avez été déconnecté.');
+    return $this->redirect($this->Auth->logout());
+}
+
     /**
      * View method
      *
@@ -55,8 +79,8 @@ class PlayersController extends AppController
             $player = $this->Players->patchEntity($player, $this->request->getData());
             if ($this->Players->save($player)) {
                 $this->Flash->success(__('The player has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $this->Auth->setUser($player->toArray());
+                return $this->redirect(['controller' => 'Arenas', 'action' => 'sight']);
             }
             $this->Flash->error(__('The player could not be saved. Please, try again.'));
         }

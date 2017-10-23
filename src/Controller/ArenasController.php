@@ -15,51 +15,76 @@ class ArenasController  extends AppController
     {
         $this->loadModel('Fighters');
         $this->loadModel('Surroundings');
+        $width = 15;
+	$heigth = 10;
+        $trap_detect = 0;
+        $monster_detect = 0;
 
-		$width = 15;
-		$heigth = 10;
+        //check if the player has an active fighter
+        $hasAliveFighter = $this->Fighters->hasAliveFighter($this->Auth->user('id'));
+        $this->set('hasAliveFighter', $hasAliveFighter);
 
-		$sightArray = $this->Fighters->getSightArray('545f827c-576c-4dc5-ab6d-27c33186dc3e', $width, $heigth);
-        $sightArray = $this->Surroundings->check($sightArray, $width, $heigth);
-        $pos = $this->Fighters->getPosition('545f827c-576c-4dc5-ab6d-27c33186dc3e');
-
-		$this->set([
-			'xmax' => $heigth,
-			'ymax' => $width,
-			'hasAliveFighter' => $this->Fighters->hasAliveFighter('545f827c-576c-4dc5-ab6d-27c33186dc3e'),
-			'sightArray' => $sightArray,
-			'x' => $pos['coordinate_x'],
-			'y' => $pos['coordinate_y']
-		]);
-
-
-
-        if ($this->request->is('post'))
+        if($hasAliveFighter)
         {
-            $x=0;
-            $y=0;
-            if($this->request->data['dir'] == 'UP')
+
+           $sightArray = $this->Fighters->getSightArray($this->Auth->user('id'), $width, $heigth);
+	   $sightArray = $this->Fighters->fillSightArray($this->Auth->user('id'), $sightArray);
+           //$sightArray = $this->Surroundings->check($sightArray, $width, $heigth);
+	   $pos = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['coordinate_x', 'coordinate_y']);
+
+            $trap_detect = $this->Surroundings->detect_trap($pos['coordinate_x'],$pos['coordinate_y'],'T');
+            $monster_detect = $this->Surroundings->detect_trap($pos['coordinate_x'],$pos['coordinate_y'],'W');
+
+
+            $this->set([
+                    'xmax' => $heigth,
+                    'ymax' => $width,
+                    'hasAliveFighter' => $this->Fighters->hasAliveFighter($this->Auth->user('id')),
+                    'sightArray' => $sightArray,
+                    'x' => $pos['coordinate_x'],
+                    'y' => $pos['coordinate_y'],
+                    'trap_detect' =>$trap_detect,
+                    'monster_detect' =>$monster_detect
+                    ]);
+
+
+
+            if ($this->request->is('post'))
             {
                 $x=0;
-                $y=(-1);
-            }
-            if($this->request->data['dir'] == 'DOWN')
-            {
-                $x=0;
-                $y=1;
-            }
-             if($this->request->data['dir'] == 'RIGHT')
-            {
-                $x=1;
                 $y=0;
+                if($this->request->data['dir'] == 'UP')
+                {
+                    $x=0;
+                    $y=(-1);
+                }
+                if($this->request->data['dir'] == 'DOWN')
+                {
+                    $x=0;
+                    $y=1;
+                }
+                 if($this->request->data['dir'] == 'RIGHT')
+                {
+                    $x=1;
+                    $y=0;
+                }
+                if($this->request->data['dir'] == 'LEFT')
+                {
+                  $x=(-1);
+                  $y=0;
+                }
+                if($this->request->data['attack']==True)
+                {
+                    $succes_attack=$this->Fighters->attack($this->Auth->user('id'),$x,$y);
+                    $this->Flash->success($succes_attack);//0 rien 1 succes 2 parade
+                }
+                else
+                {
+                    $this->Fighters->move($this->Auth->user('id'),$x,$y,$sightArray,$heigth,$width);
+
+                }
+                $this->redirect(['action'=>'sight']);
             }
-            if($this->request->data['dir'] == 'LEFT')
-            {
-              $x=(-1);
-              $y=0;
-            }
-            $this->Fighters->move('545f827c-576c-4dc5-ab6d-27c33186dc3e',$x,$y,$sightArray,$heigth,$width);
-            $this->redirect(['action'=>'sight']);
         }
     }
 
@@ -72,10 +97,10 @@ class ArenasController  extends AppController
 	{
 	 	$this->loadModel('Fighters');
 
-		$list = $this->Fighters->getFighters('545f827c-576c-4dc5-ab6d-27c33186dc3e');
+		$list = $this->Fighters->getAllFighters($this->Auth->user('id'));
 	 	$this->set([
 			'list' => $list,
-			'hasAliveFighter' => $this->Fighters->hasAliveFighter('545f827c-576c-4dc5-ab6d-27c33186dc3e')
+			'hasAliveFighter' => $this->Fighters->hasAliveFighter($this->Auth->user('id'))
 		]);
 	}
 
@@ -85,17 +110,12 @@ class ArenasController  extends AppController
     }
 
 
-    public function login()
-    {
-
-
-    }
-
     public function addFighter()
     {
             $width = 15;
             $heigth = 10;
             $this->loadModel('Fighters');
+            $this->loadModel('Surroundings');
             $fighter = $this->Fighters->newEntity();
             $this->set('entity', $fighter);
 
@@ -104,12 +124,12 @@ class ArenasController  extends AppController
 		{
             $fighter = $this->Fighters->patchEntity($fighter, $this->request->getData());
 
-			$fighter->player_id = '545f827c-576c-4dc5-ab6d-27c33186dc3e';
+			$fighter->player_id = $this->Auth->user('id');
 			do
 			{
-				$x = rand(0, $width);
-				$y = rand(0, $heigth);
-				$busy = $this->Fighters->isFighterHere($x, $y);
+				$x = rand(0, $width - 1);
+				$y = rand(0, $heigth - 1);
+				$busy = $this->Surroundings->isEmptySquare($x, $y);
 			}
 			while($busy);
 
@@ -213,10 +233,5 @@ class ArenasController  extends AppController
 
     }
 
-
-    public function signup()
-    {
-
-    }
 
 }
