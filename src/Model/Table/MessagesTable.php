@@ -22,6 +22,14 @@ use Cake\Validation\Validator;
 class MessagesTable extends Table
 {
 
+    public function find_message($fighter_id)
+    {
+      $query = $this->find()
+                    ->where(['fighter_id_from' => $fighter_id, 'OR' => ['fighter_id' => $fighter_id]])
+                    ->toArray();
+      return $query;
+    }
+
     /**
      * Initialize method
      *

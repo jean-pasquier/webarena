@@ -82,7 +82,7 @@ class FightersTable extends Table
 			->select(['coordinate_x', 'coordinate_y'])
 			->where(['player_id' => $pid, 'current_health >' => 0])
 			->first();
-		if($pos == null) 
+		if($pos == null)
 			return $pos;
 		return($pos->toArray());
     }
@@ -93,25 +93,25 @@ class FightersTable extends Table
         $fighter_data = $fighter->toArray();
         $tempo_coord_x = $x + $fighter_data['coordinate_x'];
         $tempo_coord_y = $y + $fighter_data['coordinate_y'];
-		
+
         if($tempo_coord_x >=0 && $tempo_coord_x < $width && $tempo_coord_y >=0 && $tempo_coord_y < $height )
         {
             if($sightArray[$tempo_coord_y][$tempo_coord_x]=='.')
             {
                 $fighter->coordinate_x = $tempo_coord_x;
                 $fighter->coordinate_y = $tempo_coord_y;
-                $this->save($fighter); 
+                $this->save($fighter);
             }
             if($sightArray[$tempo_coord_y][$tempo_coord_x]=='W' || $sightArray[$tempo_coord_y][$tempo_coord_x]=='T' )
             {
                 $fighter->current_health = 0;
-                $this->save($fighter); 
-            } 
-        }    
+                $this->save($fighter);
+            }
+        }
     }
 
-	
-	
+
+
     public function getBestFighter()
     {
       $res = $this->find()
@@ -125,6 +125,15 @@ class FightersTable extends Table
       array_push($best, $res['xp']);
       array_push($best, $res['level']);
       return $best;
+    }
+
+    public function getFightersGuild($guild_id)
+    {
+      $query = $this->find()
+                    ->select('name')
+                    ->where(['guild_id' => $guild_id])
+                    ->toList();
+      return $query;
     }
 
 

@@ -60,4 +60,43 @@ class GuildsTable extends Table
 
         return $validator;
     }
+
+    /**
+     * Default validation rules.
+     *
+     * @param  array  $fighter_id.
+     * @return list of guilds for each players
+     */
+    public function find_guild(array $fighters = null)
+    {
+      if($fighters)
+      {
+        $res = array();
+        foreach($fighters as $fighter)
+        {
+          $query = $this->find()
+                        ->join([
+                          'table' => 'fighters',
+                          'alias' => 'f',
+                          'type' => 'LEFT',
+                          'conditions' => 'f.guild_id = guilds.id',
+                        ])
+                        ->where(['f.id' => $fighter[0]])
+                        ->toArray();
+
+          if($query) $query['fighter_name'] = $fighter[1];
+          array_push($res, $query);
+        }
+        return $res;
+      }
+      return false;
+
+    }
+
+    public function getAllGuilds()
+    {
+      $query = $this->find()
+                    ->toList();
+      return $query;
+    }
 }
