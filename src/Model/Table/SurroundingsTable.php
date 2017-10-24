@@ -111,7 +111,7 @@ class SurroundingsTable extends Table
 	}
 
 	//check if surrounding exists
-	public function checkToGenerate($array, $width, $heigth)
+	public function checkToGenerate($width, $heigth)
 	{
 		if($this->find('all')->select(['type', 'coordinate_x', 'coordinate_y'])->count() == 0)
 			$this->generate($width, $heigth);
