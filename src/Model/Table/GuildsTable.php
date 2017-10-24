@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
  * Guilds Model
@@ -21,7 +22,29 @@ use Cake\Validation\Validator;
  */
 class GuildsTable extends Table
 {
-
+    
+    public function getAllGuilds()
+    {
+        return $this->find()->toList();
+    }
+    
+    public function getAllGuildFighters($fid, $gid)
+    {
+        return TableRegistry::get('Fighters')
+            ->find()
+            ->where([
+                'guild_id' => $gid, 
+                'id !=' => $fid
+            ])
+            ->toArray();
+    }
+    
+    public function getGuildName($gid)
+    {
+        return $this->find()->select('name')->where(['id' => $gid])->first()['name'];
+    }
+    
+    
     /**
      * Initialize method
      *
@@ -67,35 +90,29 @@ class GuildsTable extends Table
      * @param  array  $fighter_id.
      * @return list of guilds for each players
      */
-    public function find_guild(array $fighters = null)
-    {
-      if($fighters)
-      {
-        $res = array();
-        foreach($fighters as $fighter)
-        {
-          $query = $this->find()
-                        ->join([
-                          'table' => 'fighters',
-                          'alias' => 'f',
-                          'type' => 'LEFT',
-                          'conditions' => 'f.guild_id = guilds.id',
-                        ])
-                        ->where(['f.id' => $fighter[0]])
-                        ->toArray();
+//    public function find_guild(array $fighters = null)
+//    {
+//      if($fighters)
+//      {
+//        $res = array();
+//        foreach($fighters as $fighter)
+//        {
+//          $query = $this->find()
+//                        ->join([
+//                          'table' => 'fighters',
+//                          'alias' => 'f',
+//                          'type' => 'LEFT',
+//                          'conditions' => 'f.guild_id = guilds.id',
+//                        ])
+//                        ->where(['f.id' => $fighter[0]])
+//                        ->toArray();
+//
+//          if($query) $query['fighter_name'] = $fighter[1];
+//          array_push($res, $query);
+//        }
+//        return $res;
+//      }
 
-          if($query) $query['fighter_name'] = $fighter[1];
-          array_push($res, $query);
-        }
-        return $res;
-      }
+//    }
 
-    }
-
-    public function getAllGuilds()
-    {
-      $query = $this->find()
-                    ->toList();
-      return $query;
-    }
 }

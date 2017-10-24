@@ -2,29 +2,44 @@
 
 <h1><?= $this->fetch('title') ?></h1>
 
+<?php if($hasGuild): ?>
 
-<ul class="list-unstyled col-md-6 col-md-offset-3">
-	<?php foreach ($guilds as $guild): if($guild):?>
+<h2>You are in the <?= $guild; ?> guild !</h2>
+<ul class="list-unstyled">
+	<?php foreach($guildFighters as $fighter) : ?>
 	<li>
-		<article class="panel panel-success">
-			<h5 class="panel-heading"><?= $guild[0]->name ?></h5>
-			<div class="panel-body">
+		<dl class="panel">
+			<dt class="panel-title"><?= $fighter['name'] ?></dt>
+			<dd class="panel-body">
 				<dl class="dl-horizontal">
-					<?php foreach($fighters as $fighter): ?>
-					<dt>Fighter</dt>
-					<dd><?= $fighter->name?></dd>
-				<?php endforeach; ?>
+					<dt>Health</dt>
+					<dd><?= $fighter['current_health'].'/'.$fighter['skill_health'] ?></dd>
+					<dt>XP</dt>
+					<dd><?= $fighter['xp'] ?></dd>
+					<dt>Coord</dt>
+					<dd><?= $fighter['coordinate_x'].','.$fighter['coordinate_y']  ?></dd>
 				</dl>
-			</div>
-		</article>
+				<?= $this->Html->Link('Send message', ['controller' => 'Arenas', 'action' => 'guild/'.$fighter['id']]); ?>
+			</dd>
+		</dl>
 	</li>
-<?php endif; endforeach; ?>
+	<?php endforeach; ?>
 </ul>
 
-<p class="col-md-6 col-md-offset-3">
-	<?= $this->Html->link('Create a new guild', ['action' => './addGuild']); ?>
- </p>
+<?php else: ?>
 
- <p class="col-md-6 col-md-offset-3">
- 	<?= $this->Html->link('Find guilds', ['action' => './findGuilds']); ?>
-  </p>
+<ul class="list-unstryled">
+	<?php foreach($guilds as $guild): ?>
+	<li>
+		<dl class="panel">
+			<dt class="panel-title"><?= $guild['name'] ?></dt>
+			
+			<dd class="panel-body">
+				<?= $this->Html->Link('Join guild', ['controller' => 'Arenas', 'action' => 'guild/'.$guild['id']]); ?>
+			</dd>
+		</dl>
+	</li>
+	<?php endforeach; ?>
+</ul>
+
+<?php endif; ?>
