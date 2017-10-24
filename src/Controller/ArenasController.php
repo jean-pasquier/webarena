@@ -30,7 +30,7 @@ class ArenasController  extends AppController
 
            $sightArray = $this->Fighters->getSightArray($this->Auth->user('id'), $width, $heigth);
 	   $sightArray = $this->Fighters->fillSightArray($this->Auth->user('id'), $sightArray);
-           //$sightArray = $this->Surroundings->check($sightArray, $width, $heigth);
+           $sightArray = $this->Surroundings->checkToGenerate($sightArray, $width, $heigth);
 	   $pos = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['coordinate_x', 'coordinate_y']);
 
             $trap_detect = $this->Surroundings->detect_trap($pos['coordinate_x'],$pos['coordinate_y'],'T');
@@ -162,24 +162,45 @@ class ArenasController  extends AppController
           $this->set('events', $events);
     }
 
+    // public function guild()
+    // {
+    //   $res = array();
+    //   $this->loadModel('Fighters');
+    //   $this->loadModel('Guilds');
+    //   $this->loadModel('Messages');
+    //   $fighters = $this->Fighters->getAllFighters($this->Auth->user('id'));
+    //   foreach($fighters as $fighter)
+    //   {
+    //     $temp = array();
+    //     array_push($temp, $fighter->id);
+    //     array_push($temp, $fighter->name);
+    //     array_push($res, $temp);
+    //   }
+    //   $guilds = $this->Guilds->find_guild($res);
+    //   if($guilds[0]) $fighters = $this->Fighters->getFightersGuild($guilds[0][0]->id);
+    //   $this->set('guilds', $guilds);
+    //   $this->set('fighters', $fighters);
+    // }
+
     public function guild()
     {
       $res = array();
       $this->loadModel('Fighters');
       $this->loadModel('Guilds');
       $this->loadModel('Messages');
-      $fighters = $this->Fighters->getAllFighters($this->Auth->user('id'));
+      $guild_id = $this->Fighters->getAliveFighter($this->Auth->user('id'), 'guild_id');
+      $fighters = $this->Fighters->getFightersGuild($guild_id['guild_id']);
       foreach($fighters as $fighter)
-      {
-        $temp = array();
-        array_push($temp, $fighter->id);
-        array_push($temp, $fighter->name);
-        array_push($res, $temp);
-      }
-      $guilds = $this->Guilds->find_guild($res);
-      if($guilds[0]) $fighters = $this->Fighters->getFightersGuild($guilds[0][0]->id);
-      $this->set('guilds', $guilds);
+        {
+          $temp = array();
+          array_push($temp, $fighter->id);
+          array_push($temp, $fighter->name);
+          array_push($res, $temp);
+        }
+      $guild = $this->Guilds->getGuild($guild_id['guild_id']);
+      $this->set('guild', $guild);
       $this->set('fighters', $fighters);
+
     }
 
     public function addGuild()

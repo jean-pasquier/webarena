@@ -92,6 +92,11 @@ class GuildsTable extends Table
 
     }
 
+    public function getGuild($gid, $select = array())
+    {
+      return $this->find()->select($select)->where(['id' => $gid])->first();
+    }
+
     public function getAllGuilds()
     {
       $query = $this->find()

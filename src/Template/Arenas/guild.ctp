@@ -4,10 +4,9 @@
 
 
 <ul class="list-unstyled col-md-6 col-md-offset-3">
-	<?php foreach ($guilds as $guild): if($guild):?>
 	<li>
 		<article class="panel panel-success">
-			<h5 class="panel-heading"><?= $guild[0]->name ?></h5>
+			<h5 class="panel-heading"><?= $guild->name ?></h5>
 			<div class="panel-body">
 				<dl class="dl-horizontal">
 					<?php foreach($fighters as $fighter): ?>
@@ -18,7 +17,6 @@
 			</div>
 		</article>
 	</li>
-<?php endif; endforeach; ?>
 </ul>
 
 <p class="col-md-6 col-md-offset-3">
