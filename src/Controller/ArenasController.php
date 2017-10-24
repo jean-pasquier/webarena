@@ -163,26 +163,6 @@ class ArenasController  extends AppController
           $this->set('events', $events);
     }
 
-    // public function guild()
-    // {
-    //   $res = array();
-    //   $this->loadModel('Fighters');
-    //   $this->loadModel('Guilds');
-    //   $this->loadModel('Messages');
-    //   $fighters = $this->Fighters->getAllFighters($this->Auth->user('id'));
-    //   foreach($fighters as $fighter)
-    //   {
-    //     $temp = array();
-    //     array_push($temp, $fighter->id);
-    //     array_push($temp, $fighter->name);
-    //     array_push($res, $temp);
-    //   }
-    //   $guilds = $this->Guilds->find_guild($res);
-    //   if($guilds[0]) $fighters = $this->Fighters->getFightersGuild($guilds[0][0]->id);
-    //   $this->set('guilds', $guilds);
-    //   $this->set('fighters', $fighters);
-    // }
-
     public function guild()
     {
       $res = array();
@@ -247,42 +227,74 @@ class ArenasController  extends AppController
 
     }
 
-    public function messages()
+    public function messages($fighter_player_id = null)
     {
+      $bool = true;
       $this->loadModel('Messages');
       $this->loadModel('Fighters');
       $entity = $this->Messages->newEntity();
       $fres = array();
       $fid = $this->Fighters->getAliveFighter($this->Auth->user('id'), 'id');
-      $messages = $this->Messages->find_message($fid['id']);
-      foreach($messages as $message):
-        $temp =  $this->Fighters->getFighter($message['fighter_id_from'], 'name');
-        $message['fighter_name_from'] = $temp[0]['name'];
-        $temp = $this->Fighters->getFighter($message['fighter_id'], 'name');
-        $message['fighter_name'] = $temp[0]['name'];
-      endforeach;
-      $fighters = $this->Fighters->getEveryFighterAliveExecptOurs($this->Auth->user('id'), ['id', 'name']);
+      $fid1 = $this->Fighters->getAliveFighter($fighter_player_id, 'id');
+      if(!$fighter_player_id):
+        $messages = $this->Messages->find_message($fid['id']);
+        foreach($messages as $message):
+          $temp =  $this->Fighters->getFighter($message['fighter_id_from'], 'name');
+          $message['fighter_name_from'] = $temp[0]['name'];
+          $temp = $this->Fighters->getFighter($message['fighter_id'], 'name');
+          $message['fighter_name'] = $temp[0]['name'];
+        endforeach;
+      else:
+        $bool = false;
+        $messages = $this->Messages->find_message($fid['id'], $fid1['id']);
+        foreach($messages as $message):
+          $temp =  $this->Fighters->getFighter($message['fighter_id_from'], 'name');
+          $message['fighter_name_from'] = $temp[0]['name'];
+          $temp = $this->Fighters->getFighter($message['fighter_id'], 'name');
+          $message['fighter_name'] = $temp[0]['name'];
+        endforeach;
+      endif;
+      $fighters = $this->Fighters->getEveryFighterAliveExecptOurs($this->Auth->user('id'), ['id', 'name', 'player_id']);
       foreach($fighters as $fighter):
         array_push($fres, $fighter['name']);
       endforeach;
       if($this->request->is('post'))
       {
-        $req = array();
-        $data = $this->request->getData();
-        $req['date'] =  Time::now();
-        $req['title'] = $data['title'];
-        $req['message'] = $data['message'];
-        $req['fighter_id_from'] = $fid['id'];
-        $req['fighter_id'] = $fighters[$data['fighters_name']]->id;
-        if($this->Messages->insert_message($req)):
-          $this->Flash->success(__('The message has been saved.'));
-           return $this->redirect(['action' => 'messages']);
-         else:
-            $this->Flash->error(__('The message could not be saved. Please, try again.'));
+        if(!$fighter_player_id):
+          $req = array();
+          $data = $this->request->getData();
+          $req['date'] =  Time::now();
+          $req['title'] = $data['title'];
+          $req['message'] = $data['message'];
+          $req['fighter_id_from'] = $fid['id'];
+          $req['fighter_id'] = $fighters[$data['fighters_name']]->id;
+          if($this->Messages->insert_message($req)):
+            $this->Flash->success(__('The message has been saved.'));
+             return $this->redirect(['action' => 'messages']);
+           else:
+              $this->Flash->error(__('The message could not be saved. Please, try again.'));
+          endif;
+
+        else:
+          $req = array();
+          $data = $this->request->getData();
+          $req['date'] =  Time::now();
+          $req['title'] = $data['title'];
+          $req['message'] = $data['message'];
+          $req['fighter_id_from'] = $fid['id'];
+          $req['fighter_id'] = $fid1['id'];
+          if($this->Messages->insert_message($req)):
+            $this->Flash->success(__('The message has been saved.'));
+             return $this->redirect(['action' => 'messages/'.$fighter_player_id]);
+           else:
+              $this->Flash->error(__('The message could not be saved. Please, try again.'));
+          endif;
         endif;
       }
+      $this->set('bool', $bool);
       $this->set('fid', $fid['id']);
       $this->set('fighters', $fres);
+      $this->set('fighters_id', $fighters);
       $this->set('messages', $messages);
       $this->set('entity', $entity);
     }
