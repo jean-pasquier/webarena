@@ -22,13 +22,21 @@ use Cake\Validation\Validator;
 class MessagesTable extends Table
 {
 
-    public function find_message($fighter_id)
+    public function find_message($fighter_id, $fighter1_id = null)
     {
-      $query = $this->find()
+      if(!$fighter1_id):
+        $query = $this->find()
                     ->where(['fighter_id_from' => $fighter_id])
                     ->orwhere(['fighter_id' => $fighter_id])
                     ->toList();
       return $query;
+    else:
+      $query = $this->find()
+                  ->where(['fighter_id_from' => $fighter_id, 'fighter_id' => $fighter1_id])
+                  ->orwhere(['fighter_id' => $fighter_id, 'fighter_id_from' => $fighter1_id])
+                  ->toList();
+      return $query;
+    endif;
     }
 
     public function insert_message($data)
