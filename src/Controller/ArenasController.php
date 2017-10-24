@@ -177,7 +177,7 @@ class ArenasController  extends AppController
         array_push($res, $temp);
       }
       $guilds = $this->Guilds->find_guild($res);
-      $fighters = $this->Fighters->getFightersGuild($guilds[0][0]->id);
+      if($guilds[0]) $fighters = $this->Fighters->getFightersGuild($guilds[0][0]->id);
       $this->set('guilds', $guilds);
       $this->set('fighters', $fighters);
     }

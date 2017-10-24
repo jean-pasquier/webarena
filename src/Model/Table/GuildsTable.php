@@ -89,7 +89,6 @@ class GuildsTable extends Table
         }
         return $res;
       }
-      return false;
 
     }
 
