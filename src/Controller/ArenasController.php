@@ -27,11 +27,12 @@ class ArenasController  extends AppController
 
         if($hasAliveFighter)
         {
+			$this->Surroundings->checkToGenerate($width, $heigth);
 
-           $sightArray = $this->Fighters->getSightArray($this->Auth->user('id'), $width, $heigth);
-	   $sightArray = $this->Fighters->fillSightArray($this->Auth->user('id'), $sightArray);
-           $sightArray = $this->Surroundings->checkToGenerate($sightArray, $width, $heigth);
-	   $pos = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['coordinate_x', 'coordinate_y']);
+           	$sightArray = $this->Fighters->getSightArray($this->Auth->user('id'), $width, $heigth);
+			$sightArray = $this->Fighters->fillSightArray($this->Auth->user('id'), $sightArray);
+
+	   		$pos = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['coordinate_x', 'coordinate_y']);
 
             $trap_detect = $this->Surroundings->detect_trap($pos['coordinate_x'],$pos['coordinate_y'],'T');
             $monster_detect = $this->Surroundings->detect_trap($pos['coordinate_x'],$pos['coordinate_y'],'W');
