@@ -22,11 +22,14 @@ class EventsTable extends Table
 
 	public function getDayEvents($fighter)
 	{
-		//probleme date !
-		return $this->find()->where(['dateDiff(NOW(), date) <' => 1,
-		'abs(coordinate_x - ' . $fighter['coordinate_x'] . ') + abs(coordinate_y - ' . $fighter['coordinate_y'] . ') <=' => $fighter['skill_sight'],
-		'abs(coordinate_x - ' . $fighter['coordinate_x'] . ') + abs(coordinate_y - ' . $fighter['coordinate_y'] . ') >=' => - $fighter['skill_sight']
-		])->order(['date' => 'Desc'])->toList();
+
+		if($fighter) :
+			return $this->find()->where(['dateDiff(NOW(), date) <' => 1,
+			'abs(coordinate_x - ' . $fighter['coordinate_x'] . ') + abs(coordinate_y - ' . $fighter['coordinate_y'] . ') <=' => $fighter['skill_sight'],
+			'abs(coordinate_x - ' . $fighter['coordinate_x'] . ') + abs(coordinate_y - ' . $fighter['coordinate_y'] . ') >=' => - $fighter['skill_sight']
+			])->order(['date' => 'Desc'])->toList();
+		else: return array();
+		endif;
 	}
 
 	public function hasMove($fighter)

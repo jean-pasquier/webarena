@@ -98,6 +98,11 @@ class ArenasController  extends AppController
                         $this->Flash->success('Parade !  Ahah ');//0 rien 1 succes 2 parade
 
                     }
+                    if($succes_attack == 3)
+                    {
+                        $this->Flash->success('Team Work !  Ahah ');//0 rien 1 succes 2 parade
+
+                    }
                 }
                 else
                 {
@@ -117,9 +122,19 @@ class ArenasController  extends AppController
                 $strength=0;
                 $health=0;
 
+            $skill_credits=0;
+            $sight=0;
+            $strength=0;
+            $health=0;
 
-                $hasAliveFighter= $this->Fighters->hasAliveFighter($this->Auth->user('id'));
-                if($hasAliveFighter)
+
+            $hasAliveFighter= $this->Fighters->hasAliveFighter($this->Auth->user('id'));
+            if($hasAliveFighter)
+            {
+                $current_fighter= $this->Fighters->getAliveFighter($this->Auth->user('id'));
+                $skill_credits=(int)($current_fighter['xp']/4-$current_fighter['level']+1);
+
+                if($this->request->is('post'))
                 {
                     $current_fighter= $this->Fighters->getAliveFighter($this->Auth->user('id'));
                     $skill_credits=(int)($current_fighter['xp']/4-$current_fighter['level']+1);
@@ -128,31 +143,28 @@ class ArenasController  extends AppController
                     {
                        if($skill_credits > 0)
                        {
-                           if($this->request->data['skill'] == 'Sight')
-                           {
-                               $sight=1;
-                               $this->Flash->success('Upgraded Sight ! ');//0 rien 1 succes 2 parade
-                           }
-                           if($this->request->data['skill'] == 'Strength')
-                           {
-                                $strength=1;
-                                $this->Flash->success('Upgraded Strenght ! ');//0 rien 1 succes 2 parade
-                           }
-                           if($this->request->data['skill'] == 'Health')
-                           {
-                               $health=3;
-                               $this->Flash->success('Upgraded Health ! ');//0 rien 1 succes 2 parade
-
-                           }
-                           $this->Fighters->gain_level($current_fighter['id'],$sight,$strength,$health);
+                           $sight=1;
+                           $this->Flash->success('Upgraded Sight ! ');//0 rien 1 succes 2 parade
                        }
-                       else
+                       if($this->request->data['skill'] == 'Strength')
                        {
-                           $this->Flash->success('Not enough skill points  ! ');//0 rien 1 succes 2 parade
+                            $strength=1;
+                            $this->Flash->success('Upgraded Strenght ! ');//0 rien 1 succes 2 parade
+                       }
+                       if($this->request->data['skill'] == 'Health')
+                       {
+                           $health=3;
+                           $this->Flash->success('Upgraded Health ! ');//0 rien 1 succes 2 parade
 
                        }
-                       $this->redirect(['action'=>'fighter']);
+                       $this->Fighters->gain_level($current_fighter['id'],$sight,$strength,$health);
+                   }
+                   else
+                   {
+                       $this->Flash->success('Not enough skill points  ! ');//0 rien 1 succes 2 parade
 
+                   }
+                   $this->redirect(['action'=>'fighter']);
 
 
                     }

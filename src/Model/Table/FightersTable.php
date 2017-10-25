@@ -226,13 +226,15 @@ class FightersTable extends Table
             if($dice > $seuil)
             {
                 // on applique l'attaque à la vie de l'énemie
-                $ennemy->current_health = $ennemy['current_health']-$fighter['skill_strength'];
-
+                $bonus_guild = $this->calcul_attack_bonus_guild($fighter['guild_id'],$fighter['id'],$tempo_coord_x,$tempo_coord_y);
+                //debug($bonus_guild);
+                $ennemy->current_health = $ennemy['current_health']-$fighter['skill_strength']-$bonus_guild;
+                
                 if($ennemy->current_health <= 0)
                 {
                   $Events->attackKilled($fighter_data);
-                   $ennemy->current_health=0;
-                   $fighter->xp=$fighter->xp+ $ennemy['level'];
+                  $ennemy->current_health=0;
+                  $fighter->xp=$fighter->xp+ $ennemy['level'];
                 }
                 else
                 {
@@ -242,6 +244,10 @@ class FightersTable extends Table
                 $this->save($fighter);
                 $this->save($ennemy);
                 $succes=1;
+                if($bonus_guild > 0)
+                {
+                    $succes=3;
+                }
             }
             else
             {
@@ -254,6 +260,14 @@ class FightersTable extends Table
         }
         return($succes); // 0 = rien 1 = succes 2 = parade
     }
+    
+    public function calcul_attack_bonus_guild($gid,$fid, $x , $y )
+    {
+        $res=$this->find('all')->where(['guild_id ='=>$gid,'id <>'=>$fid,'coordinate_x =' =>$x,'coordinate_y <>' => $y,'coordinate_y >=' =>($y-1),'coordinate_y <=' =>($y+1)])
+		->orWhere(['guild_id ='=>$gid,'id <>'=>$fid,'coordinate_y =' =>$y,'coordinate_x <>' => $x,'coordinate_x >=' =>($x-1),'coordinate_x <=' =>($x+1)]);
+        return($res->count());
+    }
+          
 
 
 
