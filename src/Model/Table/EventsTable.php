@@ -19,11 +19,72 @@ use Cake\Validation\Validator;
  */
 class EventsTable extends Table
 {
-	
+
 	public function getDayEvents()
 	{
 		//probleme date !
 		return $this->find()->where(['dateDiff(NOW(), date) <' => 1])->order(['date' => 'Desc'])->toList();
+	}
+
+	public function hasMove($fighter)
+	{
+		$fighter['name'] = $fighter['name'].' has move';
+
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+	}
+
+	public function MoveAndDie($fighter)
+	{
+		if($fighter['thing'] == 'W'):
+			 $fighter['thing'] = 'monster';
+	 	elseif($fighter['thing'] == 'T'):
+			$fighter['thing'] = 'trap';
+		endif;
+		$fighter['name'] = $fighter['name'].' has move on a '. $fighter['thing']. ' and died';
+
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+	}
+
+	public function attackKilled($fighter)
+	{
+		$fighter['name'] = $fighter['name']. ' attacked '. $fighter['thing']. ' and killed it';
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+	}
+
+	public function attackFailed($fighter)
+	{
+		$fighter['name'] = $fighter['name']. ' failed his attack on '. $fighter['thing'];
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+	}
+
+	public function attack($fighter)
+	{
+		$fighter['name'] = $fighter['name']. ' attacked '. $fighter['thing'];
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+	}
+
+	public function newFighter($fighter)
+	{
+		$fighter['name'] = $fighter['name']. ' entered in the arena';
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
 	}
 
     /**

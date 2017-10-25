@@ -1,3 +1,6 @@
+.undisplayed{
+	display: none;
+}
 .mainnav-menu{
 	background-color: transparent;
 	transition: transform 0.5s;
