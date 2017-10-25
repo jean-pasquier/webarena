@@ -147,13 +147,13 @@ class ArenasController  extends AppController
 			if ($this->Fighters->save($fighter))
 			{
                 $this->Flash->success(__('The fighter has been saved.'));
-
                 return $this->redirect(['action' => 'fighter']);
             }
 			
             $this->Flash->error(__('The fighter could not be saved. Please, try again.'));
 		}
 
+            
     }
 
 
