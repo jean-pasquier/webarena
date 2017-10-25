@@ -56,6 +56,10 @@ class ArenasController  extends AppController
             {
                 $x=0;
                 $y=0;
+                if($this->request->data['dir'] == 'Regenerate surrondings')
+                {
+                    $this->Surroundings->generate($width, $heigth);
+                }
                 if($this->request->data['dir'] == 'UP')
                 {
                     $x=0;
@@ -79,7 +83,21 @@ class ArenasController  extends AppController
                 if($this->request->data['attack']==True)
                 {
                     $succes_attack=$this->Fighters->attack($this->Auth->user('id'),$x,$y);
-                    $this->Flash->success($succes_attack);//0 rien 1 succes 2 parade
+                    if($succes_attack == 0)
+                    {
+                       $this->Flash->success('Failure');//0 rien 1 succes 2 parade
+
+                    }
+                    if($succes_attack == 1)
+                    {
+                       $this->Flash->success('Succes ! ');//0 rien 1 succes 2 parade
+
+                    }
+                    if($succes_attack == 2)
+                    {
+                        $this->Flash->success('Parade !  Ahah ');//0 rien 1 succes 2 parade
+
+                    }
                 }
                 else
                 {
@@ -90,19 +108,62 @@ class ArenasController  extends AppController
         }
     }
 
-
-
-
-
-
 	public function fighter()
 	{
 	 	$this->loadModel('Fighters');
+                
+                $skill_credits=0;
+                $sight=0;
+                $strength=0;
+                $health=0;
+
+
+                $hasAliveFighter= $this->Fighters->hasAliveFighter($this->Auth->user('id'));
+                if($hasAliveFighter)
+                {
+                    $current_fighter= $this->Fighters->getAliveFighter($this->Auth->user('id'));
+                    $skill_credits=(int)($current_fighter['xp']/4-$current_fighter['level']+1);
+                    
+                    if($this->request->is('post'))
+                    {
+                       if($skill_credits > 0)
+                       {
+                           if($this->request->data['skill'] == 'Sight')
+                           {
+                               $sight=1;
+                               $this->Flash->success('Upgraded Sight ! ');//0 rien 1 succes 2 parade
+                           }
+                           if($this->request->data['skill'] == 'Strength')
+                           {
+                                $strength=1;
+                                $this->Flash->success('Upgraded Strenght ! ');//0 rien 1 succes 2 parade
+                           }
+                           if($this->request->data['skill'] == 'Health')
+                           {
+                               $health=3;
+                               $this->Flash->success('Upgraded Health ! ');//0 rien 1 succes 2 parade
+
+                           }
+                           $this->Fighters->gain_level($current_fighter['id'],$sight,$strength,$health);
+                       }
+                       else
+                       {
+                           $this->Flash->success('Not enough skill points  ! ');//0 rien 1 succes 2 parade                          
+                           
+                       }
+                       $this->redirect(['action'=>'fighter']);
+
+
+                       
+                    }
+                }
+               
 
 		$list = $this->Fighters->getAllFighters($this->Auth->user('id'));
 	 	$this->set([
 			'list' => $list,
-			'hasAliveFighter' => $this->Fighters->hasAliveFighter($this->Auth->user('id'))
+			'hasAliveFighter' => $hasAliveFighter,
+                        'skill_credits'=>$skill_credits
 		]);
 	}
 
@@ -114,12 +175,13 @@ class ArenasController  extends AppController
 
     public function addFighter()
     {
-		$width = 15;
-		$heigth = 10;
-		$this->loadModel('Fighters');
-		$this->loadModel('Surroundings');
-		$fighter = $this->Fighters->newEntity();
-		$this->set('entity', $fighter);
+            $width = 15;
+            $heigth = 10;
+            $this->loadModel('Fighters');
+            $this->loadModel('Surroundings');
+            $this->loadModel('Events');
+            $fighter = $this->Fighters->newEntity();
+            $this->set('entity', $fighter);
 
 
         if ($this->request->is('post'))
@@ -143,6 +205,9 @@ class ArenasController  extends AppController
 			$fighter->skill_strength = 1;
 			$fighter->level = 1;
 			$fighter->xp = 0;
+      $fighter_data = $fighter->toArray();
+      $fighter_data['date'] = Time::now();
+      $this->Events->newFighter($fighter_data);
 
 			if ($this->Fighters->save($fighter))
 			{

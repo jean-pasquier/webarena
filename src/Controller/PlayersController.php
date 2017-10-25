@@ -30,7 +30,7 @@ class PlayersController extends AppController
   {
     if ($this->Auth->user('id')!= '')
     {
-      pr($this->Auth->user('id'));
+      //pr($this->Auth->user('id'));
       return $this->redirect($this->Auth->redirectUrl());
     }
     if ($this->request->is('post')) {
