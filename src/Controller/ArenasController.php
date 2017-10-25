@@ -16,6 +16,7 @@ class ArenasController  extends AppController
     {
         $this->loadModel('Fighters');
         $this->loadModel('Surroundings');
+        $this->loadModel('Events');
         $width = 15;
 	$heigth = 10;
         $trap_detect = 0;
@@ -83,7 +84,6 @@ class ArenasController  extends AppController
                 else
                 {
                     $this->Fighters->move($this->Auth->user('id'),$x,$y,$sightArray,$heigth,$width);
-
                 }
                 $this->redirect(['action'=>'sight']);
             }
@@ -160,7 +160,7 @@ class ArenasController  extends AppController
     {
   		$this->loadModel('Events');
   		$events = $this->Events->getDayEvents();
-          $this->set('events', $events);
+      $this->set('events', $events);
     }
 
     public function guild()
