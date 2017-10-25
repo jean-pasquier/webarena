@@ -417,6 +417,10 @@ div.message {
     padding: 0 1.5rem 0 1.5rem;
     transition: height 300ms ease-out 0s;
     background-color: #a0d3e8;
+    margin-top: 55px;
+    margin-right: 100px;
+    float : right;
+    position : fixed;
     color: #626262;
     top: 15px;
     right: 15px;

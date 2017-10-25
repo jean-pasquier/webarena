@@ -56,6 +56,8 @@ class SurroundingsTable extends Table
 		$pnbr = $width * $heigth / 10;
 		$tnbr = $width * $heigth / 10;
 		$mnbr = 1;
+                $hnbr = 3;
+
 
 		$mySurr = array();
 		
@@ -98,6 +100,19 @@ class SurroundingsTable extends Table
 			array_push($mySurr, $temparr);
 		}
 
+
+                //genetate H
+               for($i = 0; $i < $hnbr; $i++)
+               {
+                       $coord = $this->calculateRandomCoord($mySurr, $width - 1, $heigth - 1);
+
+                       $temparr = array();
+                       array_push($temparr, 'H');
+                       array_push($temparr, $coord[0]);
+                       array_push($temparr, $coord[1]);
+                       array_push($mySurr, $temparr);
+               }
+               
 		//add all the surroundings in the table
 		foreach($mySurr as $row)
 		{

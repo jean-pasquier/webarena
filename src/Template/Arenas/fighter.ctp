@@ -3,6 +3,19 @@
 <h1><?= $this->fetch('title') ?></h1>
 
 
+
+<?php if ($hasAliveFighter): ?>
+
+<?php 
+echo $this->Form->create();
+echo 'Skills credits : ',$skill_credits;
+echo $this->Form->submit('Sight',['class' => 'button','name'=>'skill']);
+echo $this->Form->submit('Strength',['class' => 'button', 'name'=>'skill']);
+echo $this->Form->submit('Health', ['class' => 'button', 'name'=>'skill']);
+echo $this->Form->end();
+?>
+
+
 <ul class="list-unstyled col-md-6 col-md-offset-3">
 	<?php foreach ($list as $fighter): ?>
 	<li>
@@ -16,12 +29,20 @@
 					<dd><?= $fighter['xp'] ?></dd>
 					<dt>Coord</dt>
 					<dd><?= $fighter['coordinate_x'].','.$fighter['coordinate_y']  ?></dd>
+                                        <dt>Sight</dt>
+					<dd><?= $fighter['skill_sight']?></dd>
+                                        <dt>Strength</dt>
+					<dd><?= $fighter['skill_strength']?></dd>
+                                        <dt>Health</dt>
+					<dd><?= $fighter['skill_health']?></dd>                
 				</dl>
 			</div>
 		</article>
 	</li>
 	<?php endforeach; ?>
 </ul>
+
+<?php endif; ?>
 
 <?php if (!$hasAliveFighter): ?>
 <p class="col-md-6 col-md-offset-3">All your fighters are dead...
