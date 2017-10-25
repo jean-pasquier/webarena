@@ -111,7 +111,7 @@ class ArenasController  extends AppController
 	public function fighter()
 	{
 	 	$this->loadModel('Fighters');
-                
+
                 $skill_credits=0;
                 $sight=0;
                 $strength=0;
@@ -123,7 +123,7 @@ class ArenasController  extends AppController
                 {
                     $current_fighter= $this->Fighters->getAliveFighter($this->Auth->user('id'));
                     $skill_credits=(int)($current_fighter['xp']/4-$current_fighter['level']+1);
-                    
+
                     if($this->request->is('post'))
                     {
                        if($skill_credits > 0)
@@ -148,16 +148,16 @@ class ArenasController  extends AppController
                        }
                        else
                        {
-                           $this->Flash->success('Not enough skill points  ! ');//0 rien 1 succes 2 parade                          
-                           
+                           $this->Flash->success('Not enough skill points  ! ');//0 rien 1 succes 2 parade
+
                        }
                        $this->redirect(['action'=>'fighter']);
 
 
-                       
+
                     }
                 }
-               
+
 
 		$list = $this->Fighters->getAllFighters($this->Auth->user('id'));
 	 	$this->set([
@@ -226,7 +226,9 @@ class ArenasController  extends AppController
     public function diary()
     {
   		$this->loadModel('Events');
-  		$events = $this->Events->getDayEvents();
+      $this->loadModel('Fighters');
+      $fighter = $this->Fighters->getAliveFighter($this->Auth->user('id'));
+  		$events = $this->Events->getDayEvents($fighter);
 		$this->set('events', $events);
     }
 

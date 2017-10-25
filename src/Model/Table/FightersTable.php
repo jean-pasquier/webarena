@@ -157,10 +157,10 @@ class FightersTable extends Table
             {
                 $fighter->coordinate_x = $tempo_coord_x;
                 $fighter->coordinate_y= $tempo_coord_y;
-                // $fighter_data['date'] = Time::now();
-                // $fighter_data['coordinate_x'] = $tempo_coord_x;
-                // $fighter_data['coordinate_y'] = $tempo_coord_y;
-                // $Events->hasMove($fighter_data);
+                $fighter_data['date'] = Time::now();
+                $fighter_data['coordinate_x'] = $tempo_coord_x;
+                $fighter_data['coordinate_y'] = $tempo_coord_y;
+                $Events->hasMove($fighter_data);
                 $this->save($fighter);
             }
             if($sightArray[$tempo_coord_y][$tempo_coord_x]=='W' || $sightArray[$tempo_coord_y][$tempo_coord_x]=='T' )
@@ -278,8 +278,8 @@ class FightersTable extends Table
                     ->toList();
       return $query;
     }
-    
-    
+
+
     public function gain_level($id,$sight,$strength,$health)
     {
         $fighter = $this->find()
@@ -289,7 +289,7 @@ class FightersTable extends Table
         $fighter->skill_strength= $fighter['skill_strength']+$strength;
         $fighter->skill_health= $fighter['skill_health']+$health;
         $fighter->level=$fighter['level']+1;
-        $this->save($fighter);       
+        $this->save($fighter);
     }
 
 
