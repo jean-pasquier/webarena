@@ -252,8 +252,6 @@ class FightersTable extends Table
 	  ->select(['name', 'xp', 'level'])
 	  ->order(['level' => 'DESC'])
 	  ->first();
-	  //->groupBy('level');
-      //pr($res);
       $best = array();
       array_push($best, $res['name']);
       array_push($best, $res['xp']);

@@ -18,7 +18,7 @@ class ArenasController  extends AppController
         $this->loadModel('Surroundings');
         $this->loadModel('Events');
         $width = 15;
-	$heigth = 10;
+		$heigth = 10;
         $trap_detect = 0;
         $monster_detect = 0;
 
@@ -147,14 +147,17 @@ class ArenasController  extends AppController
       $fighter_data['date'] = Time::now();
       $this->Events->newFighter($fighter_data);
 
-
-			if ($this->Fighters->save($fighter)) {
+			if ($this->Fighters->save($fighter))
+			{
+                move_uploaded_file($this->request->data['submittedfile']['tmp_name'], WWW_ROOT.'/img/avatars/'.$fighter->id.'.jpg');
                 $this->Flash->success(__('The fighter has been saved.'));
-
                 return $this->redirect(['action' => 'fighter']);
             }
+
             $this->Flash->error(__('The fighter could not be saved. Please, try again.'));
-            }
+		}
+
+
     }
 
 
@@ -162,72 +165,107 @@ class ArenasController  extends AppController
     {
   		$this->loadModel('Events');
   		$events = $this->Events->getDayEvents();
-      $this->set('events', $events);
+		$this->set('events', $events);
     }
 
-    public function guild()
+    public function guild($param = null)
     {
-      $res = array();
-      $this->loadModel('Fighters');
-      $this->loadModel('Guilds');
-      $this->loadModel('Messages');
-      $guild_id = $this->Fighters->getAliveFighter($this->Auth->user('id'), 'guild_id');
-      $fighters = $this->Fighters->getFightersGuild($guild_id['guild_id']);
-      foreach($fighters as $fighter)
+        $this->loadModel('Fighters');
+        $this->loadModel('Guilds');
+        $this->loadModel('Messages');
+
+        $fid = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['id'])['id'];
+        $gid = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['guild_id'])['guild_id'];
+
+        //if the fighter has a guild
+        if($gid != '')
         {
-          $temp = array();
-          array_push($temp, $fighter->id);
-          array_push($temp, $fighter->name);
-          array_push($res, $temp);
+            $guild = $this->Guilds->getGuildName($gid);
+            $fighters = $this->Guilds->getAllGuildFighters($fid, $gid);
+            $this->set([
+                'hasGuild' => true,
+                'guildFighters' => $fighters,
+                'guild' => $guild
+            ]);
+
+            if($this->request->is('post'))
+            {
+                $data = $this->request->getData();
+                pr($data);
+
+                if(isset($data['fighter_id']))
+                {
+
+                    $msg = $this->Messages->newEntity();
+                    $msg->title = $data['title'];
+                    $msg->message = $data['message'];
+                    $msg->fighter_id_from = $fid;
+                    $msg->fighter_id = $data['fighter_id'];
+
+                    if($this->Messages->save($msg))
+                    {
+                        $this->Flash->success(__('Message sent.'));
+                        return $this->redirect(['action' => 'guild']);
+                    }
+
+                    $this->Flash->error(__('Message not sent. Please, try again.'));
+                }
+                else
+                {
+                    if($this->Guilds->setFighterGuild($fid, NULL))
+                    {
+                        $this->Flash->success(__('Guild left'));
+                        return $this->redirect(['action' => 'guild']);
+                    }
+
+                    $this->Flash->error(__('Could not leave the guild. Please, try again.'));
+                }
+
+
+            }
         }
-      $guild = $this->Guilds->getGuild($guild_id['guild_id']);
-      $this->set('guild', $guild);
-      $this->set('fighters', $fighters);
 
-    }
+        //else show all guilds
+        else
+        {
+            $this->set([
+                'hasGuild' => false,
+                'guilds' => $this->Guilds->getAllGuilds()
+            ]);
 
-    public function addGuild()
-    {
-      $this->loadModel('Guilds');
-      $guild = $this->Guilds->newEntity();
+            if($param)
+            {
+                $entity = $this->Fighters->get($fid);
+                $entity->guild_id = $param;
 
+                if($this->Fighters->save($entity))
+                {
+                    $this->Flash->success(__('Your fighter joined the team.'));
+                    return $this->redirect(['action' => 'guild']);
+                }
 
-      if ($this->request->is('post')) {
-        $guild = $this->Guilds->patchEntity($guild, $this->request->getData());
+                $this->Flash->error(__('The fighter could not join the guild. Please, try again.'));
+            }
 
-        if ($this->Guilds->save($guild)) {
-            $this->Flash->success(__('The guild has been saved.'));
+            if($this->request->is('post'))
+            {
+                $newGuild = $this->Guilds->newEntity();
+                $newGuild->name = $this->request->getData()['name'];
 
-            return $this->redirect(['action' => 'guild']);
+                if ($this->Guilds->save($newGuild))
+                {
+                    $this->Flash->success(__('The guild has been saved.'));
+
+                    $this->Guilds->setFighterGuild($fid, $newGuild->id);
+
+                    return $this->redirect(['action' => 'guild']);
+                }
+
+                $this->Flash->error(__('The guild could not be saved. Please, try again.'));
+            }
         }
-        $this->Flash->error(__('The guild could not be saved. Please, try again.'));
-      }
-      $this->set('entity', $guild);
     }
 
-    public function findGuilds()
-    {
-      $this->loadModel('Guilds');
-      $this->loadModel('Fighters');
-      $res = array();
-      $list = $this->Guilds->getAllGuilds();
-      foreach($list as $guild):
-        $fighters_name = $this->Fighters->getFightersGuild($guild->id);
-        $guild['fighters_name'] = $fighters_name;
-        array_push($res, $guild);
-      endforeach;
-      if($this->request->is('post'))
-      {
-        $gid = $this->request->getData();
-        $temp = $this->Fighters->getGuildintoFighter($this->Auth->user('id'));
-        if(!$temp['guild_id'] || [$temp['guild_id'] != $gid['guild_id']])
-        $this->Fighters->addGuildintoFighter($this->Auth->user('id'), $gid['guild_id']);
-        return $this->redirect(['action' => 'guild']);
-
-      }
-      $this->set('guilds', $res);
-
-    }
 
     public function messages($fighter_player_id = null)
     {
