@@ -67,6 +67,16 @@ class AppController extends Controller
           'Form' => ['userModel' => 'Players']
         ]);
         $this->Auth->config('logoutRedirect', ['controller' => 'Pages', 'action' => 'home']);
+        $this->Auth->config('loginRedirect', ['controller' => 'Arenas']);
+
+        if ($this->Auth->user('id') != '')
+        {
+          $this->set('isConnected', true);
+        }
+        else
+        {
+          $this->set('isConnected', false);
+        }
 
         /*
          * Enable the following components for recommended CakePHP security settings.

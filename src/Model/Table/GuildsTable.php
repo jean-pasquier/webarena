@@ -23,6 +23,12 @@ use Cake\ORM\TableRegistry;
 class GuildsTable extends Table
 {
     
+    public function setFighterGuild($fid, $gid)
+    {
+        $fighter = TableRegistry::get('Fighters')->find()->where(['id' => $fid, 'current_health >' => 0])->first();
+        $fighter->guild_id = $gid;
+        return TableRegistry::get('Fighters')->save($fighter);    
+    }
     public function getAllGuilds()
     {
         return $this->find()->toList();
@@ -34,7 +40,8 @@ class GuildsTable extends Table
             ->find()
             ->where([
                 'guild_id' => $gid, 
-                'id !=' => $fid
+                'id !=' => $fid,
+                'current_health >' => 0
             ])
             ->toArray();
     }
@@ -43,6 +50,7 @@ class GuildsTable extends Table
     {
         return $this->find()->select('name')->where(['id' => $gid])->first()['name'];
     }
+
     
     
     /**
@@ -90,29 +98,4 @@ class GuildsTable extends Table
      * @param  array  $fighter_id.
      * @return list of guilds for each players
      */
-//    public function find_guild(array $fighters = null)
-//    {
-//      if($fighters)
-//      {
-//        $res = array();
-//        foreach($fighters as $fighter)
-//        {
-//          $query = $this->find()
-//                        ->join([
-//                          'table' => 'fighters',
-//                          'alias' => 'f',
-//                          'type' => 'LEFT',
-//                          'conditions' => 'f.guild_id = guilds.id',
-//                        ])
-//                        ->where(['f.id' => $fighter[0]])
-//                        ->toArray();
-//
-//          if($query) $query['fighter_name'] = $fighter[1];
-//          array_push($res, $query);
-//        }
-//        return $res;
-//      }
-
-//    }
-
 }

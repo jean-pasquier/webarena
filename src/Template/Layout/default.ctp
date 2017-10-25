@@ -50,13 +50,15 @@ $cakeDescription = 'WebArenas';
 			</div>
 			<div class="collapse navbar-collapse" id="collapse">
 				<ul class="nav navbar-nav">
+          <?php if ($isConnected): ?>
 					<li><?php echo $this->Html->link('Home', ['controller' => 'Arenas', 'action' => '/']);?></li>
-					<li><?php echo $this->Html->link('Fighters', ['controller' => 'Arenas', 'action' => 'fighter']);?></li>
+					<li><?= $this->Html->link('Fighters', ['controller' => 'Arenas', 'action' => 'fighter']);?></li>
 					<li><?php echo $this->Html->link('Sight', ['controller' => 'Arenas', 'action' => 'sight']);?></li>
 					<li><?php echo $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
           <li><?php echo $this->Html->link('Guilds', ['controller' => 'Arenas', 'action' => 'guild']);?></li>
           <li><?php echo $this->Html->link('Messages', ['controller' => 'Arenas', 'action' => 'messages']);?></li>
 					<li><?php echo $this->Html->link('Deconnexion', ['controller' => 'Players', 'action' => 'logout']);?></li>
+          <?php endif; ?>
 				</ul>
 			</div>
 

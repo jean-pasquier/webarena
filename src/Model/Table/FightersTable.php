@@ -232,8 +232,6 @@ class FightersTable extends Table
 	  ->select(['name', 'xp', 'level'])
 	  ->order(['level' => 'DESC'])
 	  ->first();
-	  //->groupBy('level');
-      //pr($res);
       $best = array();
       array_push($best, $res['name']);
       array_push($best, $res['xp']);
@@ -245,7 +243,7 @@ class FightersTable extends Table
     {
       $query = $this->find()
                     ->select('name')
-                    ->where(['guild_id' => $guild_id])
+                    ->where(['guild_id' => $guild_id, 'current_health >' => 0])
                     ->toList();
       return $query;
     }
