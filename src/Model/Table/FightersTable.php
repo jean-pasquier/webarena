@@ -193,6 +193,9 @@ class FightersTable extends Table
         $monster=$Surroundings->find()
                      ->where(['Type' => 'W','coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y])
                      ->first();
+        $potion = $Surroundings->find()
+                ->where(['Type' => 'H','coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y])
+                ->first();
         if($monster)
         {
             $fighter_data['thing'] = 'a monster';
@@ -200,6 +203,14 @@ class FightersTable extends Table
             $Surroundings->delete($monster);
             $succes=1;
         }
+        if($potion)
+        {
+            $Surroundings->delete($potion);
+            $succes=1;
+            $fighter->current_health=$fighter['current_health']+3;
+            $this->save($fighter);
+        }
+
 
         //fight with players
         $ennemy=$this->find()
@@ -266,6 +277,19 @@ class FightersTable extends Table
                     ->where(['guild_id' => $guild_id, 'current_health >' => 0])
                     ->toList();
       return $query;
+    }
+    
+    
+    public function gain_level($id,$sight,$strength,$health)
+    {
+        $fighter = $this->find()
+                    ->select()
+                    ->where(['id' => $id])->first();
+        $fighter->skill_sight= $fighter['skill_sight']+$sight;
+        $fighter->skill_strength= $fighter['skill_strength']+$strength;
+        $fighter->skill_health= $fighter['skill_health']+$health;
+        $fighter->level=$fighter['level']+1;
+        $this->save($fighter);       
     }
 
 
