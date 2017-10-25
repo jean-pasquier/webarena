@@ -173,6 +173,7 @@ class ArenasController  extends AppController
         $this->loadModel('Fighters');
         $this->loadModel('Guilds');
         $this->loadModel('Messages');
+        $this->loadModel('Events');
 
         $fid = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['id'])['id'];
         $gid = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['guild_id'])['guild_id'];
@@ -214,6 +215,10 @@ class ArenasController  extends AppController
                 {
                     if($this->Guilds->setFighterGuild($fid, NULL))
                     {
+                      $fighter_data = $this->Fighters->getAliveFighter($this->Auth->user('id'));
+                      $fighter_data['date'] = Time::now();
+                      $fighter_data['guild'] = $guild;
+                      $this->Events->leftGuild($fighter_data);
                         $this->Flash->success(__('Guild left'));
                         return $this->redirect(['action' => 'guild']);
                     }
@@ -240,6 +245,10 @@ class ArenasController  extends AppController
 
                 if($this->Fighters->save($entity))
                 {
+                  $fighter_data = $this->Fighters->getAliveFighter($this->Auth->user('id'));
+                  $fighter_data['date'] = Time::now();
+                  $fighter_data['guild'] = $this->Guilds->getGuildName($param);
+                  $this->Events->joinGuild($fighter_data);
                     $this->Flash->success(__('Your fighter joined the team.'));
                     return $this->redirect(['action' => 'guild']);
                 }
@@ -255,6 +264,10 @@ class ArenasController  extends AppController
                 if ($this->Guilds->save($newGuild))
                 {
                     $this->Flash->success(__('The guild has been saved.'));
+                    $fighter_data = $this->Fighters->getAliveFighter($this->Auth->user('id'));
+                    $fighter_data['date'] = Time::now();
+                    $fighter_data['guild'] = $newGuild->name;
+                    $this->Events->createGuild($fighter_data);
 
                     $this->Guilds->setFighterGuild($fid, $newGuild->id);
 

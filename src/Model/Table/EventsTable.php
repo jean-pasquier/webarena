@@ -87,6 +87,33 @@ class EventsTable extends Table
 									->execute();
 	}
 
+	public function leftGuild($fighter)
+	{
+		$fighter['name'] = $fighter['name']. ' left the guild : '. $fighter['guild'];
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+	}
+
+	public function joinGuild($fighter)
+	{
+		$fighter['name'] = $fighter['name']. ' join the guild : '. $fighter['guild'];
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+	}
+
+	public function createGuild($fighter)
+	{
+		$fighter['name'] = $fighter['name']. ' create the guild : '. $fighter['guild'];
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+	}
+
     /**
      * Initialize method
      *
