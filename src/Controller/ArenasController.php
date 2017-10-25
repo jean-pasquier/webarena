@@ -146,14 +146,15 @@ class ArenasController  extends AppController
 
 			if ($this->Fighters->save($fighter))
 			{
+                move_uploaded_file($this->request->data['submittedfile']['tmp_name'], WWW_ROOT.'/img/avatars/'.$fighter->id.'.jpg');
                 $this->Flash->success(__('The fighter has been saved.'));
                 return $this->redirect(['action' => 'fighter']);
             }
-			
+
             $this->Flash->error(__('The fighter could not be saved. Please, try again.'));
 		}
 
-            
+
     }
 
 
@@ -172,38 +173,38 @@ class ArenasController  extends AppController
 
         $fid = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['id'])['id'];
         $gid = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['guild_id'])['guild_id'];
-        
+
         //if the fighter has a guild
         if($gid != '')
         {
             $guild = $this->Guilds->getGuildName($gid);
-            $fighters = $this->Guilds->getAllGuildFighters($fid, $gid);                        
+            $fighters = $this->Guilds->getAllGuildFighters($fid, $gid);
             $this->set([
                 'hasGuild' => true,
                 'guildFighters' => $fighters,
                 'guild' => $guild
             ]);
-            
+
             if($this->request->is('post'))
             {
                 $data = $this->request->getData();
                 pr($data);
-                                
+
                 if(isset($data['fighter_id']))
                 {
-                    
+
                     $msg = $this->Messages->newEntity();
                     $msg->title = $data['title'];
                     $msg->message = $data['message'];
                     $msg->fighter_id_from = $fid;
                     $msg->fighter_id = $data['fighter_id'];
-                    
+
                     if($this->Messages->save($msg))
                     {
                         $this->Flash->success(__('Message sent.'));
                         return $this->redirect(['action' => 'guild']);
                     }
-                    
+
                     $this->Flash->error(__('Message not sent. Please, try again.'));
                 }
                 else
@@ -213,14 +214,14 @@ class ArenasController  extends AppController
                         $this->Flash->success(__('Guild left'));
                         return $this->redirect(['action' => 'guild']);
                     }
-                    
+
                     $this->Flash->error(__('Could not leave the guild. Please, try again.'));
                 }
-                
-			
+
+
             }
         }
-        
+
         //else show all guilds
         else
         {
@@ -228,32 +229,32 @@ class ArenasController  extends AppController
                 'hasGuild' => false,
                 'guilds' => $this->Guilds->getAllGuilds()
             ]);
-    
+
             if($param)
             {
                 $entity = $this->Fighters->get($fid);
                 $entity->guild_id = $param;
-                
+
                 if($this->Fighters->save($entity))
                 {
                     $this->Flash->success(__('Your fighter joined the team.'));
                     return $this->redirect(['action' => 'guild']);
                 }
-			
+
                 $this->Flash->error(__('The fighter could not join the guild. Please, try again.'));
             }
-            
+
             if($this->request->is('post'))
             {
                 $newGuild = $this->Guilds->newEntity();
                 $newGuild->name = $this->request->getData()['name'];
-                
+
                 if ($this->Guilds->save($newGuild))
                 {
                     $this->Flash->success(__('The guild has been saved.'));
-                    
+
                     $this->Guilds->setFighterGuild($fid, $newGuild->id);
-                    
+
                     return $this->redirect(['action' => 'guild']);
                 }
 
@@ -261,7 +262,7 @@ class ArenasController  extends AppController
             }
         }
     }
-    
+
 
     public function messages($fighter_player_id = null)
     {
