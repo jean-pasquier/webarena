@@ -6,6 +6,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 /**
  * Fighters Model
@@ -144,22 +145,32 @@ class FightersTable extends Table
 
     public function move($pid, $x, $y, $sightArray, $height, $width)
     {
+        $Events = TableRegistry::get('Events');
         $fighter = $this->find()->where(['player_id' => $pid, 'current_health >' => 0])->first();
         $fighter_data = $fighter->toArray();
-        $tempo_coord_x = $x + $fighter_data['coordinate_x'];
-        $tempo_coord_y = $y + $fighter_data['coordinate_y'];
+        $tempo_coord_x = $x + $fighter['coordinate_x'];
+        $tempo_coord_y = $y + $fighter['coordinate_y'];
 
         if($tempo_coord_x >=0 && $tempo_coord_x < $width && $tempo_coord_y >=0 && $tempo_coord_y < $height )
         {
             if($sightArray[$tempo_coord_y][$tempo_coord_x]=='.')
             {
                 $fighter->coordinate_x = $tempo_coord_x;
-                $fighter->coordinate_y = $tempo_coord_y;
+                $fighter->coordinate_y= $tempo_coord_y;
+                $fighter_data['date'] = Time::now();
+                $fighter_data['coordinate_x'] = $tempo_coord_x;
+                $fighter_data['coordinate_y'] = $tempo_coord_y;
+                $Events->hasMove($fighter_data);
                 $this->save($fighter);
             }
             if($sightArray[$tempo_coord_y][$tempo_coord_x]=='W' || $sightArray[$tempo_coord_y][$tempo_coord_x]=='T' )
             {
                 $fighter->current_health = 0;
+                $fighter_data['date'] = Time::now();
+                $fighter_data['coordinate_x'] = $tempo_coord_x;
+                $fighter_data['coordinate_y'] = $tempo_coord_y;
+                $fighter_data['thing'] = $sightArray[$tempo_coord_y][$tempo_coord_x];
+                $Events->MoveAndDie($fighter_data);
                 $this->save($fighter);
             }
         }
@@ -168,10 +179,14 @@ class FightersTable extends Table
     public function attack($pid,$x,$y)
     {
         $Surroundings = TableRegistry::get('Surroundings');
+        $Events = TableRegistry::get('Events');
         $fighter = $this->find()->where(['player_id' => $pid, 'current_health >' => 0])->first();
         $fighter_data = $fighter->toArray();
         $tempo_coord_x = $x + $fighter_data['coordinate_x'];
         $tempo_coord_y = $y + $fighter_data['coordinate_y'];
+        $fighter_data['date'] = Time::now();
+        $fighter_data['coordinate_x'] = $tempo_coord_x;
+        $fighter_data['coordinate_y'] = $tempo_coord_y;
         $succes = 0;
 
         //  kill monsters
@@ -180,6 +195,8 @@ class FightersTable extends Table
                      ->first();
         if($monster)
         {
+            $fighter_data['thing'] = 'a monster';
+            $Events->attack($fighter_data);
             $Surroundings->delete($monster);
             $succes=1;
         }
@@ -192,6 +209,7 @@ class FightersTable extends Table
         {
             // on récupère le niveau de l'attaqué et le niveau de l'attaquant + calcul du seuil
             $seuil =10+$ennemy['level']-$fighter['level'];
+            $fighter_data['thing'] = $ennemy->name;
             $dice = rand(0,20);
 
             if($dice > $seuil)
@@ -201,20 +219,22 @@ class FightersTable extends Table
 
                 if($ennemy->current_health <= 0)
                 {
+                  $Events->attackKilled($fighter_data);
                    $ennemy->current_health=0;
                    $fighter->xp=$fighter->xp+ $ennemy['level'];
                 }
                 else
                 {
+                  $Events->attack($fighter_data);
                    $fighter->xp=$fighter->xp+1;
                 }
                 $this->save($fighter);
                 $this->save($ennemy);
                 $succes=1;
-
             }
             else
             {
+              $Events->attackFailed($fighter_data);
                 //message d'échec`
                 $succes=2;
             }
