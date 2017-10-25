@@ -13,16 +13,30 @@
 
 </ul>
 
-<?php 
-echo $this->Form->create();
-echo 'Attack : ' ;
-echo $this->Form->checkbox('attack');
-echo $this->Form->submit('UP',['class' => 'button','name'=>'dir']);
-echo $this->Form->submit('DOWN',['class' => 'button', 'name'=>'dir']);
-echo $this->Form->submit('RIGHT', ['class' => 'button', 'name'=>'dir']);
-echo $this->Form->submit('LEFT', ['class' => 'button', 'name'=>'dir']);
-echo $this->Form->end();
-?>
+<?php
+echo $this->Form->create(); ?>
+<div class="table-responsive col-xs-3">
+  <table class="table">
+    <tr>
+      <td> </td>
+      <td> <?= $this->Form->submit('UP',['class' => 'button','name'=>'dir']); ?> </td>
+      <td> </td>
+    </tr>
+
+    <tr>
+      <td><?= $this->Form->submit('LEFT', ['class' => 'button', 'name'=>'dir']);?></td>
+        <td><?= 'Attack : ' ;?> <?= $this->Form->checkbox('attack');?></td>
+        <td><?= $this->Form->submit('RIGHT', ['class' => 'button', 'name'=>'dir']);?></td>
+    </tr>
+
+    <tr>
+      <td> </td>
+      <td> <?= $this->Form->submit('DOWN',['class' => 'button','name'=>'dir']); ?> </td>
+      <td> </td>
+    </tr>
+
+  </table>
+</div>
 
 <table class="table table-bordered table-responsive">
 	<tbody>

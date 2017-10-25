@@ -152,7 +152,6 @@ class ArenasController  extends AppController
             }
             $this->Flash->error(__('The fighter could not be saved. Please, try again.'));
             }
-
     }
 
 
