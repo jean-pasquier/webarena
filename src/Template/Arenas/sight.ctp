@@ -15,12 +15,12 @@
 
 <?php
 echo $this->Form->create(); ?>
-<div class="table-responsive col-xs-3">
+<div class="table-responsive col-xs-5">
   <table class="table">
     <tr>
       <td> </td>
       <td> <?= $this->Form->submit('UP',['class' => 'button','name'=>'dir']); ?> </td>
-      <td> </td>
+      <td> <?= $this->Form->submit('Regenerate surrondings',['class' => 'button','name'=>'dir']); ?></td>
     </tr>
 
     <tr>
@@ -32,6 +32,7 @@ echo $this->Form->create(); ?>
     <tr>
       <td> </td>
       <td> <?= $this->Form->submit('DOWN',['class' => 'button','name'=>'dir']); ?> </td>
+      <?= $this->Form->end() ?>
       <td> </td>
     </tr>
 

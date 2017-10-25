@@ -78,6 +78,15 @@ class EventsTable extends Table
 									->execute();
 	}
 
+	public function newFighter($fighter)
+	{
+		$fighter['name'] = $fighter['name']. ' entered in the arena';
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+	}
+
     /**
      * Initialize method
      *

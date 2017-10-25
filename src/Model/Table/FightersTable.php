@@ -157,10 +157,10 @@ class FightersTable extends Table
             {
                 $fighter->coordinate_x = $tempo_coord_x;
                 $fighter->coordinate_y= $tempo_coord_y;
-                $fighter_data['date'] = Time::now();
-                $fighter_data['coordinate_x'] = $tempo_coord_x;
-                $fighter_data['coordinate_y'] = $tempo_coord_y;
-                $Events->hasMove($fighter_data);
+                // $fighter_data['date'] = Time::now();
+                // $fighter_data['coordinate_x'] = $tempo_coord_x;
+                // $fighter_data['coordinate_y'] = $tempo_coord_y;
+                // $Events->hasMove($fighter_data);
                 $this->save($fighter);
             }
             if($sightArray[$tempo_coord_y][$tempo_coord_x]=='W' || $sightArray[$tempo_coord_y][$tempo_coord_x]=='T' )

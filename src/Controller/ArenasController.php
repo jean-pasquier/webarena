@@ -56,6 +56,10 @@ class ArenasController  extends AppController
             {
                 $x=0;
                 $y=0;
+                if($this->request->data['dir'] == 'Regenerate surrondings')
+                {
+                    $this->Surroundings->generate($width, $heigth);
+                }
                 if($this->request->data['dir'] == 'UP')
                 {
                     $x=0;
@@ -90,11 +94,6 @@ class ArenasController  extends AppController
         }
     }
 
-
-
-
-
-
 	public function fighter()
 	{
 	 	$this->loadModel('Fighters');
@@ -118,6 +117,7 @@ class ArenasController  extends AppController
             $heigth = 10;
             $this->loadModel('Fighters');
             $this->loadModel('Surroundings');
+            $this->loadModel('Events');
             $fighter = $this->Fighters->newEntity();
             $this->set('entity', $fighter);
 
@@ -143,6 +143,9 @@ class ArenasController  extends AppController
 			$fighter->skill_strength = 1;
 			$fighter->level = 1;
 			$fighter->xp = 0;
+      $fighter_data = $fighter->toArray();
+      $fighter_data['date'] = Time::now();
+      $this->Events->newFighter($fighter_data);
 
 
 			if ($this->Fighters->save($fighter)) {
