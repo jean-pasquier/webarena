@@ -46,12 +46,50 @@ class GuildsTable extends Table
             ->toArray();
     }
     
+    public function getAllGuildsFighters($gid)
+    {
+        return TableRegistry::get('Fighters')
+            ->find()
+            ->where([
+                'guild_id' => $gid, 
+                'current_health >' => 0
+            ])
+            ->toArray();
+    }
+    
     public function getGuildName($gid)
     {
         return $this->find()->select('name')->where(['id' => $gid])->first()['name'];
     }
 
-    
+    public function getBestGuildId()
+    {
+        $guildScores = array();
+        $guilds = $this->getAllGuilds();
+        foreach($guilds as $guild)
+        {            
+            $guildScore = 0;
+            $fighters = $this->getAllGuildsFighters($guild['id']);
+            foreach($fighters as $fighter)
+            {
+                $guildScore += $fighter['xp'];
+            }
+            $guildScores[$guild['id']] = $guildScore;
+        }
+        
+        $max = 0;
+        $maxId = 0;
+        foreach($guildScores as $gid => $score)
+        {
+            if($score>$max)
+            {
+                $max = $score;
+                $maxId = $gid;
+            }
+        }
+        
+        return $maxId;
+    }
     
     /**
      * Initialize method
