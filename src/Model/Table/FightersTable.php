@@ -277,17 +277,12 @@ class FightersTable extends Table
 
 
 
-    public function getBestFighter()
+    public function getBestFighter($where = array())
     {
-      $res = $this->find()
-	  ->select(['name', 'xp', 'level'])
-	  ->order(['level' => 'DESC'])
-	  ->first();
-      $best = array();
-      array_push($best, $res['name']);
-      array_push($best, $res['xp']);
-      array_push($best, $res['level']);
-      return $best;
+		return $this->find()
+			->order(['xp' => 'DESC'])
+			->where($where)
+			->first();
     }
 
     public function getFightersGuild($guild_id)

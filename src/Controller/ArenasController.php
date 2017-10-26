@@ -185,7 +185,19 @@ class ArenasController  extends AppController
 
     public function index()
     {
-
+        $this->loadModel('Guilds');
+        $this->loadModel('Fighters');
+        
+        $bestGuild = $this->Guilds->getBestGuild();
+        $bestGuildId = $bestGuild[0];
+        $bestGuildScore = $bestGuild[1];
+        
+        $this->set([
+            'bestAllTimeFighter' => $this->Fighters->getBestFighter(),
+            'bestAliveFighter' => $this->Fighters->getBestFighter(['current_health >' => 0]),
+            'bestGuildName' => $this->Guilds->getGuildName($bestGuildId),
+            'bestGuildScore' => $bestGuildScore
+        ]);
     }
 
 
@@ -254,7 +266,7 @@ class ArenasController  extends AppController
         $this->loadModel('Guilds');
         $this->loadModel('Messages');
         $this->loadModel('Events');
-
+        
         $fid = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['id'])['id'];
         $gid = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['guild_id'])['guild_id'];
 
@@ -313,9 +325,10 @@ class ArenasController  extends AppController
         //else show all guilds
         else
         {
+            $guilds = $this->Guilds->getAllSortedGuilds();
             $this->set([
                 'hasGuild' => false,
-                'guilds' => $this->Guilds->getAllGuilds()
+                'guilds' => $guilds
             ]);
 
             if($param)
