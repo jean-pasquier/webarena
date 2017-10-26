@@ -45,21 +45,22 @@
 </ul>
 <?php else: ?>
 
-<ul class="list-unstyled">
+<ul class="list-unstyled col-md-6 col-md-offset-3">
 	<?php foreach($guilds as $guild): ?>
-	<li>
-		<dl class="panel">
-			<dt class="panel-title"><?= $guild['name'] ?></dt>
-			
-			<dd class="panel-body">
-				<?= $this->Html->Link('Join guild', ['controller' => 'Arenas', 'action' => 'guild/'.$guild['id']]); ?>
+	<li class="panel panel-default">
+		<h4 class="panel-heading"><?= $guild[1] ?></h4>
+		<dl class="panel-body dl-horizontal">
+			<dt>Score</dt>
+			<dd>
+				<?= $guild[2] ?>
 			</dd>
 		</dl>
+		<?= $this->Html->Link('Join guild', ['controller' => 'Arenas', 'action' => 'guild/'.$guild[0]]) ?>
 	</li>
 	<?php endforeach; ?>
 	
 	<div>
-		<button class="" id="create-guild-btn">Create a guild.</button>
+		<button class="button" id="create-guild-btn">Create a guild</button>
 	</div>
 	<div class="undisplayed col-md-6 col-md-offset-3" id="create-guild-form">
 		<?= $this->Form->create() ?>

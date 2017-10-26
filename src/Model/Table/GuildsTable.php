@@ -62,7 +62,7 @@ class GuildsTable extends Table
         return $this->find()->select('name')->where(['id' => $gid])->first()['name'];
     }
 
-    public function getBestGuildId()
+    public function calculateGuildScores()
     {
         $guildScores = array();
         $guilds = $this->getAllGuilds();
@@ -76,19 +76,39 @@ class GuildsTable extends Table
             }
             $guildScores[$guild['id']] = $guildScore;
         }
+        return $guildScores;
+    }
         
-        $max = 0;
-        $maxId = 0;
-        foreach($guildScores as $gid => $score)
+    public function sortGuilds()
+    {
+        $array = $this->calculateGuildScores();
+        
+        if(asort($array, SORT_DESC))
         {
-            if($score>$max)
-            {
-                $max = $score;
-                $maxId = $gid;
-            }
+            return array_reverse($array, true);
         }
-        
-        return $maxId;
+    }
+    
+    public function getBestGuild()
+    {
+        $array = $this->sortGuilds();
+        reset($array);
+        return [key($array), current($array)];
+    }
+    
+    public function getAllSortedGuilds()
+    {
+        $arr = $this->sortGuilds();
+        $finalArray = array();
+        foreach($arr as $gid => $score)
+        {
+            $guild = array();
+            array_push($guild, $gid);
+            array_push($guild, $this->getGuildName($gid));
+            array_push($guild, $score);
+            array_push($finalArray, $guild);
+        }
+        return $finalArray;
     }
     
     /**

@@ -13,12 +13,13 @@
 
 </ul>
 
-<?php
-echo $this->Form->create(); ?>
-<div class="table-responsive col-xs-5">
+  
+  <button class="button default-button" id="scream-btn">Scream</button> 
+<?= $this->Form->create(); ?>
+<div class="table-responsive">
   <table class="table">
     <tr>
-      <td> <?= $this->Form->submit('Scream',['class' => 'button','name'=>'dir']); ?></td>
+      <td> </td>
       <td> <?= $this->Form->submit('UP',['class' => 'button','name'=>'dir']); ?> </td>
       <td> <?= $this->Form->submit('Regenerate surrondings',['class' => 'button','name'=>'dir']); ?></td>
     </tr>
@@ -39,6 +40,18 @@ echo $this->Form->create(); ?>
   </table>
 </div>
 
+
+<div class="undisplayed scream form columns content col-md-6 col-md-offset-3" id="scream-form">
+    <?= $this->Form->create() ?>
+    <fieldset>
+        <?= $this->Form->control('description', ['class' => 'input text']); ?>
+        <?= $this->Form->hidden('SCREAM', ['value' => 'SCREAM']); ?>
+    </fieldset>
+    <?= $this->Form->button(__('Submit', ['class' => 'btn btn-default'])) ?>
+    <?= $this->Form->end() ?>
+</div>
+
+
 <table class="table table-bordered table-responsive">
 	<tbody>
 		<?php foreach ($sightArray as $row): ?>
@@ -56,7 +69,7 @@ echo $this->Form->create(); ?>
 <?php if (!$hasAliveFighter) : ?>
 <div class="alert alert-danger col-md-6 col-md-offset-3">
 	<h4>You do not have alive fighter or all of them are dead...</h4>
-	<p><?= $this->Html->link('Create a new fighter', ['action' => './addFighter']); ?>
+	<p><?= $this->Html->link('Create a new fighter', ['action' => 'fighter']); ?>
 	</p>
 </div>
 <?php endif; ?>

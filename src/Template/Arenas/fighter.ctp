@@ -48,7 +48,19 @@ echo $this->Form->end();
 <?php endif; ?>
 
 <?php if (!$hasAliveFighter): ?>
-	<p class="col-md-6 col-md-offset-3">All your fighters are dead...
-		<?= $this->Html->link('Create a new fighter', ['action' => './addFighter']); ?>
-		?</p>
-	<?php endif; ?>
+
+<div class="undisplayed col-md-6 col-md-offset-3" id="create-fighter-form">
+	<?= $this->Form->create($entity, ['enctype' => 'multipart/form-data']) ?>
+    <fieldset>
+        <?= $this->Form->control('name'); ?>
+        <?= $this->Form->file('submittedfile', ['accept' => 'image/*']); ?>
+    </fieldset>
+    <?= $this->Form->button(__('Submit', ['class' => 'btn btn-default'])) ?>
+    <?= $this->Form->end() ?>
+</div>
+
+<div>
+	<p>	All your fighters are dead. You should create a new one !</p>
+	<button class="button" id="create-fighter-btn">Create a fighter</button>
+</div>
+<?php endif; ?>

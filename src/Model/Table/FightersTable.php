@@ -208,6 +208,11 @@ class FightersTable extends Table
             $Surroundings->delete($potion);
             $succes=1;
             $fighter->current_health=$fighter['current_health']+3;
+            if($fighter['current_health'] > $fighter['skill_health'])
+            {
+                $fighter->current_health = $fighter['skill_health'];
+            }
+            
             $this->save($fighter);
         }
 
@@ -272,17 +277,12 @@ class FightersTable extends Table
 
 
 
-    public function getBestFighter()
+    public function getBestFighter($where = array())
     {
-      $res = $this->find()
-	  ->select(['name', 'xp', 'level'])
-	  ->order(['level' => 'DESC'])
-	  ->first();
-      $best = array();
-      array_push($best, $res['name']);
-      array_push($best, $res['xp']);
-      array_push($best, $res['level']);
-      return $best;
+		return $this->find()
+			->order(['xp' => 'DESC'])
+			->where($where)
+			->first();
     }
 
     public function getFightersGuild($guild_id)
