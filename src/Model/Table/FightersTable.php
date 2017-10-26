@@ -229,7 +229,7 @@ class FightersTable extends Table
                 $bonus_guild = $this->calcul_attack_bonus_guild($fighter['guild_id'],$fighter['id'],$tempo_coord_x,$tempo_coord_y);
                 //debug($bonus_guild);
                 $ennemy->current_health = $ennemy['current_health']-$fighter['skill_strength']-$bonus_guild;
-                
+
                 if($ennemy->current_health <= 0)
                 {
                   $Events->attackKilled($fighter_data);
@@ -260,14 +260,14 @@ class FightersTable extends Table
         }
         return($succes); // 0 = rien 1 = succes 2 = parade
     }
-    
+
     public function calcul_attack_bonus_guild($gid,$fid, $x , $y )
     {
         $res=$this->find('all')->where(['guild_id ='=>$gid,'id <>'=>$fid,'coordinate_x =' =>$x,'coordinate_y <>' => $y,'coordinate_y >=' =>($y-1),'coordinate_y <=' =>($y+1)])
 		->orWhere(['guild_id ='=>$gid,'id <>'=>$fid,'coordinate_y =' =>$y,'coordinate_x <>' => $x,'coordinate_x >=' =>($x-1),'coordinate_x <=' =>($x+1)]);
         return($res->count());
     }
-          
+
 
 
 
@@ -302,6 +302,7 @@ class FightersTable extends Table
         $fighter->skill_sight= $fighter['skill_sight']+$sight;
         $fighter->skill_strength= $fighter['skill_strength']+$strength;
         $fighter->skill_health= $fighter['skill_health']+$health;
+        $fighter->current_health = $fighter['skill_health'];
         $fighter->level=$fighter['level']+1;
         $this->save($fighter);
     }

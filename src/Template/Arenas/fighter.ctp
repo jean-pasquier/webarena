@@ -30,6 +30,10 @@ echo $this->Form->end();
 					<dl class="dl-horizontal">
 						<dt>Health</dt>
 						<dd><?= $fighter['current_health'].'/'.$fighter['skill_health'] ?></dd>
+						<dt>Strength</dt>
+						<dd><?= $fighter['skill_strength'] ?></dd>
+						<dt>Sight</dt>
+						<dd><?= $fighter['skill_sight'] ?></dd>
 						<dt>XP</dt>
 						<dd><?= $fighter['xp'] ?></dd>
 						<dt>Coord</dt>
