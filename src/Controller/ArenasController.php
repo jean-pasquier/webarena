@@ -56,6 +56,10 @@ class ArenasController  extends AppController
             {
                 $x=0;
                 $y=0;
+                if($this->request->data['dir'] == 'Scream')
+                {
+                    return $this->redirect(['action' => 'scream/'.$this->Auth->user('id')]);
+                }
                 if($this->request->data['dir'] == 'Regenerate surrondings')
                 {
                     $this->Surroundings->generate($width, $heigth);
@@ -98,6 +102,11 @@ class ArenasController  extends AppController
                         $this->Flash->success('Parade !  Ahah ');//0 rien 1 succes 2 parade
 
                     }
+                    if($succes_attack == 3)
+                    {
+                        $this->Flash->success('Team Work !  Ahah ');//0 rien 1 succes 2 parade
+
+                    }
                 }
                 else
                 {
@@ -111,53 +120,60 @@ class ArenasController  extends AppController
 	public function fighter()
 	{
 	 	$this->loadModel('Fighters');
-                
+
                 $skill_credits=0;
                 $sight=0;
                 $strength=0;
                 $health=0;
 
+            $skill_credits=0;
+            $sight=0;
+            $strength=0;
+            $health=0;
 
-                $hasAliveFighter= $this->Fighters->hasAliveFighter($this->Auth->user('id'));
-                if($hasAliveFighter)
+
+            $hasAliveFighter= $this->Fighters->hasAliveFighter($this->Auth->user('id'));
+            if($hasAliveFighter)
+            {
+                $current_fighter= $this->Fighters->getAliveFighter($this->Auth->user('id'));
+                $skill_credits=(int)($current_fighter['xp']/4-$current_fighter['level']+1);
+
+                if($this->request->is('post'))
                 {
                     $current_fighter= $this->Fighters->getAliveFighter($this->Auth->user('id'));
                     $skill_credits=(int)($current_fighter['xp']/4-$current_fighter['level']+1);
-                    
+
                     if($this->request->is('post'))
                     {
                        if($skill_credits > 0)
                        {
-                           if($this->request->data['skill'] == 'Sight')
-                           {
-                               $sight=1;
-                               $this->Flash->success('Upgraded Sight ! ');//0 rien 1 succes 2 parade
-                           }
-                           if($this->request->data['skill'] == 'Strength')
-                           {
-                                $strength=1;
-                                $this->Flash->success('Upgraded Strenght ! ');//0 rien 1 succes 2 parade
-                           }
-                           if($this->request->data['skill'] == 'Health')
-                           {
-                               $health=3;
-                               $this->Flash->success('Upgraded Health ! ');//0 rien 1 succes 2 parade
-
-                           }
-                           $this->Fighters->gain_level($current_fighter['id'],$sight,$strength,$health);
+                           $sight=1;
+                           $this->Flash->success('Upgraded Sight ! ');//0 rien 1 succes 2 parade
                        }
-                       else
+                       if($this->request->data['skill'] == 'Strength')
                        {
-                           $this->Flash->success('Not enough skill points  ! ');//0 rien 1 succes 2 parade                          
-                           
+                            $strength=1;
+                            $this->Flash->success('Upgraded Strenght ! ');//0 rien 1 succes 2 parade
                        }
-                       $this->redirect(['action'=>'fighter']);
+                       if($this->request->data['skill'] == 'Health')
+                       {
+                           $health=3;
+                           $this->Flash->success('Upgraded Health ! ');//0 rien 1 succes 2 parade
+
+                       }
+                       $this->Fighters->gain_level($current_fighter['id'],$sight,$strength,$health);
+                   }
+                   else
+                   {
+                       $this->Flash->success('Not enough skill points  ! ');//0 rien 1 succes 2 parade
+
+                   }
+                   $this->redirect(['action'=>'fighter']);
 
 
-                       
                     }
                 }
-               
+
 
 		$list = $this->Fighters->getAllFighters($this->Auth->user('id'));
 	 	$this->set([
@@ -226,7 +242,9 @@ class ArenasController  extends AppController
     public function diary()
     {
   		$this->loadModel('Events');
-  		$events = $this->Events->getDayEvents();
+      $this->loadModel('Fighters');
+      $fighter = $this->Fighters->getAliveFighter($this->Auth->user('id'));
+  		$events = $this->Events->getDayEvents($fighter);
 		$this->set('events', $events);
     }
 
@@ -235,6 +253,7 @@ class ArenasController  extends AppController
         $this->loadModel('Fighters');
         $this->loadModel('Guilds');
         $this->loadModel('Messages');
+        $this->loadModel('Events');
 
         $fid = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['id'])['id'];
         $gid = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['guild_id'])['guild_id'];
@@ -276,6 +295,10 @@ class ArenasController  extends AppController
                 {
                     if($this->Guilds->setFighterGuild($fid, NULL))
                     {
+                      $fighter_data = $this->Fighters->getAliveFighter($this->Auth->user('id'));
+                      $fighter_data['date'] = Time::now();
+                      $fighter_data['guild'] = $guild;
+                      $this->Events->leftGuild($fighter_data);
                         $this->Flash->success(__('Guild left'));
                         return $this->redirect(['action' => 'guild']);
                     }
@@ -302,6 +325,10 @@ class ArenasController  extends AppController
 
                 if($this->Fighters->save($entity))
                 {
+                  $fighter_data = $this->Fighters->getAliveFighter($this->Auth->user('id'));
+                  $fighter_data['date'] = Time::now();
+                  $fighter_data['guild'] = $this->Guilds->getGuildName($param);
+                  $this->Events->joinGuild($fighter_data);
                     $this->Flash->success(__('Your fighter joined the team.'));
                     return $this->redirect(['action' => 'guild']);
                 }
@@ -317,6 +344,10 @@ class ArenasController  extends AppController
                 if ($this->Guilds->save($newGuild))
                 {
                     $this->Flash->success(__('The guild has been saved.'));
+                    $fighter_data = $this->Fighters->getAliveFighter($this->Auth->user('id'));
+                    $fighter_data['date'] = Time::now();
+                    $fighter_data['guild'] = $newGuild->name;
+                    $this->Events->createGuild($fighter_data);
 
                     $this->Guilds->setFighterGuild($fid, $newGuild->id);
 
@@ -399,6 +430,28 @@ class ArenasController  extends AppController
       $this->set('fighters_id', $fighters);
       $this->set('messages', $messages);
       $this->set('entity', $entity);
+    }
+
+    public function scream($pid = null)
+    {
+      if($pid)
+      {
+        $this->loadModel('Fighters');
+        $this->loadModel('Events');
+        if($this->request->is('post'))
+        {
+          $fighter = $this->Fighters->getAliveFighter($pid);
+          $fighter['name'] = $fighter['name']. ' screamed : '. $this->request->getData('description');
+          $fighter['date'] = Time::now();
+          if($this->Events->addScream($fighter))
+          {
+            $this->Flash->success(__('The message scream has been saved.'));
+            return $this->redirect(['action' => 'sight']);
+          }
+          else $this->Flash->error(__('The message scream could not be saved. Please, try again.'));
+
+        }
+      }
     }
 
 

@@ -20,10 +20,16 @@ use Cake\Validation\Validator;
 class EventsTable extends Table
 {
 
-	public function getDayEvents()
+	public function getDayEvents($fighter)
 	{
-		//probleme date !
-		return $this->find()->where(['dateDiff(NOW(), date) <' => 1])->order(['date' => 'Desc'])->toList();
+
+		if($fighter) :
+			return $this->find()->where(['dateDiff(NOW(), date) <' => 1,
+			'abs(coordinate_x - ' . $fighter['coordinate_x'] . ') + abs(coordinate_y - ' . $fighter['coordinate_y'] . ') <=' => $fighter['skill_sight'],
+			'abs(coordinate_x - ' . $fighter['coordinate_x'] . ') + abs(coordinate_y - ' . $fighter['coordinate_y'] . ') >=' => - $fighter['skill_sight']
+			])->order(['date' => 'Desc'])->toList();
+		else: return array();
+		endif;
 	}
 
 	public function hasMove($fighter)
@@ -85,6 +91,43 @@ class EventsTable extends Table
 									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
 									->values($fighter)
 									->execute();
+	}
+
+	public function leftGuild($fighter)
+	{
+		$fighter['name'] = $fighter['name']. ' left the guild : '. $fighter['guild'];
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+	}
+
+	public function joinGuild($fighter)
+	{
+		$fighter['name'] = $fighter['name']. ' join the guild : '. $fighter['guild'];
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+	}
+
+	public function createGuild($fighter)
+	{
+		$fighter['name'] = $fighter['name']. ' create the guild : '. $fighter['guild'];
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+	}
+
+	public function addScream($fighter)
+	{
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+		if($fighter) return true;
+		else return false;
 	}
 
     /**

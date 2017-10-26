@@ -40,18 +40,23 @@
 
 
 
-<div class="col-xs-2">
+<div class="table-responsive col-xs-2">
 	<table class="table">
     <thead>
       <tr>
-				<th> </th>
-        <th>Fighters Alive</th>
+        <th>
+					<div class="row col-xs-offset-1">
+						Fighters Alive
+					</div>
+				</th>
       </tr>
     </thead>
     <tbody>
 			<th>
 				<?php foreach ($fighters_id as $fighter): ?>
+					<div class="row col-xs-offset-1">
 					<?= $this->Html->link($fighter['name'], ['action' => './messages/'.$fighter['player_id']]); ?>
+				</div>
 				<?php endforeach; ?>
 			</th>
 
