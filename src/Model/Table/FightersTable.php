@@ -143,24 +143,17 @@ class FightersTable extends Table
     return($pos->toArray());
     }
 
-    public function move($pid, $x, $y, $height, $width)
+    public function move($pid, $x, $y, $sightArray, $height, $width)
     {
         $Events = TableRegistry::get('Events');
-        $Surroundings = TableRegistry::get('Surroundings');
         $fighter = $this->find()->where(['player_id' => $pid, 'current_health >' => 0])->first();
         $fighter_data = $fighter->toArray();
         $tempo_coord_x = $x + $fighter['coordinate_x'];
         $tempo_coord_y = $y + $fighter['coordinate_y'];
-        
-        
-        
 
         if($tempo_coord_x >=0 && $tempo_coord_x < $width && $tempo_coord_y >=0 && $tempo_coord_y < $height )
         {
-            
-            $content=$Surroundings->find()
-                     ->where(['coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y]);
-            if ($content->count() == 0 )
+            if($sightArray[$tempo_coord_y][$tempo_coord_x]=='.')
             {
                 $fighter->coordinate_x = $tempo_coord_x;
                 $fighter->coordinate_y= $tempo_coord_y;
@@ -170,18 +163,16 @@ class FightersTable extends Table
                 $Events->hasMove($fighter_data);
                 $this->save($fighter);
             }
-            else if($content->first()->type =='W' or $content->first()->type =='T' )
+            if($sightArray[$tempo_coord_y][$tempo_coord_x]=='W' || $sightArray[$tempo_coord_y][$tempo_coord_x]=='T' )
             {
                 $fighter->current_health = 0;
                 $fighter_data['date'] = Time::now();
                 $fighter_data['coordinate_x'] = $tempo_coord_x;
                 $fighter_data['coordinate_y'] = $tempo_coord_y;
-                $fighter_data['thing'] = $content->first()->type;
+                $fighter_data['thing'] = $sightArray[$tempo_coord_y][$tempo_coord_x];
                 $Events->MoveAndDie($fighter_data);
                 $this->save($fighter);
             }
-          
-           
         }
     }
 

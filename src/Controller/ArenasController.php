@@ -20,7 +20,7 @@ class ArenasController  extends AppController
         $this->loadModel('Messages');
 
         $width = 15;
-        $heigth = 10;
+		$heigth = 10;
         $trap_detect = 0;
         $monster_detect = 0;
 
@@ -123,7 +123,7 @@ class ArenasController  extends AppController
                     }
                     else
                     {
-                        $this->Fighters->move($this->Auth->user('id'), $x, $y, $heigth, $width);
+                        $this->Fighters->move($this->Auth->user('id'), $x, $y, $sightArray, $heigth, $width);
                     }
                     
                     $this->redirect(['action'=>'sight']);
