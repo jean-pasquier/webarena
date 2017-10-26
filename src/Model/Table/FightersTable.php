@@ -226,7 +226,7 @@ class FightersTable extends Table
             if($dice > $seuil)
             {
                 // on applique l'attaque à la vie de l'énemie
-                $bonus_guild = $this->calcul_attack_bonus_guild($fighter['guild_id'],$fighter['id'],$tempo_coord_x,$tempo_coord_y);
+                $bonus_guild = $this->calcul_attack_bonus_guild($fighter);
                 //debug($bonus_guild);
                 $ennemy->current_health = $ennemy['current_health']-$fighter['skill_strength']-$bonus_guild;
 
@@ -261,10 +261,12 @@ class FightersTable extends Table
         return($succes); // 0 = rien 1 = succes 2 = parade
     }
 
-    public function calcul_attack_bonus_guild($gid,$fid, $x , $y )
+    public function calcul_attack_bonus_guild($fighter)
     {
-        $res=$this->find('all')->where(['guild_id ='=>$gid,'id <>'=>$fid,'coordinate_x =' =>$x,'coordinate_y <>' => $y,'coordinate_y >=' =>($y-1),'coordinate_y <=' =>($y+1)])
-		->orWhere(['guild_id ='=>$gid,'id <>'=>$fid,'coordinate_y =' =>$y,'coordinate_x <>' => $x,'coordinate_x >=' =>($x-1),'coordinate_x <=' =>($x+1)]);
+        $res=$this->find('all')->where(['guild_id ='=>$fighter['guild_id'],'id <>'=>$fighter['id'],
+        'abs(coordinate_x - ' . $fighter['coordinate_x'] . ') + abs(coordinate_y - ' . $fighter['coordinate_y'] . ') <=' => $fighter['skill_sight'],
+        'abs(coordinate_x - ' . $fighter['coordinate_x'] . ') + abs(coordinate_y - ' . $fighter['coordinate_y'] . ') >=' => - $fighter['skill_sight']
+      ]);
         return($res->count());
     }
 
