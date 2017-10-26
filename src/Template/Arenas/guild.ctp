@@ -60,7 +60,7 @@
 	<?php endforeach; ?>
 	
 	<div>
-		<button class="" id="create-guild-btn">Create a guild.</button>
+		<button class="button" id="create-guild-btn">Create a guild</button>
 	</div>
 	<div class="undisplayed col-md-6 col-md-offset-3" id="create-guild-form">
 		<?= $this->Form->create() ?>
