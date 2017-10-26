@@ -208,6 +208,11 @@ class FightersTable extends Table
             $Surroundings->delete($potion);
             $succes=1;
             $fighter->current_health=$fighter['current_health']+3;
+            if($fighter['current_health'] > $fighter['skill_health'])
+            {
+                $fighter->current_health = $fighter['skill_health'];
+            }
+            
             $this->save($fighter);
         }
 
