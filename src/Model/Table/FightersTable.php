@@ -226,7 +226,7 @@ class FightersTable extends Table
             if($dice > $seuil)
             {
                 // on applique l'attaque à la vie de l'énemie
-                $bonus_guild = $this->calcul_attack_bonus_guild($fighter);
+                $bonus_guild = $this->calcul_attack_bonus_guild($fighter['guild_id'],$fighter['id'],$tempo_coord_x,$tempo_coord_y);
                 //debug($bonus_guild);
                 $ennemy->current_health = $ennemy['current_health']-$fighter['skill_strength']-$bonus_guild;
 
@@ -238,7 +238,6 @@ class FightersTable extends Table
                 }
                 else
                 {
-                  $Events->attack($fighter_data);
                    $fighter->xp=$fighter->xp+1;
                 }
                 $this->save($fighter);
@@ -248,6 +247,7 @@ class FightersTable extends Table
                 {
                     $succes=3;
                 }
+                $Events->attack($fighter_data, $succes);
             }
             else
             {
@@ -261,13 +261,12 @@ class FightersTable extends Table
         return($succes); // 0 = rien 1 = succes 2 = parade
     }
 
-    public function calcul_attack_bonus_guild($fighter)
+    public function calcul_attack_bonus_guild($gid, $fid, $x, $y)
     {
-        $res=$this->find('all')->where(['guild_id ='=>$fighter['guild_id'],'id <>'=>$fighter['id'],
-        'abs(coordinate_x - ' . $fighter['coordinate_x'] . ') + abs(coordinate_y - ' . $fighter['coordinate_y'] . ') <=' => $fighter['skill_sight'],
-        'abs(coordinate_x - ' . $fighter['coordinate_x'] . ') + abs(coordinate_y - ' . $fighter['coordinate_y'] . ') >=' => - $fighter['skill_sight']
-      ]);
-        return($res->count());
+      $res=$this->find('all')->where(['guild_id ='=>$gid,'id <>'=>$fid,'coordinate_x =' =>$x,'coordinate_y <>' => $y,'coordinate_y >=' =>($y-1),'coordinate_y <=' =>($y+1)])
+                ->orWhere(['guild_id ='=>$gid,'id <>'=>$fid,'coordinate_y =' =>$y,'coordinate_x <>' => $x,'coordinate_x >=' =>($x-1),'coordinate_x <=' =>($x+1)]);
+      return($res->count());
+
     }
 
 
