@@ -56,6 +56,10 @@ class ArenasController  extends AppController
             {
                 $x=0;
                 $y=0;
+                if($this->request->data['dir'] == 'Scream')
+                {
+                    return $this->redirect(['action' => 'scream/'.$this->Auth->user('id')]);
+                }
                 if($this->request->data['dir'] == 'Regenerate surrondings')
                 {
                     $this->Surroundings->generate($width, $heigth);
@@ -426,6 +430,28 @@ class ArenasController  extends AppController
       $this->set('fighters_id', $fighters);
       $this->set('messages', $messages);
       $this->set('entity', $entity);
+    }
+
+    public function scream($pid = null)
+    {
+      if($pid)
+      {
+        $this->loadModel('Fighters');
+        $this->loadModel('Events');
+        if($this->request->is('post'))
+        {
+          $fighter = $this->Fighters->getAliveFighter($pid);
+          $fighter['name'] = $fighter['name']. ' screamed : '. $this->request->getData('description');
+          $fighter['date'] = Time::now();
+          if($this->Events->addScream($fighter))
+          {
+            $this->Flash->success(__('The message scream has been saved.'));
+            return $this->redirect(['action' => 'sight']);
+          }
+          else $this->Flash->error(__('The message scream could not be saved. Please, try again.'));
+
+        }
+      }
     }
 
 

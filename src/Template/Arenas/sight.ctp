@@ -18,7 +18,7 @@ echo $this->Form->create(); ?>
 <div class="table-responsive col-xs-5">
   <table class="table">
     <tr>
-      <td> </td>
+      <td> <?= $this->Form->submit('Scream',['class' => 'button','name'=>'dir']); ?></td>
       <td> <?= $this->Form->submit('UP',['class' => 'button','name'=>'dir']); ?> </td>
       <td> <?= $this->Form->submit('Regenerate surrondings',['class' => 'button','name'=>'dir']); ?></td>
     </tr>

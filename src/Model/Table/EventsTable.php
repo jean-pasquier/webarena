@@ -120,6 +120,16 @@ class EventsTable extends Table
 									->execute();
 	}
 
+	public function addScream($fighter)
+	{
+		$query = $this->query()
+									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
+									->values($fighter)
+									->execute();
+		if($fighter) return true;
+		else return false;
+	}
+
     /**
      * Initialize method
      *
