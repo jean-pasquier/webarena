@@ -46,7 +46,6 @@ $cakeDescription = 'WebArenas';
 					<span class="icon-bar icon2"></span>
 					<span class="icon-bar icon3"></span>
 				</button>
-				<?= $this->Html->link('Home', '/', ['class' => 'navbar-brand']);?>
 			</div>
 			<div class="collapse navbar-collapse" id="collapse">
 				<ul class="nav navbar-nav">
