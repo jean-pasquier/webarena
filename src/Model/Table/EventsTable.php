@@ -75,9 +75,10 @@ class EventsTable extends Table
 									->execute();
 	}
 
-	public function attack($fighter)
+	public function attack($fighter, $succes = 1)
 	{
-		$fighter['name'] = $fighter['name']. ' attacked '. $fighter['thing'];
+		if($succes == 1)$fighter['name'] = $fighter['name']. ' attacked '. $fighter['thing'];
+		if($succes == 3)$fighter['name'] = $fighter['name']. ' attacked '. $fighter['thing'] . ' with the help of his guild';
 		$query = $this->query()
 									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
 									->values($fighter)
