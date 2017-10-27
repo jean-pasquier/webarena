@@ -40,27 +40,38 @@ $cakeDescription = 'WebArenas';
     <nav class="navbar navbar-inverse navbar-fixed-top container-fluid" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed mainnav-menu" data-toggle="collapse" data-target="#collapse" aria-expanded="false">
+				<button type="button" class="navbar-toggle mainnav-menu" data-toggle="collapse" data-target=".collapsed" aria-expanded="false">
 					<span class="sr-only">Toggle navigation</span>
 					<span class="icon-bar icon1"></span>
 					<span class="icon-bar icon2"></span>
 					<span class="icon-bar icon3"></span>
 				</button>
-			</div>
-			<div class="collapse navbar-collapse" id="collapse">
-				<ul class="nav navbar-nav">
-          <?php if ($isConnected): ?>
-					<li><?php echo $this->Html->link('Home', ['controller' => 'Arenas', 'action' => '/']);?></li>
-					<li><?= $this->Html->link('Fighters', ['controller' => 'Arenas', 'action' => 'fighter']);?></li>
-					<li><?php echo $this->Html->link('Sight', ['controller' => 'Arenas', 'action' => 'sight']);?></li>
-					<li><?php echo $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
-          <li><?php echo $this->Html->link('Guilds', ['controller' => 'Arenas', 'action' => 'guild']);?></li>
-          <li><?php echo $this->Html->link('Messages', ['controller' => 'Arenas', 'action' => 'messages']);?></li>
-					<li><?php echo $this->Html->link('Deconnexion', ['controller' => 'Players', 'action' => 'logout']);?></li>
-          <?php endif; ?>
-				</ul>
-			</div>
-
+<!--
+                <?php if (!$isConnected): ?>
+                    <?= $this->Html->link('Home', '/' , ['class' => 'navbar-brand']);?>
+                <?php endif; ?>
+-->
+            </div>
+                
+            <ul class="nav navbar-nav collapse navbar-collapse collapsed">
+      <?php if ($isConnected): ?>
+                <li><?php echo $this->Html->link('Home', ['controller' => 'Arenas', 'action' => '/']);?></li>
+                <li><?= $this->Html->link('Fighters', ['controller' => 'Arenas', 'action' => 'fighter']);?></li>
+                <li><?php echo $this->Html->link('Sight', ['controller' => 'Arenas', 'action' => 'sight']);?></li>
+                <li><?php echo $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
+      <li><?php echo $this->Html->link('Guilds', ['controller' => 'Arenas', 'action' => 'guild']);?></li>
+      <li><?php echo $this->Html->link('Messages', ['controller' => 'Arenas', 'action' => 'messages']);?></li>
+      <?php endif; ?>
+            </ul>
+            
+            <ul class="nav navbar-nav collapse navbar-collapse navbar-right collapsed">
+            <?php if ($isConnected): ?>
+                <li><?php echo $this->Html->link('Deconnexion', ['controller' => 'Players', 'action' => 'logout']);?></li>
+            <?php else: ?>
+                <li><?php echo $this->Html->link('Login', ['controller' => 'Players', 'action' => 'login']);?></li>
+                <li><?php echo $this->Html->link('Signup', ['controller' => 'Players', 'action' => 'add']);?></li>
+            <?php endif; ?>
+            </ul>                
 
 		</div>
     </nav>
@@ -89,7 +100,8 @@ $cakeDescription = 'WebArenas';
                 <dt>Options :</dt>
                 <dd>
                     <ol class="list-unstyled">
-                        <li>D - Setting elements management</li>
+                        <li>B - Communication &amp; guild options</li>
+                        <li>D - Surroundings elements management</li>
                         <li>F - Responsive pages with Bootstrap</li>
                     </ol>
                 </dd>

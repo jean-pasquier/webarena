@@ -20,7 +20,9 @@ echo $this->Form->end();
 	<?php foreach ($list as $fighter): ?>
 		<li>
 			<article class="panel <?=($fighter['current_health']==0)?'panel-danger':'panel-success'; ?>">
-				<h5 class="panel-heading"><?= $fighter['name'] ?></h5>
+				<div class="panel-heading">
+					<h4 class="panel-title"><?= $fighter['name']; ?> <?=($fighter['current_health']==0)?'(dead)':'';?></h4>
+				</div>
 				<div class="panel-body">
 					<?php if (file_exists(WWW_ROOT.'/img/avatars/'.$fighter->id.'.jpg')): ?>
 					<?= $this->Html->image('avatars/'.$fighter->id.'.jpg', ['width' => '50px', 'height' => '50px', 'alt' => 'Avatar', 'class' => 'center-block']); ?>

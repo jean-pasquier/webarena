@@ -62,14 +62,10 @@ $cakeDescription = 'WebArenas';
                     </button>
 					<?= $this->Html->link('Home', '/', ['class' => 'navbar-brand']);?>
 				</div>
-				<div>
-					<ul class="nav navbar-nav  collapse navbar-collapse navbar-right" id="collapse-home">
-                        <li><?php echo $this->Html->link('Login', ['controller' => 'Players', 'action' => 'login']);?></li>
-                        <li><?php echo $this->Html->link('Signup', ['controller' => 'Players', 'action' => 'add']);?></li>
-					</ul>
-				</div>
-
-
+                <ul class="nav navbar-nav  collapse navbar-collapse navbar-right" id="collapse-home">
+                    <li><?php echo $this->Html->link('Login', ['controller' => 'Players', 'action' => 'login']);?></li>
+                    <li><?php echo $this->Html->link('Signup', ['controller' => 'Players', 'action' => 'add']);?></li>
+                </ul>
 			</div>
 		</nav>
 
@@ -149,7 +145,8 @@ $cakeDescription = 'WebArenas';
                     <dt>Options :</dt>
                     <dd>
                         <ol class="list-unstyled">
-                            <li>D - Setting elements management</li>
+                            <li>B - Communication &amp; guild options</li>
+                            <li>D - Surroundings elements management</li>
                             <li>F - Responsive pages with Bootstrap</li>
                         </ol>
                     </dd>

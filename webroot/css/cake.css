@@ -413,22 +413,16 @@ div.message {
     text-align: center;
     cursor: pointer;
     display: block;
+    position: fixed;
+    right: 10px;
     font-weight: normal;
-    padding: 0 1.5rem 0 1.5rem;
-    transition: height 300ms ease-out 0s;
+    line-height: 2.5rem;
+    padding: 1.5rem 3.5rem;
+    transition: all 300ms ease-out 0s;
     background-color: #a0d3e8;
-    margin-top: 55px;
-    margin-right: 100px;
-    float : right;
-    position : fixed;
+    margin-top: 60px;
     color: #626262;
-    top: 15px;
-    right: 15px;
     z-index: 999;
-    overflow: hidden;
-    height: 50px;
-    line-height: 2.5em;
-    box-radius: 5px;
 }
 
 div.message:before {
@@ -486,7 +480,8 @@ div.message.hidden {
 /* Use 'one true layout' methods to get equal height columns */
 .container {
     overflow: hidden;
-    min-height: 92%; /* full height almost always */
+    min-height: 100%; /* full height almost always */
+    clear:right;
 }
 
 /* Force equal height by overflowing */

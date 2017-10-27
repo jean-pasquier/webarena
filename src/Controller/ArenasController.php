@@ -350,6 +350,7 @@ class ArenasController  extends AppController
                     $msg->message = $data['message'];
                     $msg->fighter_id_from = $fid;
                     $msg->fighter_id = $data['fighter_id'];
+                    $msg->date = Time::now();
 
                     if($this->Messages->save($msg))
                     {
