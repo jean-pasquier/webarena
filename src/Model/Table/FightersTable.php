@@ -29,7 +29,7 @@ class FightersTable extends Table
 
     public function getAllFighters($pid)
     {
-		return $this->find()->where(['player_id' => $pid])->toList();
+		return $this->find()->where(['player_id' => $pid])->order(['current_health' => 'DESC', 'xp' => 'DESC'])->toList();
     }
 
     public function getEveryFighterAliveExecptOurs($pid, $select = array())
@@ -91,6 +91,7 @@ class FightersTable extends Table
 		$surr = TableRegistry::get('Surroundings')
 			->find()
 			->where([
+				'type' => 'P',
 'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') <=' => $aFighter['skill_sight'],
 'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') >=' => - $aFighter['skill_sight']
 			]);

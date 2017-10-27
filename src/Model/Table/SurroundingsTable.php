@@ -138,8 +138,8 @@ class SurroundingsTable extends Table
 		/*$res=$this->find('all')->where(['coordinate_x >=' =>($x-1),
 		'coordinate_x <=' =>($x+1),'coordinate_y >=' =>($y-1),'coordinate_y <=' =>($y+1),'type ='=>'T'])->count();
 		*/
-		$res=$this->find('all')->where(['type ='=>$type,'coordinate_x =' =>$x,'coordinate_y >=' =>($y-1),'coordinate_y <=' =>($y+1)])
-		->orWhere(['type ='=>$type,'coordinate_y =' =>$y,'coordinate_x >=' =>($x-1),'coordinate_x <=' =>($x+1)]);
+		$res = $this->find('all')->where(['type' => $type,'coordinate_x' => $x,'coordinate_y >=' =>($y-1),'coordinate_y <=' =>($y+1)])
+		->orWhere(['type'=>$type,'coordinate_y' =>$y,'coordinate_x >=' =>($x-1),'coordinate_x <=' =>($x+1)]);
 		return($res->count());
 	}
 

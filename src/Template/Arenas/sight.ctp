@@ -5,21 +5,26 @@
 
 <?php if ($hasAliveFighter): ?>
 
-<ul>
-    <li>X= <?php echo $x ?></li>
-    <li>Y= <?php echo $y ?></li>
-    <li>Trap detect = <?php echo $trap_detect ?></li>
-    <li>Monster detect = <?php echo $monster_detect ?></li>
+<?php if($trap_detect) : ?>
+<div class="panel panel-danger col-md-4 col-md-offset-4">
+  <h5 class="panel-heading">Trap detected</h5>
+</div>
+<?php endif; ?>
 
-</ul>
 
-  
-  <button class="button default-button" id="scream-btn">Scream</button> 
-<?= $this->Form->create(); ?>
-<div class="table-responsive">
+<?php if($monster_detect) : ?>
+<div class="panel panel-danger col-md-4 col-md-offset-4">
+  <h5 class="panel-heading">Monster detected</h5>
+</div>
+<?php endif; ?>
+
+
+
+<div class="table-responsive col-md-8 col-md-offset-2">
   <table class="table">
     <tr>
-      <td> </td>
+      <td><button class="button default-button" id="scream-btn">Scream</button></td>
+      <?= $this->Form->create(); ?>
       <td> <?= $this->Form->submit('UP',['class' => 'button','name'=>'dir']); ?> </td>
       <td> <?= $this->Form->submit('Regenerate surrondings',['class' => 'button','name'=>'dir']); ?></td>
     </tr>

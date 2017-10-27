@@ -4,14 +4,14 @@
 
 
 
-<?php if ($hasAliveFighter): ?>
+<?php if($hasAliveFighter): ?>
 
 <?php
 echo $this->Form->create();
-echo 'Skills credits : ',$skill_credits;
-echo $this->Form->submit('Sight',['class' => 'button','name'=>'skill']);
-echo $this->Form->submit('Strength',['class' => 'button', 'name'=>'skill']);
-echo $this->Form->submit('Health', ['class' => 'button', 'name'=>'skill']);
+echo 'Skills credits : '.$skill_credits;
+echo $this->Form->submit('Sight', ['class' => 'button', 'name' => 'skill']);
+echo $this->Form->submit('Strength', ['class' => 'button', 'name' => 'skill']);
+echo $this->Form->submit('Health', ['class' => 'button', 'name' => 'skill']);
 echo $this->Form->end();
 ?>
 
@@ -49,6 +49,12 @@ echo $this->Form->end();
 
 <?php if (!$hasAliveFighter): ?>
 
+<div>
+	<p>	All your fighters are dead. You should create a new one !</p>
+	<button class="button" id="create-fighter-btn">Create a fighter</button>
+</div>
+
+
 <div class="undisplayed col-md-6 col-md-offset-3" id="create-fighter-form">
 	<?= $this->Form->create($entity, ['enctype' => 'multipart/form-data']) ?>
     <fieldset>
@@ -57,10 +63,5 @@ echo $this->Form->end();
     </fieldset>
     <?= $this->Form->button(__('Submit', ['class' => 'btn btn-default'])) ?>
     <?= $this->Form->end() ?>
-</div>
-
-<div>
-	<p>	All your fighters are dead. You should create a new one !</p>
-	<button class="button" id="create-fighter-btn">Create a fighter</button>
 </div>
 <?php endif; ?>

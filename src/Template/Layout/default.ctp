@@ -72,9 +72,9 @@ $cakeDescription = 'WebArenas';
     </div>
 
     <footer class="footer">
-        <section>
-            <h3>Group information</h3>
-            <dl>
+        <section class="container-fluid">
+            <h3 class="text-center">Group information</h3>
+            <dl class="dl-horizontal">
                 <dt>Group :</dt>
                 <dd>SI05</dd>
                 <dt>Author :</dt>

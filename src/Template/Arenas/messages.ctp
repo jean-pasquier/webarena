@@ -1,7 +1,16 @@
 <?php $this->assign('title', 'Messages');?>
 
-<div class="col-xs-2">
+<h1><?= $this->fetch('title') ?></h1>
+
+<?php if(!$hasAliveFighter): ?>
+
+<div class="alert alert-danger col-md-6 col-md-offset-3">
+	<h4>You do not have alive fighter or all of them are dead...</h4>
+	<p><?= $this->Html->link('Create a new fighter', ['action' => 'fighter']); ?>
+	</p>
 </div>
+
+<?php else: ?>
 
 <div class="col-xs-8">
 	<h1><?= $this->fetch('title') ?></h1>
@@ -63,3 +72,5 @@
     </tbody>
   </table>
 </div>
+
+<?php endif; ?>
