@@ -44,7 +44,7 @@ class ArenasController  extends AppController
             $this->set([
                 'xmax' => $heigth,
                 'ymax' => $width,
-                'hasAliveFighter' => $this->Fighters->hasAliveFighter($this->Auth->user('id')),
+                'aliveFighter' => $this->Fighters->find()->where(['player_id' => $this->Auth->user('id'), 'current_health >' => 0])->first(),
                 'sightArray' => $sightArray,
                 'x' => $pos['coordinate_x'],
                 'y' => $pos['coordinate_y'],
