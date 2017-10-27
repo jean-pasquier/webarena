@@ -37,7 +37,7 @@ $cakeDescription = 'WebArenas';
     <?= $this->fetch('script') ?>
 </head>
 <body>
-    
+
     <nav class="navbar navbar-inverse navbar-fixed-top container-fluid" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -51,18 +51,19 @@ $cakeDescription = 'WebArenas';
                     <?= $this->Html->link('Home', '/' , ['class' => 'navbar-brand']);?>
                 <?php endif; ?>
             </div>
-                
+
             <ul class="nav navbar-nav collapse navbar-collapse collapsed">
             <?php if ($isConnected): ?>
-                <li><?php echo $this->Html->link('Home', ['controller' => 'Arenas', 'action' => '/']);?></li>
+                <li><?= $this->Html->link('Home', ['controller' => 'Arenas', 'action' => '/']);?></li>
                 <li><?= $this->Html->link('Fighters', ['controller' => 'Arenas', 'action' => 'fighter']);?></li>
-                <li><?php echo $this->Html->link('Sight', ['controller' => 'Arenas', 'action' => 'sight']);?></li>
-                <li><?php echo $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
-                <li><?php echo $this->Html->link('Guilds', ['controller' => 'Arenas', 'action' => 'guild']);?></li>
-                <li><?php echo $this->Html->link('Messages', ['controller' => 'Arenas', 'action' => 'messages']);?></li>
+                <li><?= $this->Html->link('Sight', ['controller' => 'Arenas', 'action' => 'sight']);?></li>
+                <li><?= $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
+                <li><?= $this->Html->link('Guilds', ['controller' => 'Arenas', 'action' => 'guild']);?></li>
+                <li><?= $this->Html->link('Messages', ['controller' => 'Arenas', 'action' => 'messages']);?></li>
+                <li><?= $this->Html->link('Set account', ['controller' => 'Players', 'action' => 'edit']);?></li>
             <?php endif; ?>
             </ul>
-            
+
             <ul class="nav navbar-nav collapse navbar-collapse navbar-right collapsed">
             <?php if ($isConnected): ?>
                 <li><?php echo $this->Html->link('Deconnexion', ['controller' => 'Players', 'action' => 'logout']);?></li>
