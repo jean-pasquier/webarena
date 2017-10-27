@@ -50,13 +50,14 @@ $cakeDescription = 'WebArenas';
 			<div class="collapse navbar-collapse" id="collapse">
 				<ul class="nav navbar-nav">
           <?php if ($isConnected): ?>
-					<li><?php echo $this->Html->link('Home', ['controller' => 'Arenas', 'action' => '/']);?></li>
+					<li><?= $this->Html->link('Home', ['controller' => 'Arenas', 'action' => '/']);?></li>
 					<li><?= $this->Html->link('Fighters', ['controller' => 'Arenas', 'action' => 'fighter']);?></li>
-					<li><?php echo $this->Html->link('Sight', ['controller' => 'Arenas', 'action' => 'sight']);?></li>
-					<li><?php echo $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
-          <li><?php echo $this->Html->link('Guilds', ['controller' => 'Arenas', 'action' => 'guild']);?></li>
-          <li><?php echo $this->Html->link('Messages', ['controller' => 'Arenas', 'action' => 'messages']);?></li>
-					<li><?php echo $this->Html->link('Deconnexion', ['controller' => 'Players', 'action' => 'logout']);?></li>
+					<li><?= $this->Html->link('Sight', ['controller' => 'Arenas', 'action' => 'sight']);?></li>
+					<li><?= $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
+          <li><?= $this->Html->link('Guilds', ['controller' => 'Arenas', 'action' => 'guild']);?></li>
+          <li><?= $this->Html->link('Messages', ['controller' => 'Arenas', 'action' => 'messages']);?></li>
+          <li><?= $this->Html->link('Set account', ['controller' => 'Players', 'action' => 'edit']);?></li>
+					<li><?= $this->Html->link('Deconnexion', ['controller' => 'Players', 'action' => 'logout']);?></li>
           <?php endif; ?>
 				</ul>
 			</div>

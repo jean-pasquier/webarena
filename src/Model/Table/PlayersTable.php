@@ -54,6 +54,19 @@ class PlayersTable extends Table
       return false;
     }
 
+    public function editEmail($email, $id)
+    {
+      if($player=$this->find()->where(['id' => $id])->first())
+      {
+        $player->email = $email;
+        if($this->save($player))
+        {
+          return true;
+        }
+      }
+      return false;
+    }
+
     /**
      * Default validation rules.
      *
