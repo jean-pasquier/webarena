@@ -114,17 +114,17 @@ class PlayersController extends AppController
               $this->Flash->success('Email changed');
             }
             else {
-              $this->Flash->error('Try again');
+              $this->Flash->error('Cannot change your email. Try again');
             }
           }
           if ($data['password']!='')
           {
-            if ($this->Players->editPassword($data['password'], $this->Auth->user('email')))
+            if ($this->Players->editPassword($data['password'],  $this->Auth->user('id')))
             {
               $this->Flash->success('Password changed');
             }
             else {
-              $this->Flash->error('Try again');
+              $this->Flash->error('Cannot change your password. Try again');
             }
           }
           return $this->redirect(['controller' => 'Players', 'action' => 'edit']);

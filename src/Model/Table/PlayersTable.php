@@ -41,9 +41,9 @@ class PlayersTable extends Table
         ]);
     }
 
-    public function editPassword($password, $email)
+    public function editPassword($password, $id)
     {
-      if($player=$this->find()->where(['email' => $email])->first())
+      if($player=$this->find()->where(['id' => $id])->first())
       {
         $player->password = $password;
         if($this->save($player))

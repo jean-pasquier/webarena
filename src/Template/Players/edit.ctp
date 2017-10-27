@@ -1,7 +1,8 @@
-<div class="players form large-9 medium-8 columns content">
+<h1>Set account</h1>
+
+<div class="players form col-md-6 col-md-offset-3 columns content">
     <?= $this->Form->create() ?>
     <fieldset>
-        <legend><?= __('Edit Player') ?></legend>
         <p>You can change your password or email here</p>
         <?php
             echo $this->Form->control('email');

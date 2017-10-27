@@ -65,7 +65,8 @@ $cakeDescription = 'WebArenas';
             
             <ul class="nav navbar-nav collapse navbar-collapse navbar-right collapsed">
             <?php if ($isConnected): ?>
-                <li><?php echo $this->Html->link('Deconnexion', ['controller' => 'Players', 'action' => 'logout']);?></li>
+                <li><?= $this->Html->link('Set account', ['controller' => 'Players', 'action' => 'edit']);?></li>
+                <li><?php echo $this->Html->link('Logout', ['controller' => 'Players', 'action' => 'logout']);?></li>
             <?php else: ?>
                 <li><?php echo $this->Html->link('Login', ['controller' => 'Players', 'action' => 'login']);?></li>
                 <li><?php echo $this->Html->link('Signup', ['controller' => 'Players', 'action' => 'add']);?></li>
