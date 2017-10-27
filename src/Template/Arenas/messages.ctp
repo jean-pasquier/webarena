@@ -12,35 +12,42 @@
 
 <?php else: ?>
 
-<div class="col-xs-8">
+<div class="col-md-8">
 
 	<ul class="list-unstyled">
 		<?php foreach ($messages as $message): ?>
 		<li>
 			<article class="panel <?=($message['fighter_id_from']==$fid)?'panel-info':'panel-default'; ?>">
-				<h5 class="panel-heading">From: <?= $message['fighter_name_from'] ?> <br>To: <?= $message['fighter_name']?></h5>
+				<h3 class="undisplayed">Message</h3>
+				<div class="panel-heading">
+					<dl class="dl-horizontal">
+						<dt>From: </dt><dd><?= $message['fighter_name_from'] ?></dd>
+						<dt>To: </dt>
+						<dd><?= $message['fighter_name']?></dd>
+					</dl>
+				</div>
 				<div class="panel-body">
 					<dl class="dl-horizontal">
 						<dt><?= $message['title'] ?></dt>
 						<dd><?= $message['message'] ?></dd>
-	          <p> </p>
-	          <p style="font-style:italic"> <?= $message['date']?> </p>
 					</dl>
+					<p class="center-text"><?= $message['date']?></p>
 				</div>
 			</article>
 		</li>
 		<?php endforeach; ?>
 	</ul>
 
-	<div class="messages form large-12 medium-8 columns content">
+	<div class="messages form col-md-6 col-md-offset-3 columns content">
 	  <?= $this->form->create($entity); ?>
 	  <fieldset>
 			<?php if($bool) : ?>
-	    <?= $this->form->control('fighters_name', ['options' => $fighters]); endif;?>
+	    <?= $this->form->control('fighters_name', ['options' => $fighters]); ?>
+		  <?php endif;?>
 	    <?= $this->form->control('title'); ?>
 	    <?= $this->form->control('message'); ?>
 	  </fieldset>
-	  <?= $this->Form->button(__('Submit')) ?>
+	  <?= $this->Form->button('Submit', ['class' => 'btn btn-primary']) ?>
 	  <?= $this->Form->end() ?>
 	</div>
 </div>
@@ -48,26 +55,21 @@
 
 
 
-<div class="table-responsive col-xs-2">
+<div class="table-responsive col-md-4">
 	<table class="table">
     <thead>
       <tr>
-        <th>
-					<div class="row col-xs-offset-1">
-						Fighters Alive
-					</div>
-				</th>
+        <th>Fighters in the Arena</th>
       </tr>
     </thead>
     <tbody>
-			<th>
-				<?php foreach ($fighters_id as $fighter): ?>
-					<div class="row col-xs-offset-1">
-					<?= $this->Html->link($fighter['name'], ['action' => './messages/'.$fighter['player_id']]); ?>
-				</div>
-				<?php endforeach; ?>
-			</th>
-
+		<th>
+			<?php foreach ($fighters_id as $fighter): ?>
+			<div>
+				<?= $this->Html->link($fighter['name'], ['action' => './messages/'.$fighter['player_id']]); ?>
+			</div>
+			<?php endforeach; ?>
+		</th>
     </tbody>
   </table>
 </div>

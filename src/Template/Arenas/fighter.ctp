@@ -1,4 +1,4 @@
-<?php $this->assign('title', 'Fighters');?>
+<?php $this->assign('title', 'Your Fighters');?>
 
 <h1><?= $this->fetch('title') ?></h1>
 
@@ -6,20 +6,29 @@
 
 <?php if($hasAliveFighter): ?>
 
-<?php
-echo $this->Form->create();
-echo 'Skills credits : '.$skill_credits;
-echo $this->Form->submit('Sight', ['class' => 'button', 'name' => 'skill']);
-echo $this->Form->submit('Strength', ['class' => 'button', 'name' => 'skill']);
-echo $this->Form->submit('Health', ['class' => 'button', 'name' => 'skill']);
-echo $this->Form->end();
-?>
+
+<?php if($skill_credits): ?>
+<div class="panel panel-success col-sm-8 col-sm-offset-2">
+	<div class="panel-heading">
+		<h3 class="panel-title">Level up ! You can upgrade one of these skills for your fighter :</h3>
+	</div>
+	<p><?= 'Skills credits : '. $skill_credits; ?></p>
+	<?= $this->Form->create(); ?>
+	<div class="btn-group btn-group-justified" role="group">
+		<?= $this->Form->submit('Sight', ['class' => 'btn btn-success col-xs-4 ', 'name' => 'skill']); ?>
+		<?= $this->Form->submit('Strength', ['class' => 'btn btn-success col-xs-4', 'name' => 'skill']); ?>
+		<?= $this->Form->submit('Health', ['class' => 'btn btn-success col-xs-4', 'name' => 'skill']); ?>
+	</div>
+	
+	<?= $this->Form->end(); ?>
+</div>
+<?php endif; ?>
 
 
-<ul class="list-unstyled col-md-6 col-md-offset-3">
+<ul class="list-unstyled col-sm-6 col-sm-offset-3">
 	<?php foreach ($list as $fighter): ?>
 		<li>
-			<article class="panel <?=($fighter['current_health']==0)?'panel-danger':'panel-success'; ?>">
+			<article class="panel <?=($fighter['current_health']==0)?'panel-danger':'panel-primary'; ?>">
 				<div class="panel-heading">
 					<h4 class="panel-title"><?= $fighter['name']; ?> <?=($fighter['current_health']==0)?'(dead)':'';?></h4>
 				</div>

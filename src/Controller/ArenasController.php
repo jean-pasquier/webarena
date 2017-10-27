@@ -42,17 +42,15 @@ class ArenasController  extends AppController
 
 
             $this->set([
-            'xmax' => $heigth,
-            'ymax' => $width,
-            'hasAliveFighter' => $this->Fighters->hasAliveFighter($this->Auth->user('id')),
-            'sightArray' => $sightArray,
-            'x' => $pos['coordinate_x'],
-            'y' => $pos['coordinate_y'],
-            'trap_detect' =>$trap_detect,
-            'monster_detect' =>$monster_detect
+                'xmax' => $heigth,
+                'ymax' => $width,
+                'hasAliveFighter' => $this->Fighters->hasAliveFighter($this->Auth->user('id')),
+                'sightArray' => $sightArray,
+                'x' => $pos['coordinate_x'],
+                'y' => $pos['coordinate_y'],
+                'trap_detect' =>$trap_detect,
+                'monster_detect' =>$monster_detect
             ]);
-
-
 
             if($this->request->is('post'))
             {
@@ -106,19 +104,19 @@ class ArenasController  extends AppController
                         $succes_attack=$this->Fighters->attack($this->Auth->user('id'), $x, $y);
                         if($succes_attack == 0)
                         {
-                            $this->Flash->success('Failure');//0 rien 1 succes 2 parade
+                            $this->Flash->success('Attack failed...');//0 rien 1 succes 2 parade
                         }
                         if($succes_attack == 1)
                         {
-                            $this->Flash->success('Succes ! ');//0 rien 1 succes 2 parade
+                            $this->Flash->success('Attack succedeed !');//0 rien 1 succes 2 parade
                         }
                         if($succes_attack == 2)
                         {
-                            $this->Flash->success('Parade !  Ahah ');//0 rien 1 succes 2 parade
+                            $this->Flash->success('Attack dodged...');//0 rien 1 succes 2 parade
                         }
                         if($succes_attack == 3)
                         {
-                            $this->Flash->success('Team Work !  Ahah ');//0 rien 1 succes 2 parade
+                            $this->Flash->success('Team Work, Well done !');//0 rien 1 succes 2 parade
                         }
                     }
                     else
@@ -139,49 +137,50 @@ class ArenasController  extends AppController
         $this->loadModel('Surroundings');
         $this->loadModel('Events');
 
-        $skill_credits=0;
-        $sight=0;
-        $strength=0;
-        $health=0;
+        $skill_credits = 0;
+        $sight = 0;
+        $strength = 0;
+        $health = 0;
 
-        $skill_credits=0;
-        $sight=0;
-        $strength=0;
-        $health=0;
+        $skill_credits = 0;
+        $sight = 0;
+        $strength = 0;
+        $health = 0;
 
-        $hasAliveFighter= $this->Fighters->hasAliveFighter($this->Auth->user('id'));
+        $hasAliveFighter = $this->Fighters->hasAliveFighter($this->Auth->user('id'));
         
         if($hasAliveFighter)
         {
             $current_fighter = $this->Fighters->getAliveFighter($this->Auth->user('id'));
             $skill_credits = (int)($current_fighter['xp']/4-$current_fighter['level']+1);
 
+            
             if($this->request->is('post'))
             {
-
+                
                 if($skill_credits > 0)
                 {
-                    if($this->request->data['skill'] == 'Strength')
+                    if($this->request->data['skill'] == 'Sight')
                     {
                         $sight = 1;
-                        $this->Flash->success('Upgraded Sight ! ');//0 rien 1 succes 2 parade
+                        $this->Flash->success('Upgraded Sight !');
                     }
                     if($this->request->data['skill'] == 'Strength')
                     {
                         $strength = 1;
-                        $this->Flash->success('Upgraded Strenght ! ');//0 rien 1 succes 2 parade
+                        $this->Flash->success('Upgraded Strenght !');
                     }
                     if($this->request->data['skill'] == 'Health')
                     {
                         $health = 3;
-                        $this->Flash->success('Upgraded Health ! ');//0 rien 1 succes 2 parade
+                        $this->Flash->success('Upgraded Health !');
                     }
 
-                    $this->Fighters->gain_level($current_fighter['id'],$sight,$strength,$health);
+                    $this->Fighters->gain_level($current_fighter['id'], $sight, $strength, $health);
                 }
                 else
                 {
-                    $this->Flash->success('Not enough skill points  ! ');//0 rien 1 succes 2 parade
+                    $this->Flash->success('Not enough skill points  !');
                 }
                 
                 $this->redirect(['action'=>'fighter']);

@@ -2,7 +2,6 @@
 
 <h1><?= $this->fetch('title') ?></h1>
 
-
 <?php if ($hasAliveFighter): ?>
 
 <?php if($trap_detect) : ?>
@@ -19,30 +18,26 @@
 <?php endif; ?>
 
 
+<div class="col-xs-12 col-xs-offset-0">
+	<div class="row">
+		<button class='btn btn-primary col-xs-2 col-xs-offset-2' id="scream-btn">Scream</button>
+		<?= $this->Form->create(); ?>
+		<?= $this->Form->submit('Edit Surrondings', ['class' => 'btn btn-primary col-xs-2 col-xs-offset-4','name'=>'dir']); ?>
+	</div>
+	<div class="row">
+		<?= $this->Form->submit('UP', ['class' => 'btn btn-primary col-xs-2 col-xs-offset-5','name'=>'dir']); ?> 
+	</div>
+	<div class="row">
+		<?= $this->Form->submit('LEFT', ['class' => 'btn btn-primary col-xs-2 col-xs-offset-2', 'name'=>'dir']);?>
+		<span class="col-xs-2 col-xs-offset-1 text-center"><?= 'Attack : ' ;?> <?= $this->Form->checkbox('attack');?></span>
+		<?= $this->Form->submit('RIGHT', ['class' => 'btn btn-primary col-xs-2 col-xs-offset-1', 'name'=>'dir']);?>
+	</div>
+	<div class="row">
+		<?= $this->Form->submit('DOWN',['class' => 'btn btn-primary col-xs-2 col-xs-offset-5','name'=>'dir']); ?> 
+	</div>
+	
+	<?= $this->Form->end() ?>
 
-<div class="table-responsive col-md-8 col-md-offset-2">
-  <table class="table">
-    <tr>
-      <td><button class="button default-button" id="scream-btn">Scream</button></td>
-      <?= $this->Form->create(); ?>
-      <td> <?= $this->Form->submit('UP',['class' => 'button','name'=>'dir']); ?> </td>
-      <td> <?= $this->Form->submit('Regenerate surrondings',['class' => 'button','name'=>'dir']); ?></td>
-    </tr>
-
-    <tr>
-      <td><?= $this->Form->submit('LEFT', ['class' => 'button', 'name'=>'dir']);?></td>
-        <td><?= 'Attack : ' ;?> <?= $this->Form->checkbox('attack');?></td>
-        <td><?= $this->Form->submit('RIGHT', ['class' => 'button', 'name'=>'dir']);?></td>
-    </tr>
-
-    <tr>
-      <td> </td>
-      <td> <?= $this->Form->submit('DOWN',['class' => 'button','name'=>'dir']); ?> </td>
-      <?= $this->Form->end() ?>
-      <td> </td>
-    </tr>
-
-  </table>
 </div>
 
 
@@ -52,10 +47,9 @@
         <?= $this->Form->control('description', ['class' => 'input text']); ?>
         <?= $this->Form->hidden('SCREAM', ['value' => 'SCREAM']); ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit', ['class' => 'btn btn-default'])) ?>
+    <?= $this->Form->submit('Submit', ['class' => 'btn btn-primary']); ?>
     <?= $this->Form->end() ?>
 </div>
-
 
 <table class="table table-bordered table-responsive">
 	<tbody>
@@ -68,7 +62,6 @@
 		<?php endforeach; ?>
 	</tbody>
 </table>
-
 <?php endif;?>
 
 <?php if (!$hasAliveFighter) : ?>

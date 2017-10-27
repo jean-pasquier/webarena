@@ -24,19 +24,21 @@ class MessagesTable extends Table
 
     public function find_message($fighter_id, $fighter1_id = null)
     {
-      if(!$fighter1_id):
-        $query = $this->find()
-                    ->where(['fighter_id_from' => $fighter_id])
-                    ->orwhere(['fighter_id' => $fighter_id])
-                    ->toList();
-      return $query;
-    else:
-      $query = $this->find()
-                  ->where(['fighter_id_from' => $fighter_id, 'fighter_id' => $fighter1_id])
-                  ->orwhere(['fighter_id' => $fighter_id, 'fighter_id_from' => $fighter1_id])
-                  ->toList();
-      return $query;
-    endif;
+        if(!$fighter1_id):
+            $query = $this->find()
+                ->where(['fighter_id_from' => $fighter_id])
+                ->orwhere(['fighter_id' => $fighter_id])
+                ->order(['date' => 'DESC'])
+                ->toList();
+            return $query;
+        else:
+            $query = $this->find()
+                ->where(['fighter_id_from' => $fighter_id, 'fighter_id' => $fighter1_id])
+                ->orwhere(['fighter_id' => $fighter_id, 'fighter_id_from' => $fighter1_id])
+                ->order(['date' => 'DESC'])
+                ->toList();
+            return $query;
+        endif;
     }
 
     public function insert_message($data)
