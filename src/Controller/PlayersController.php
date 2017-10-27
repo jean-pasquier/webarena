@@ -79,24 +79,6 @@ class PlayersController extends AppController
     return $this->redirect($this->Auth->logout());
   }
 
-  /**
-  * View method
-  *
-  * @param string|null $id Player id.
-  * @return \Cake\Http\Response|void
-  * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-  */
-  public function view($id = null)
-  {
-    $player = $this->Players->get($id, [
-      'contain' => ['Fighters']
-    ]);
-
-    $this->set('player', $player);
-    $this->set('_serialize', ['player']);
-  }
-
-
 
   /**
   * Add method
@@ -119,30 +101,35 @@ class PlayersController extends AppController
     $this->set('_serialize', ['player']);
   }
 
-  /**
-  * Edit method
-  *
-  * @param string|null $id Player id.
-  * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-  * @throws \Cake\Network\Exception\NotFoundException When record not found.
-  */
-  public function edit($id = null)
-  {
-    $player = $this->Players->get($id, [
-      'contain' => []
-    ]);
-    if ($this->request->is(['patch', 'post', 'put'])) {
-      $player = $this->Players->patchEntity($player, $this->request->getData());
-      if ($this->Players->save($player))
-      {
-        $this->Flash->success(__('The player has been saved.'));
-        return $this->redirect(['action' => 'index']);
-      }
-      $this->Flash->error(__('The player could not be saved. Please, try again.'));
+  public function edit()
+    {
+        if ($this->request->is('post'))
+        {
+          $data=$this->request->getData();
+          //si le champ email est renseigné
+          if ($data['email']!='')
+          {
+            if($this->Players->editEmail($data['email'], $this->Auth->user('id')))
+            {
+              $this->Flash->success('Email changed');
+            }
+            else {
+              $this->Flash->error('Try again');
+            }
+          }
+          if ($data['password']!='')
+          {
+            if ($this->Players->editPassword($data['password'], $this->Auth->user('email')))
+            {
+              $this->Flash->success('Password changed');
+            }
+            else {
+              $this->Flash->error('Try again');
+            }
+          }
+          return $this->redirect(['controller' => 'Players', 'action' => 'edit']);
+        }
     }
-    $this->set(compact('player'));
-    $this->set('_serialize', ['player']);
-  }
 
   /**
   * Delete method

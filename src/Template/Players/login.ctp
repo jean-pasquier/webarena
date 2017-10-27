@@ -4,7 +4,7 @@
 	<?= $this->Form->create(); ?>
 	<?= $this->Form->control('email'); ?>
 	<?= $this->Form->control('password'); ?>
-	<?= $this->Form->button('Connexion'); ?>
+	<?= $this->Form->button('Login'); ?>
 	<?= $this->Form->end(); ?>
 	<button class="default-button" id="new-password-btn">Forgot password ?</button>
 </div>

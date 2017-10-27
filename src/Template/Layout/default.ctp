@@ -37,6 +37,7 @@ $cakeDescription = 'WebArenas';
     <?= $this->fetch('script') ?>
 </head>
 <body>
+    
     <nav class="navbar navbar-inverse navbar-fixed-top container-fluid" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -46,22 +47,20 @@ $cakeDescription = 'WebArenas';
 					<span class="icon-bar icon2"></span>
 					<span class="icon-bar icon3"></span>
 				</button>
-<!--
                 <?php if (!$isConnected): ?>
                     <?= $this->Html->link('Home', '/' , ['class' => 'navbar-brand']);?>
                 <?php endif; ?>
--->
             </div>
                 
             <ul class="nav navbar-nav collapse navbar-collapse collapsed">
-      <?php if ($isConnected): ?>
+            <?php if ($isConnected): ?>
                 <li><?php echo $this->Html->link('Home', ['controller' => 'Arenas', 'action' => '/']);?></li>
                 <li><?= $this->Html->link('Fighters', ['controller' => 'Arenas', 'action' => 'fighter']);?></li>
                 <li><?php echo $this->Html->link('Sight', ['controller' => 'Arenas', 'action' => 'sight']);?></li>
                 <li><?php echo $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
-      <li><?php echo $this->Html->link('Guilds', ['controller' => 'Arenas', 'action' => 'guild']);?></li>
-      <li><?php echo $this->Html->link('Messages', ['controller' => 'Arenas', 'action' => 'messages']);?></li>
-      <?php endif; ?>
+                <li><?php echo $this->Html->link('Guilds', ['controller' => 'Arenas', 'action' => 'guild']);?></li>
+                <li><?php echo $this->Html->link('Messages', ['controller' => 'Arenas', 'action' => 'messages']);?></li>
+            <?php endif; ?>
             </ul>
             
             <ul class="nav navbar-nav collapse navbar-collapse navbar-right collapsed">
@@ -71,11 +70,9 @@ $cakeDescription = 'WebArenas';
                 <li><?php echo $this->Html->link('Login', ['controller' => 'Players', 'action' => 'login']);?></li>
                 <li><?php echo $this->Html->link('Signup', ['controller' => 'Players', 'action' => 'add']);?></li>
             <?php endif; ?>
-            </ul>                
-
+            </ul>
 		</div>
     </nav>
-
 
     <?= $this->Flash->render() ?>
     <div class="container clearfix" style="padding-top: 60px;">
