@@ -66,7 +66,7 @@ class AppController extends Controller
         $this->Auth->config('authenticate', [
           'Form' => ['userModel' => 'Players']
         ]);
-        $this->Auth->config('logoutRedirect', ['controller' => 'Pages', 'action' => 'home']);
+        $this->Auth->config('logoutRedirect', '/');
         $this->Auth->config('loginRedirect', ['controller' => 'Arenas']);
 
         if ($this->Auth->user('id') != '')
