@@ -13,7 +13,6 @@
 <?php else: ?>
 
 <div class="col-xs-8">
-	<h1><?= $this->fetch('title') ?></h1>
 
 	<ul class="list-unstyled">
 		<?php foreach ($messages as $message): ?>
