@@ -7,14 +7,14 @@
 
 <?php if($trap_detect) : ?>
 <div class="panel panel-danger col-md-4 col-md-offset-4">
-  <h5 class="panel-heading">Trap detected</h5>
+  <h5 class="panel-heading">Suspicious Break</h5>
 </div>
 <?php endif; ?>
 
 
 <?php if($monster_detect) : ?>
 <div class="panel panel-danger col-md-4 col-md-offset-4">
-  <h5 class="panel-heading">Monster detected</h5>
+  <h5 class="panel-heading">Stink</h5>
 </div>
 <?php endif; ?>
 

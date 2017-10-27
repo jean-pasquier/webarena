@@ -57,7 +57,7 @@ $cakeDescription = 'WebArenas';
           <li><?= $this->Html->link('Guilds', ['controller' => 'Arenas', 'action' => 'guild']);?></li>
           <li><?= $this->Html->link('Messages', ['controller' => 'Arenas', 'action' => 'messages']);?></li>
           <li><?= $this->Html->link('Set account', ['controller' => 'Players', 'action' => 'edit']);?></li>
-					<li><?= $this->Html->link('Deconnexion', ['controller' => 'Players', 'action' => 'logout']);?></li>
+					<li><?= $this->Html->link('Logout', ['controller' => 'Players', 'action' => 'logout']);?></li>
           <?php endif; ?>
 				</ul>
 			</div>
