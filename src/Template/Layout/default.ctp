@@ -60,7 +60,6 @@ $cakeDescription = 'WebArenas';
                 <li><?= $this->Html->link('Diary', ['controller' => 'Arenas', 'action' => 'diary']);?></li>
                 <li><?= $this->Html->link('Guilds', ['controller' => 'Arenas', 'action' => 'guild']);?></li>
                 <li><?= $this->Html->link('Messages', ['controller' => 'Arenas', 'action' => 'messages']);?></li>
-                <li><?= $this->Html->link('Set account', ['controller' => 'Players', 'action' => 'edit']);?></li>
             <?php endif; ?>
             </ul>
 
