@@ -41,6 +41,19 @@ class PlayersTable extends Table
         ]);
     }
 
+    public function editPassword($password, $email)
+    {
+      if($player=$this->find()->where(['email' => $email])->first())
+      {
+        $player->password = $password;
+        if($this->save($player))
+        {
+          return true;
+        }
+      }
+      return false;
+    }
+
     /**
      * Default validation rules.
      *

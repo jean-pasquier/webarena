@@ -28,19 +28,42 @@ class PlayersController extends AppController
 
   public function login()
   {
+    $this->loadModel('Players');
     if ($this->Auth->user('id')!= '')
     {
-      //pr($this->Auth->user('id'));
       return $this->redirect($this->Auth->redirectUrl());
     }
-    if ($this->request->is('post')) {
+    $data=$this->request->getData();
+    //Generae new password
+    if ($this->request->is('post') && isset($data['newPassword']))
+    {
+      $email = $data['email'];
+      if ($email) {
+        $newPassword='';
+        for ($i=0; $i<6; $i++)
+        {
+          $newPassword=$newPassword.chr(rand(97,122));
+        }
+        if ($this->Players->editPassword($newPassword, $email))
+        {
+          $this->Flash->success('Password: '. $newPassword);
+        }
+        else {
+          $this->Flash->error('Your email is incorrect');
+        }
+      }
 
+    }
+    //login
+    else if ($this->request->is('post')  && !isset($data['newPassword']))
+    {
       $user = $this->Auth->identify();
-      if ($user) {
+      if ($user)
+      {
         $this->Auth->setUser($user);
         return $this->redirect($this->Auth->redirectUrl());
       }
-      $this->Flash->error('Votre identifiant ou votre mot de passe est incorrect.');
+      $this->Flash->error('Your email or password is incorrect.');
     }
   }
 
@@ -52,7 +75,7 @@ class PlayersController extends AppController
 
   public function logout()
   {
-    $this->Flash->success('Vous avez été déconnecté.');
+    $this->Flash->success('You are disconnected.');
     return $this->redirect($this->Auth->logout());
   }
 
@@ -72,6 +95,8 @@ class PlayersController extends AppController
     $this->set('player', $player);
     $this->set('_serialize', ['player']);
   }
+
+
 
   /**
   * Add method
@@ -108,9 +133,9 @@ class PlayersController extends AppController
     ]);
     if ($this->request->is(['patch', 'post', 'put'])) {
       $player = $this->Players->patchEntity($player, $this->request->getData());
-      if ($this->Players->save($player)) {
+      if ($this->Players->save($player))
+      {
         $this->Flash->success(__('The player has been saved.'));
-
         return $this->redirect(['action' => 'index']);
       }
       $this->Flash->error(__('The player could not be saved. Please, try again.'));
@@ -128,8 +153,10 @@ class PlayersController extends AppController
   */
   public function delete($id = null)
   {
+    $this->loadModel('Fighters');
     $this->request->allowMethod(['post', 'delete']);
     $player = $this->Players->get($id);
+    $this->Fighters->delete($Fighters->where(['player_id' => $player->id]));
     if ($this->Players->delete($player)) {
       $this->Flash->success(__('The player has been deleted.'));
     } else {
