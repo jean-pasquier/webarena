@@ -45,26 +45,15 @@ class ArenasController  extends AppController
 
 
             $this->set([
-<<<<<<< HEAD
-            'xmax' => $heigth,
-            'ymax' => $width,
-            'hasAliveFighter' => $this->Fighters->hasAliveFighter($this->Auth->user('id')),
-            'sightArray' => $sightArray,
-            'x' => $pos['coordinate_x'],
-            'y' => $pos['coordinate_y'],
-            'trap_detect' =>$trap_detect,
-            'monster_detect' =>$monster_detect,
-            'fighter' => $this->Fighters->getAliveFighter($this->Auth->user('id'))
-=======
                 'xmax' => $heigth,
                 'ymax' => $width,
-                'aliveFighter' => $this->Fighters->find()->where(['player_id' => $this->Auth->user('id'), 'current_health >' => 0])->first(),
+                'hasAliveFighter' => $this->Fighters->hasAliveFighter($this->Auth->user('id')),
                 'sightArray' => $sightArray,
                 'x' => $pos['coordinate_x'],
                 'y' => $pos['coordinate_y'],
                 'trap_detect' =>$trap_detect,
-                'monster_detect' =>$monster_detect
->>>>>>> 6d668590d18637cd42b8ed4d94aa91f529ca0ecc
+                'monster_detect' =>$monster_detect,
+                'aliveFighter' => $this->Fighters->getAliveFighter($this->Auth->user('id'))
             ]);
 
             if($this->request->is('post'))
@@ -119,27 +108,23 @@ class ArenasController  extends AppController
                         $succes_attack=$this->Fighters->attack($this->Auth->user('id'), $x, $y);
                         if($succes_attack == 0)
                         {
-                            $this->Flash->success('Attack failed...');//0 rien 1 succes 2 parade
+                            $this->Flash->success('Attack failed...');
                         }
-                        if($succes_attack == 1)
+                        else if($succes_attack == 1)
                         {
-                            $this->Flash->success('Attack succedeed !');//0 rien 1 succes 2 parade
+                            $this->Flash->success('Attack succedeed !');
                         }
-                        if($succes_attack == 2)
+                        else if($succes_attack == 2)
                         {
-<<<<<<< HEAD
-                            $this->Flash->success('Parry !');//0 rien 1 succes 2 parade
+                            $this->Flash->success('Parry !');
                         }
-                        if($succes_attack == 3)
+                        else if($succes_attack == 3)
                         {
-                            $this->Flash->success('Team Work !');//0 rien 1 succes 2 parade
-=======
-                            $this->Flash->success('Attack dodged...');//0 rien 1 succes 2 parade
+                            $this->Flash->success('Attack dodged...');
                         }
-                        if($succes_attack == 3)
+                        else if($succes_attack == 4)
                         {
-                            $this->Flash->success('Team Work, Well done !');//0 rien 1 succes 2 parade
->>>>>>> 6d668590d18637cd42b8ed4d94aa91f529ca0ecc
+                            $this->Flash->success('Team Work, Well done !');
                         }
                     }
                     else
@@ -170,13 +155,8 @@ class ArenasController  extends AppController
         $strength = 0;
         $health = 0;
 
-<<<<<<< HEAD
-        $hasAliveFighter= $this->Fighters->hasAliveFighter($this->Auth->user('id'));
-
-=======
         $hasAliveFighter = $this->Fighters->hasAliveFighter($this->Auth->user('id'));
         
->>>>>>> 6d668590d18637cd42b8ed4d94aa91f529ca0ecc
         if($hasAliveFighter)
         {
             $current_fighter = $this->Fighters->getAliveFighter($this->Auth->user('id'));

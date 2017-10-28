@@ -178,12 +178,12 @@ class FightersTable extends Table
         if($tempo_coord_x >=0 && $tempo_coord_x < $width && $tempo_coord_y >=0 && $tempo_coord_y < $height )
         {
             //find surroundings
-            $content=$Surroundings->find()
+            $content = $Surroundings->find()
                      ->where(['coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y]);
 			
 			//find ennemies
-            $ennemies=$this->find()
-                     ->where(['current_health >' => 0, 'coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y]);
+            $ennemies = $this->find()
+                     ->where(['current_health >' => 0, 'coordinate_x' => $tempo_coord_x,'coordinate_y' => $tempo_coord_y]);
 			
 			//if there is neither surr and ennemy -> the fighter can move
             if ($content->count() == 0 && $ennemies->count() == 0)
@@ -224,7 +224,7 @@ class FightersTable extends Table
         $succes = 0;
 
         //  kill monsters
-        $monster=$Surroundings->find()
+        $monster = $Surroundings->find()
                      ->where(['Type' => 'W','coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y])
                      ->first();
         $potion = $Surroundings->find()
@@ -252,7 +252,7 @@ class FightersTable extends Table
 
 
         //fight with players
-        $ennemy=$this->find()
+        $ennemy = $this->find()
                      ->where(['coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y,'current_health >' => 0])
                      ->first();
         if($ennemy)
@@ -265,9 +265,11 @@ class FightersTable extends Table
             if($dice > $seuil)
             {
                 // on applique l'attaque à la vie de l'énemie
-                $bonus_guild = $this->calcul_attack_bonus_guild($fighter['guild_id'],$fighter['id'],$tempo_coord_x,$tempo_coord_y);
-                //debug($bonus_guild);
-                $ennemy->current_health = $ennemy['current_health']-$fighter['skill_strength']-$bonus_guild;
+                $bonus_guild = $this
+					->calcul_attack_bonus_guild($fighter['guild_id'], $fighter['id'], $tempo_coord_x, $tempo_coord_y);
+
+				$ennemy->current_health = $ennemy['current_health']-$fighter['skill_strength']-$bonus_guild;
+				$fighter_data['thing_life'] = $ennemy->current_health;
 
                 if($ennemy->current_health <= 0)
                 {
@@ -290,6 +292,7 @@ class FightersTable extends Table
             }
             else
             {
+				$fighter_data['thing_life'] = $ennemy->current_health;
               $Events->attackFailed($fighter_data);
                 //message d'échec`
                 $succes=2;
