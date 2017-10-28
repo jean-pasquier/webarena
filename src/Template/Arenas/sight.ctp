@@ -5,10 +5,9 @@
 <?php if ($hasAliveFighter): ?>
 
 <article class='panel panel-primary col-md-4 col-md-offset-0 col-xs-8 col-xs-offset-2'>
-	<div class="panel-heading">
-		<h4 class="panel-title"><?= 'My player : ' . $aliveFighter['name'];?></h4>
-	</div>
-	<div class="panel-body">
+		<h4 class="panel-title">
+			<?= $this->Html->image('avatars/default.jpg', ['width' => '25px', 'height' => '25px', 'alt' => 'Avatar', 'class' => 'center-block']); ?>
+		</h4>
 		<dl class="dl-horizontal">
 			<dt>Health</dt>
 			<dd><?= $aliveFighter['current_health'].'/'.$aliveFighter['skill_health'] ?></dd>
@@ -21,44 +20,43 @@
 			<dt>Coord</dt>
 			<dd><?= $aliveFighter['coordinate_x'].','.$aliveFighter['coordinate_y']  ?></dd>
 		</dl>
-	</div>
 </article>
 
 
 <div class="col-md-8">
-	<div>
-		<div class="row">
-			<button class='btn btn-primary col-xs-2 col-xs-offset-2' id="scream-btn">Scream</button>
-			<?= $this->Form->create(); ?>
-			<?= $this->Form->submit('Edit Surrondings', ['class' => 'btn btn-primary col-xs-2 col-xs-offset-4','name'=>'dir']); ?>
-		</div>
-		<div class="row">
-			<?= $this->Form->submit('UP', ['class' => 'btn btn-primary col-xs-2 col-xs-offset-5','name'=>'dir']); ?> 
-		</div>
-		<div class="row">
-			<?= $this->Form->submit('LEFT', ['class' => 'btn btn-primary col-xs-2 col-xs-offset-2', 'name'=>'dir']);?>
-			<span class="col-xs-2 col-xs-offset-1 text-center"><?= 'Attack : ' ;?> <?= $this->Form->checkbox('attack');?></span>
-			<?= $this->Form->submit('RIGHT', ['class' => 'btn btn-primary col-xs-2 col-xs-offset-1', 'name'=>'dir']);?>
-		</div>
-		<div class="row">
-			<?= $this->Form->submit('DOWN',['class' => 'btn btn-primary col-xs-2 col-xs-offset-5','name'=>'dir']); ?> 
-		</div>
-
-		<?= $this->Form->end() ?>
+	<div class="row">
+		<button class='btn btn-primary col-xs-2 col-xs-offset-2' id="scream-btn">Scream</button>
+		<?= $this->Form->create(); ?>
+		<?= $this->Form->submit('Edit Surrondings', ['class' => 'btn btn-primary col-xs-2 col-xs-offset-4','name'=>'dir']); ?>
 	</div>
+	<div class="row">
+		<?= $this->Form->submit('UP', ['class' => 'btn btn-primary col-xs-2 col-xs-offset-5','name'=>'dir']); ?> 
+	</div>
+	<div class="row">
+		<?= $this->Form->submit('LEFT', ['class' => 'btn btn-primary col-xs-2 col-xs-offset-2', 'name'=>'dir']);?>
+		<span class="col-xs-2 col-xs-offset-1 text-center"><?= 'Attack : ' ;?> <?= $this->Form->checkbox('attack');?></span>
+		<?= $this->Form->submit('RIGHT', ['class' => 'btn btn-primary col-xs-2 col-xs-offset-1', 'name'=>'dir']);?>
+	</div>
+	<div class="row">
+		<?= $this->Form->submit('DOWN',['class' => 'btn btn-primary col-xs-2 col-xs-offset-5','name'=>'dir']); ?> 
+	</div>
+
+	<?= $this->Form->end() ?>
 	
-	<?php if($trap_detect) : ?>
-	<div class="panel panel-danger col-md-8 col-md-offset-2">
-	  <h5 class="panel-heading">Suspicious Break</h5>
-	</div>
-	<?php endif; ?>
+	<div class="row">
+		<?php if($trap_detect) : ?>
+		<div class="panel panel-danger col-md-8 col-md-offset-2">
+		  <h5 class="panel-heading">Suspicious Break</h5>
+		</div>
+		<?php endif; ?>
 
 
-	<?php if($monster_detect) : ?>
-	<div class="panel panel-danger col-md-8 col-md-offset-2">
-	  <h5 class="panel-heading">Stink</h5>
+		<?php if($monster_detect) : ?>
+		<div class="panel panel-danger col-md-8 col-md-offset-2">
+		  <h5 class="panel-heading">Stink</h5>
+		</div>
+		<?php endif; ?>
 	</div>
-	<?php endif; ?>
 
 </div>
 
@@ -75,12 +73,26 @@
     <?= $this->Form->end() ?>
 </div>
 
-<table class="table table-bordered table-responsive">
+<table class="sight-table">
 	<tbody>
 		<?php foreach ($sightArray as $row): ?>
 		<tr>
 			<?php foreach ($row as $square): ?>
-			<td><?= $square ?></td>
+			<td <?= ($square == '.')?'class="enable-square"':''; ?>>
+				<!--			FIGHTER IMG-->
+				<?php if ($square == 'M') : ?>
+				<?= $this->Html->image('avatars/default.jpg', ['width' => '33px', 'height' => '33px', 'alt' => 'Avatar', 'class' => 'center-block']); ?>
+<!--			WALL IMG-->
+				<?php elseif($square == 'P'): ?>
+				<?= $this->Html->image('wall.bmp', ['width' => '33px', 'height' => '33px', 'alt' => 'P', 'class' => 'center-block']); ?>
+<!--			POTION IMG-->
+				<?php elseif($square == 'H'): ?>
+				<?= $this->Html->image('potion.png', ['width' => '33px', 'height' => '33px', 'alt' => 'H', 'class' => 'center-block']); ?>
+<!--			ENNEMY IMG-->
+				<?php elseif($square == 'E'): ?>
+				<?= $this->Html->image('ennemy.png', ['width' => '33px', 'height' => '33px', 'alt' => 'E', 'class' => 'center-block']); ?>
+				<?php endif; ?>
+			</td>
 			<?php endforeach; ?>
 		</tr>
 		<?php endforeach; ?>

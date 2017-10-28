@@ -58,7 +58,7 @@ class FightersTable extends Table
 			$cols = array();
 			for($j=0; $j<$width; $j++)
 			{
-				array_push($cols, '.');
+				array_push($cols, '');
 			}
 			array_push($array, $cols);
 		}
@@ -104,6 +104,20 @@ class FightersTable extends Table
 		foreach($surr as $sur)
 			$arr[$sur['coordinate_y']][$sur['coordinate_x']] = $sur['type'];
 
+		return $arr;
+	}
+	
+	public function greyFarSquares($arr, $pos, $sight)
+	{
+		for($i=0; $i<count($arr); $i++)
+		{
+			for($j=0; $j<count($arr[$i]); $j++)
+			{
+				if(abs($j - $pos['coordinate_x']) + abs($i - $pos['coordinate_y']) > $sight['skill_sight'])
+					$arr[$i][$j] = '.';
+			}
+		}
+		
 		return $arr;
 	}
 

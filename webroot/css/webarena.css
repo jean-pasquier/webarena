@@ -1,3 +1,13 @@
+.sight-table td{
+	background-image: url(../img/grass.jpg);
+	height: 50px;
+}
+.enable-square{
+	filter: grayscale(0.66);
+}
+.sight-table tr{
+	border: 0px;
+}
 .footer{
 	background-color: #ddd;
 }
