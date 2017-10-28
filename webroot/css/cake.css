@@ -37,10 +37,6 @@ legend {
     color:#15848F;
 }
 
-.row {
-    max-width: 80rem;
-}
-
 .actions.columns {
     margin-top:1rem;
     border-left: 5px solid #15848F;

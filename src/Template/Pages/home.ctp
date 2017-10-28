@@ -27,7 +27,8 @@ if (!Configure::read('debug')) :
     );
 endif;
 
-$cakeDescription = 'WebArenas';
+$cakeDescription = 'WebArena';
+$this->assign('title', 'Welcome');
 ?>
 <!DOCTYPE html>
 <html>
@@ -73,6 +74,7 @@ $cakeDescription = 'WebArenas';
 
             <?= $this->Html->image('arena-logo.png', ['class' => 'img-responsive center-block', 'alt' => 'arena-logo']); ?>
 
+            <h1><?= $this->fetch('title');?></h1>
             <p class="text-justify font-size-large">
             In this game you will have to create a fighter by giving him a name and an avatar if you want.
             You will then control your fighter and fight the others fighters online or the monster you will meet in the arena (sight tab).

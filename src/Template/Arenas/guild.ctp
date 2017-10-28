@@ -20,7 +20,7 @@
 	<h2>You are in the <?= $guild; ?> guild !</h2>
 
 	<?= $this->Form->create() ?>
-		<?= $this->Form->button(__('Quit the guild', ['class' => 'btn btn-default'])) ?>
+		<?= $this->Form->button('Quit the guild', ['class' => 'btn btn-primary']) ?>
 	<?= $this->Form->end() ?>
 
 
@@ -39,7 +39,7 @@
 						<dd><?= $fighter['coordinate_x'].','.$fighter['coordinate_y']  ?></dd>
 					</dl>
 					<div class="guild-msg-btn" id="<?= $fighter['id']; ?>"</div>
-						<button class="button default-button">Send a message</button>
+						<button class="btn btn-primary">Send a message</button>
 					</div>
 					<div class="undisplayed col-md-6 col-md-offset-3" id="guild-msg-form-<?= $fighter['id']; ?>">
 						<?= $this->Form->create() ?>

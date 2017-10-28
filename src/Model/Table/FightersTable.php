@@ -94,6 +94,11 @@ class FightersTable extends Table
 				'type' => 'P',
 'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') <=' => $aFighter['skill_sight'],
 'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') >=' => - $aFighter['skill_sight']
+			])
+			->orWhere([
+				'type' => 'H',
+'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') <=' => $aFighter['skill_sight'],
+'abs(coordinate_x - ' . $aFighter['coordinate_x'] . ') + abs(coordinate_y - ' . $aFighter['coordinate_y'] . ') >=' => - $aFighter['skill_sight']
 			]);
 
 		foreach($surr as $sur)
@@ -158,10 +163,16 @@ class FightersTable extends Table
 
         if($tempo_coord_x >=0 && $tempo_coord_x < $width && $tempo_coord_y >=0 && $tempo_coord_y < $height )
         {
-            
+            //find surroundings
             $content=$Surroundings->find()
                      ->where(['coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y]);
-            if ($content->count() == 0 )
+			
+			//find ennemies
+            $ennemies=$this->find()
+                     ->where(['current_health >' => 0, 'coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y]);
+			
+			//if there is neither surr and ennemy -> the fighter can move
+            if ($content->count() == 0 && $ennemies->count() == 0)
             {
                 $fighter->coordinate_x = $tempo_coord_x;
                 $fighter->coordinate_y= $tempo_coord_y;
@@ -171,7 +182,8 @@ class FightersTable extends Table
                 $Events->hasMove($fighter_data);
                 $this->save($fighter);
             }
-            else if($content->first()->type =='W' or $content->first()->type =='T' )
+			//else if the fighter encounters a trap or a monster -> he dies
+            else if($content->count()>0 && ($content->first()->type =='W' or $content->first()->type =='T'))
             {
                 $fighter->current_health = 0;
                 $fighter_data['date'] = Time::now();
@@ -181,8 +193,6 @@ class FightersTable extends Table
                 $Events->MoveAndDie($fighter_data);
                 $this->save($fighter);
             }
-          
-           
         }
     }
 
