@@ -68,7 +68,7 @@ class EventsTable extends Table
 
 	public function attackFailed($fighter)
 	{
-		$fighter['name'] = $fighter['name']. ' failed his attack on '. $fighter['thing'];
+		$fighter['name'] = $fighter['name']. ' failed his attack on '. $fighter['thing'] . '. ' . $fighter['thing'] . ' still have ' . $fighter['thing_life'] . ' life point.';
 		$query = $this->query()
 									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
 									->values($fighter)
@@ -79,6 +79,7 @@ class EventsTable extends Table
 	{
 		if($succes == 1)$fighter['name'] = $fighter['name']. ' attacked '. $fighter['thing'];
 		if($succes == 3)$fighter['name'] = $fighter['name']. ' attacked '. $fighter['thing'] . ' with the help of his guild';
+		$fighter['name'] = $fighter['name']  . '. ' . $fighter['thing'] . ' have now ' . $fighter['thing_life'] . ' life point.';
 		$query = $this->query()
 									->insert(['name', 'date', 'coordinate_x', 'coordinate_y'])
 									->values($fighter)
