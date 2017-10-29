@@ -34,9 +34,9 @@ class ArenasController  extends AppController
 
             $sightArray = $this->Fighters->getSightArray($this->Auth->user('id'), $width, $heigth);
             $sightArray = $this->Fighters->fillSightArray($this->Auth->user('id'), $sightArray);
-            
+
             $pos = $this->Fighters->getAliveFighter($this->Auth->user('id'), ['coordinate_x', 'coordinate_y']);
-            
+
             $sightArray = $this->Fighters->greyFarSquares($sightArray, $pos, $this->Fighters->getAliveFighter($this->Auth->user('id'), ['skill_sight']));
 
 
@@ -79,7 +79,7 @@ class ArenasController  extends AppController
                 }
                 else
                 {
-                    if($data['dir'] == 'Regenerate surrondings')
+                    if($data['dir'] == 'Edit Surrondings')
                     {
                         $this->Surroundings->generate($width, $heigth);
                     }
@@ -156,16 +156,16 @@ class ArenasController  extends AppController
         $health = 0;
 
         $hasAliveFighter = $this->Fighters->hasAliveFighter($this->Auth->user('id'));
-        
+
         if($hasAliveFighter)
         {
             $current_fighter = $this->Fighters->getAliveFighter($this->Auth->user('id'));
             $skill_credits = (int)($current_fighter['xp']/4-$current_fighter['level']+1);
 
-            
+
             if($this->request->is('post'))
             {
-                
+
                 if($skill_credits > 0)
                 {
                     if($this->request->data['skill'] == 'Sight')
