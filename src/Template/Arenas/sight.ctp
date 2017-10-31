@@ -73,6 +73,7 @@
     <?= $this->Form->end() ?>
 </div>
 
+                 
 <table class="sight-table">
 	<tbody>
 		<?php foreach ($sightArray as $row): ?>
@@ -94,9 +95,15 @@
 				<?php elseif($square == 'H'): ?>
 				<?= $this->Html->image('potion.png', ['width' => '33px', 'height' => '33px', 'alt' => 'H', 'class' => 'center-block']); ?>
 <!--			ENNEMY IMG-->
-				<?php elseif($square == 'E'): ?>
-				<?= $this->Html->image('ennemy.png', ['width' => '33px', 'height' => '33px', 'alt' => 'E', 'class' => 'center-block']); ?>
+				<?php elseif(strpos($square,'E') !== false ): ?>
+                                <?php $fid=str_replace("E", "", $square) ?>
+                                <?php if (file_exists(WWW_ROOT.'/img/avatars/'.$fid.'.jpg')): ?>
+				<?= $this->Html->image('avatars/'.$fid.'.jpg', ['width' => '33px', 'height' => '33px', 'alt' => 'E', 'class' => 'center-block']); ?>
+                                <?php else: ?>
+				<?= $this->Html->image('ennemy.png', ['width' => '33px', 'height' => '33px', 'alt' => 'Avatar', 'class' => 'center-block']); ?>
 				<?php endif; ?>
+				<?php endif; ?>
+
 			</td>
 			<?php endforeach; ?>
 		</tr>

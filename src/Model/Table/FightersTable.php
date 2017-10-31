@@ -76,7 +76,7 @@ class FightersTable extends Table
 
 		//ennemies position
 		$ennemies = $this->find()
-			->select(['coordinate_x', 'coordinate_y'])
+			->select(['coordinate_x', 'coordinate_y','id'])
 			->where([
 				'player_id !=' => $aFighter['player_id'],
 				'current_health >' => 0,
@@ -85,7 +85,7 @@ class FightersTable extends Table
 			]);
 
 		foreach($ennemies as $ennemy)
-			$arr[$ennemy['coordinate_y']][$ennemy['coordinate_x']]= 'E';
+			$arr[$ennemy['coordinate_y']][$ennemy['coordinate_x']]= "E".$ennemy['id'];
 
 		//surroundings position
 		$surr = TableRegistry::get('Surroundings')
