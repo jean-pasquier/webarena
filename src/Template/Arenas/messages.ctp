@@ -39,13 +39,13 @@
 	</ul>
 
 	<div class="messages form col-md-6 col-md-offset-3 columns content">
-	  <?= $this->form->create($entity); ?>
+	  <?= $this->Form->create($entity); ?>
 	  <fieldset>
 			<?php if($bool) : ?>
-	    <?= $this->form->control('fighters_name', ['options' => $fighters]); ?>
+	    <?= $this->Form->control('fighters_name', ['options' => $fighters]); ?>
 		  <?php endif;?>
-	    <?= $this->form->control('title'); ?>
-	    <?= $this->form->control('message'); ?>
+	    <?= $this->Form->control('title'); ?>
+	    <?= $this->Form->control('message'); ?>
 	  </fieldset>
 	  <?= $this->Form->button('Submit', ['class' => 'btn btn-primary']) ?>
 	  <?= $this->Form->end() ?>
