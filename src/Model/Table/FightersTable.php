@@ -106,7 +106,7 @@ class FightersTable extends Table
 
 		return $arr;
 	}
-	
+
 	public function greyFarSquares($arr, $pos, $sight)
 	{
 		for($i=0; $i<count($arr); $i++)
@@ -117,7 +117,7 @@ class FightersTable extends Table
 					$arr[$i][$j] = '.';
 			}
 		}
-		
+
 		return $arr;
 	}
 
@@ -171,20 +171,20 @@ class FightersTable extends Table
         $fighter_data = $fighter->toArray();
         $tempo_coord_x = $x + $fighter['coordinate_x'];
         $tempo_coord_y = $y + $fighter['coordinate_y'];
-        
-        
-        
+
+
+
 
         if($tempo_coord_x >=0 && $tempo_coord_x < $width && $tempo_coord_y >=0 && $tempo_coord_y < $height )
         {
             //find surroundings
             $content = $Surroundings->find()
                      ->where(['coordinate_x'=>$tempo_coord_x,'coordinate_y'=>$tempo_coord_y]);
-			
+
 			//find ennemies
             $ennemies = $this->find()
                      ->where(['current_health >' => 0, 'coordinate_x' => $tempo_coord_x,'coordinate_y' => $tempo_coord_y]);
-			
+
 			//if there is neither surr and ennemy -> the fighter can move
             if ($content->count() == 0 && $ennemies->count() == 0)
             {
@@ -233,7 +233,7 @@ class FightersTable extends Table
         if($monster)
         {
             $fighter_data['thing'] = 'a monster';
-            $Events->attack($fighter_data);
+            $Events->attackKilled($fighter_data);
             $Surroundings->delete($monster);
             $succes=1;
         }
@@ -246,7 +246,7 @@ class FightersTable extends Table
             {
                 $fighter->current_health = $fighter['skill_health'];
             }
-            
+
             $this->save($fighter);
         }
 
