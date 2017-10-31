@@ -80,8 +80,13 @@
 			<?php foreach ($row as $square): ?>
 			<td <?= ($square == '.')?'class="enable-square"':''; ?>>
 				<!--			FIGHTER IMG-->
-				<?php if ($square == 'M') : ?>
+				
+                                <?php if ($square == 'M') : ?>
+                                <?php if (file_exists(WWW_ROOT.'/img/avatars/'.$aliveFighter['id'].'.jpg')): ?>
+				<?= $this->Html->image('avatars/'.$aliveFighter['id'].'.jpg', ['width' => '33px', 'height' => '33px', 'alt' => 'M', 'class' => 'center-block']); ?>
+                                <?php else: ?>
 				<?= $this->Html->image('avatars/default.jpg', ['width' => '33px', 'height' => '33px', 'alt' => 'Avatar', 'class' => 'center-block']); ?>
+				<?php endif; ?>
 <!--			WALL IMG-->
 				<?php elseif($square == 'P'): ?>
 				<?= $this->Html->image('wall.bmp', ['width' => '33px', 'height' => '33px', 'alt' => 'P', 'class' => 'center-block']); ?>

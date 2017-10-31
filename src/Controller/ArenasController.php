@@ -228,7 +228,10 @@ class ArenasController  extends AppController
 
                 if ($this->Fighters->save($fighter))
                 {
-                    move_uploaded_file($this->request->data['submittedfile']['tmp_name'], WWW_ROOT.'/img/avatars/'.$fighter->id.'.jpg');
+                    if(strpos( $this->request->data['submittedfile']['type'], 'image/' ) !== false )
+                    {
+                        move_uploaded_file($this->request->data['submittedfile']['tmp_name'], WWW_ROOT.'/img/avatars/'.$fighter->id.'.jpg');
+                    }
                     $this->Flash->success(__('The fighter has been saved.'));
                     return $this->redirect(['action' => 'fighter']);
                 }
