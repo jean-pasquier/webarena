@@ -119,7 +119,7 @@ class PlayersController extends AppController
           }
           if ($data['password']!='')
           {
-            if ($this->Players->editPassword($data['password'],  $this->Auth->user('id')))
+            if ($this->Players->editPassword($data['password'],  null, $this->Auth->user('id')))
             {
               $this->Flash->success('Password changed');
             }
