@@ -154,7 +154,7 @@ $this->assign('title', 'Welcome');
                     </dd>
                     <dt> git log : </dt>
                     <dd> <p><?= $this->Html->link('version.log', ['controller' => 'Arenas', 'action' => 'versionGitLog'])?></p> </dd>
-                    <dt> Hébergement :</dt>
+                    <dt> Hosting address :</dt>
                     <dd><?php echo $this->Html->link('http://wabarenaece.fr');?></dd>
 
                 </dl>
