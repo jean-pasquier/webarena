@@ -2,6 +2,7 @@
 
 <h1><?= $this->fetch('title') ?></h1>
 
+<?php if ($hasAliveFighter): ?>
 <ol class="list-unstyled">
 	<?php foreach ($events as $event): ?>
 	<li>
@@ -13,3 +14,12 @@
 	<?php endforeach; ?>
 </ol>
 
+<?php endif;?>
+
+<?php if (!$hasAliveFighter) : ?>
+<div class="alert alert-danger col-md-6 col-md-offset-3">
+	<h4>You do not have alive fighter or all of them are dead...</h4>
+	<p><?= $this->Html->link('Create a new fighter', ['action' => 'fighter']); ?>
+	</p>
+</div>
+<?php endif; ?>

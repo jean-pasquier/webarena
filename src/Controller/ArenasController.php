@@ -323,6 +323,7 @@ class ArenasController  extends AppController
       $fighter = $this->Fighters->getAliveFighter($this->Auth->user('id'));
   		$events = $this->Events->getDayEvents($fighter);
 		$this->set('events', $events);
+    $this->set(['hasAliveFighter'=>$fighter]);
     }
 
     public function guild($param = null)
@@ -351,7 +352,6 @@ class ArenasController  extends AppController
             if($this->request->is('post'))
             {
                 $data = $this->request->getData();
-                pr($data);
 
                 if(isset($data['fighter_id']))
                 {
@@ -393,9 +393,11 @@ class ArenasController  extends AppController
         else
         {
             $guilds = $this->Guilds->getAllSortedGuilds();
+            $newGuild = $this->Guilds->newEntity();
             $this->set([
                 'hasGuild' => false,
-                'guilds' => $guilds
+                'guilds' => $guilds,
+                'entity' => $newGuild
             ]);
 
             if($param)
@@ -418,7 +420,6 @@ class ArenasController  extends AppController
 
             if($this->request->is('post'))
             {
-                $newGuild = $this->Guilds->newEntity();
                 $newGuild->name = $this->request->getData()['name'];
 
                 if ($this->Guilds->save($newGuild))

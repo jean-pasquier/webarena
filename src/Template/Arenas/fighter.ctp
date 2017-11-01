@@ -19,7 +19,7 @@
 		<?= $this->Form->submit('Strength', ['class' => 'btn btn-success col-xs-4', 'name' => 'skill']); ?>
 		<?= $this->Form->submit('Health', ['class' => 'btn btn-success col-xs-4', 'name' => 'skill']); ?>
 	</div>
-	
+
 	<?= $this->Form->end(); ?>
 </div>
 <?php endif; ?>
@@ -45,6 +45,8 @@
 						<dd><?= $fighter['skill_strength'] ?></dd>
 						<dt>Sight</dt>
 						<dd><?= $fighter['skill_sight'] ?></dd>
+						<dt>Level</dt>
+						<dd><?= $fighter['level'] ?></dd>
 						<dt>XP</dt>
 						<dd><?= $fighter['xp'] ?></dd>
 						<dt>Coord</dt>
