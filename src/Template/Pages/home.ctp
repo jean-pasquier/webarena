@@ -127,8 +127,8 @@ $this->assign('title', 'Welcome');
 
 
         </div>
-        
-        
+
+
         <footer class="footer">
             <section class="container-fluid">
                 <h3 class="text-center">Group information</h3>
@@ -152,6 +152,10 @@ $this->assign('title', 'Welcome');
                             <li>F - Responsive pages with Bootstrap</li>
                         </ol>
                     </dd>
+                    <dt> git log : </dt>
+                    <dd> <p><?= $this->Html->link('version.log', ['controller' => 'Arenas', 'action' => 'versionGitLog'])?></p> </dd>
+                    <dt> Hébergement :</dt>
+                    <dd><?php echo $this->Html->link('http://wabarenaece.fr');?></dd>
 
                 </dl>
             </section>

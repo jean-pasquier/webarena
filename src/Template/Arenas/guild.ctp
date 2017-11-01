@@ -33,6 +33,8 @@
 					<dl class="dl-horizontal">
 						<dt>Health</dt>
 						<dd><?= $fighter['current_health'].'/'.$fighter['skill_health'] ?></dd>
+						<dt>Level</dt>
+						<dd><?= $fighter['level'] ?></dd>
 						<dt>XP</dt>
 						<dd><?= $fighter['xp'] ?></dd>
 						<dt>Coord</dt>

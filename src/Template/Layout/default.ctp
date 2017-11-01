@@ -103,7 +103,10 @@ $cakeDescription = 'WebArena';
                         <li>F - Responsive pages with Bootstrap</li>
                     </ol>
                 </dd>
-
+                <dt> git log : </dt>
+                <dd> <p><?= $this->Html->link('version.log', ['controller' => 'Arenas', 'action' => 'versionGitLog'])?></p> </dd>
+                <dt> Hébergement :</dt>
+                <dd><?php echo $this->Html->link('http://wabarenaece.fr');?></dd>
             </dl>
         </section>
     </footer>

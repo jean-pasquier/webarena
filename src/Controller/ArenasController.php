@@ -315,6 +315,10 @@ class ArenasController  extends AppController
 
     }
 
+    public function versionGitLog()
+    {
+
+    }
 
     public function diary()
     {
