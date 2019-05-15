@@ -1,3 +1,6 @@
+# Local images
+/webroot/img/avatars/*
+
 # CakePHP specific files #
 ##########################
 /config/app.php
